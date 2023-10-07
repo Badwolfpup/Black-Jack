@@ -28,6 +28,26 @@ namespace Black_Jack
             förstaSortering(räknare);
             return värdelista;
         }
+
+
+
+        public List<int> raderaMarker(List<int> markerVärde, int tabortvärde)
+        {
+            värdelista = markerVärde;
+            for (int i = 0; i < värdelista.Count; i++)
+            {
+                if (värdelista[i] == tabortvärde)
+                {
+                    värdelista.RemoveAt(i);
+                    break;
+                }
+            }
+            if (värdelista.Count > 0)
+            {
+                sorteraMarker(värdelista);
+            }
+            return värdelista;
+        }
         private void förstaSortering(int räkna)
         {
             int räknare = räkna;
