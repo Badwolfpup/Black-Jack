@@ -28,101 +28,72 @@
         /// </summary>
         private void InitializeComponent()
         {
-            nyRunda = new Button();
-            label1 = new Label();
-            label2 = new Label();
-            draNyttKort = new Button();
-            passa = new Button();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            richTextBox1 = new RichTextBox();
-            SuspendLayout();
+            this.nyRunda = new System.Windows.Forms.Button();
+            this.draNyttKort = new System.Windows.Forms.Button();
+            this.passa = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.SuspendLayout();
             // 
             // nyRunda
             // 
-            nyRunda.Location = new Point(613, 90);
-            nyRunda.Margin = new Padding(2);
-            nyRunda.Name = "nyRunda";
-            nyRunda.Size = new Size(78, 20);
-            nyRunda.TabIndex = 1;
-            nyRunda.Text = "Börja spela";
-            nyRunda.UseVisualStyleBackColor = true;
-            nyRunda.Click += button1_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(190, 80);
-            label1.Margin = new Padding(2, 0, 2, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(33, 15);
-            label1.TabIndex = 2;
-            label1.Text = "Bank";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(190, 255);
-            label2.Margin = new Padding(2, 0, 2, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(45, 15);
-            label2.TabIndex = 4;
-            label2.Text = "Spelare";
+            this.nyRunda.Location = new System.Drawing.Point(1156, 215);
+            this.nyRunda.Name = "nyRunda";
+            this.nyRunda.Size = new System.Drawing.Size(117, 30);
+            this.nyRunda.TabIndex = 1;
+            this.nyRunda.Text = "Börja spela";
+            this.nyRunda.UseVisualStyleBackColor = true;
+            this.nyRunda.Click += new System.EventHandler(this.nyRunda_Click);
             // 
             // draNyttKort
             // 
-            draNyttKort.Location = new Point(613, 119);
-            draNyttKort.Margin = new Padding(2);
-            draNyttKort.Name = "draNyttKort";
-            draNyttKort.Size = new Size(78, 20);
-            draNyttKort.TabIndex = 6;
-            draNyttKort.Text = "Dra kort";
-            draNyttKort.UseVisualStyleBackColor = true;
-            draNyttKort.Click += button2_Click;
+            this.draNyttKort.Location = new System.Drawing.Point(1156, 258);
+            this.draNyttKort.Name = "draNyttKort";
+            this.draNyttKort.Size = new System.Drawing.Size(117, 30);
+            this.draNyttKort.TabIndex = 6;
+            this.draNyttKort.Text = "Dra kort";
+            this.draNyttKort.UseVisualStyleBackColor = true;
+            this.draNyttKort.Click += new System.EventHandler(this.draNyttKort_Click);
             // 
             // passa
             // 
-            passa.Location = new Point(616, 150);
-            passa.Margin = new Padding(2);
-            passa.Name = "passa";
-            passa.Size = new Size(78, 20);
-            passa.TabIndex = 7;
-            passa.Text = "Passa";
-            passa.UseVisualStyleBackColor = true;
-            passa.Click += passa_Click;
+            this.passa.Location = new System.Drawing.Point(1161, 305);
+            this.passa.Name = "passa";
+            this.passa.Size = new System.Drawing.Size(117, 30);
+            this.passa.TabIndex = 7;
+            this.passa.Text = "Passa";
+            this.passa.UseVisualStyleBackColor = true;
+            this.passa.Click += new System.EventHandler(this.passa_Click_1);
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(467, 43);
-            richTextBox1.Margin = new Padding(2);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(106, 88);
-            richTextBox1.TabIndex = 9;
-            richTextBox1.Text = "";
+            this.richTextBox1.Location = new System.Drawing.Point(700, 64);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(157, 130);
+            this.richTextBox1.TabIndex = 9;
+            this.richTextBox1.Text = "";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(828, 535);
-            Controls.Add(richTextBox1);
-            Controls.Add(passa);
-            Controls.Add(draNyttKort);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(nyRunda);
-            Margin = new Padding(2);
-            Name = "Form1";
-            Text = "Form1";
-            Load += Form1_Load;
-            MouseClick += Form1_MouseClick;
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(1324, 454);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.passa);
+            this.Controls.Add(this.draNyttKort);
+            this.Controls.Add(this.nyRunda);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+
+            this.Name = "Form1";
+            this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load_1);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
         private Button nyRunda;
-        private Label label1;
-        private Label label2;
         private Button draNyttKort;
         private Button passa;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;

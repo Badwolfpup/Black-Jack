@@ -29,7 +29,10 @@ namespace Black_Jack
             return värdelista;
         }
 
-
+        //private List<int> sorteraMarker(List<int> markerVärde)
+        //{
+            
+        //}
 
         public List<int> raderaMarker(List<int> markerVärde, int tabortvärde)
         {
@@ -59,10 +62,11 @@ namespace Black_Jack
                     for (int i = räknare; i < värdelista.Count; i++)
                     {
                         summa += värdelista[i];
+                        antalMarker++;
                         if (summa == 10)
                         {
                             värdelista.Insert(räknare, 10);
-                            värdelista.RemoveRange(räknare + 1, 2);
+                            värdelista.RemoveRange(räknare + 1, antalMarker);
                             sorteraMarker(värdelista);
                             summa = 0;
                             break;
