@@ -52,7 +52,7 @@ namespace Black_Jack
 			return kortlek;
 		}
 
-		public int hämaKortvärde(string kort)
+		public int hämtaKortvärde(string kort)
 		{
 			int värde = 0;
 			if (!Char.IsLetter(kort[1]))
@@ -62,22 +62,31 @@ namespace Black_Jack
 			}
 			else if (kort[1] == 'A')
 			{
-				if ((värde + 11) < 21)
-				{
-					värde = 11;
-				}
-				else
-				{
-					värde = 1;
-				}
+				värde = 11;
 			}
 			else värde = 10;
 
 			return värde;
 		}
-		public void draKort(Form form)
-        {
 
-        }
+		public int beräknaKortvärde(List<int> kort)
+		{
+			int värde = 0 ;
+			kort.Sort();
+			foreach (int i in kort)
+			{
+				if (i == 11) 
+				{
+					if (värde + 11 > 21)
+					{
+						värde += 1;
+					}
+					else värde += 11;
+
+				} else värde += i;
+			}
+			return värde;
+		}
+
 	}
 }

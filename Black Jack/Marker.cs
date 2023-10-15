@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,12 +10,25 @@ namespace Black_Jack
     internal class Marker
     {
         List<int> värdelista;
+        int räknare;
+        bool harBytt = false;
 
+        public List<int> sortera(List<int> markerVärde)
+        {
+            värdelista = markerVärde;
+            värdelista = sorteraMarker(värdelista);
+            while (bytValör())
+            {
+                harBytt = bytValör();
+            }
+            return värdelista;
+
+        }
 
         public List<int> sorteraMarker(List<int> markerVärde) 
         {
             värdelista = markerVärde;
-            int räknare = 0;
+            räknare = 0;
             int x = värdelista.Last();
             if (värdelista.Last() !=5 && värdelista.Count > 1)
             {
@@ -25,192 +39,255 @@ namespace Black_Jack
                 värdelista.Insert(räknare, värdelista.Last());
                 värdelista.RemoveAt(värdelista.Count - 1);
             }
-            förstaSortering(räknare);
             return värdelista;
         }
-
-        //private List<int> sorteraMarker(List<int> markerVärde)
-        //{
-            
-        //}
 
         public List<int> raderaMarker(List<int> markerVärde, int tabortvärde)
         {
             värdelista = markerVärde;
-            for (int i = 0; i < värdelista.Count; i++)
+            for (int i = värdelista.Count-1; i > -1; i--)
             {
-                if (värdelista[i] == tabortvärde)
+                int x = värdelista[i];
+                if (x == tabortvärde)
                 {
                     värdelista.RemoveAt(i);
+                    break;
+                } else if ((tabortvärde < värdelista[i]))
+                {
+                    switch(tabortvärde)
+                    {
+                        case 5:
+                            if (värdelista[i] / tabortvärde == 200)
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(500);
+                                for (int j = 1; j < 5; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                                värdelista.Add(50);
+                                for (int k = 6; k < 10; k++)
+                                {
+                                    värdelista.Insert(i + k, 10);
+                                }
+                                värdelista.Add(5);
+                            }
+                            else if (värdelista[i] / tabortvärde == 100)
+                            {
+                                värdelista.RemoveAt(i);
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                                värdelista.Add(50);
+                                for (int k = 5; k < 9; k++)
+                                {
+                                    värdelista.Insert(i + k, 10);
+                                }
+                                värdelista.Add(5);
+                            }
+                            else if (värdelista[i] / tabortvärde == 20)
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(50);
+                                for (int j = 1; j < 5; j++)
+                                {
+                                    värdelista.Insert(i + j, 10);
+                                }
+                                värdelista.Add(5);
+                            }
+                            else if (värdelista[i] / tabortvärde == 10)
+                            {
+                                värdelista.RemoveAt(i);
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    värdelista.Insert(i + j, 10);
+                                }
+                                värdelista.Add(5);
+                            }
+                            else
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(5);
+                            }
+                            break;
+                        case 10:
+                            if (värdelista[i] / tabortvärde == 100)
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(500);
+                                for (int j = 1; j < 5; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                                värdelista.Add(50);
+                                for (int k = 6; k < 10; k++)
+                                {
+                                    värdelista.Insert(i + k, 10);
+                                }
+                            } else if (värdelista[i] / tabortvärde == 50)
+                            {
+                                värdelista.RemoveAt(i);
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                                värdelista.Add(50);
+                                for (int k = 5; k < 9; k++)
+                                {
+                                    värdelista.Insert(i + k, 10);
+                                }
+                            } else if (värdelista[i] / tabortvärde == 10)
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(50);
+                                for (int j = 1; j < 5; j++)
+                                {
+                                    värdelista.Insert(i + j, 10);
+                                }
+                            } else
+                            {
+                                värdelista.RemoveAt(i);
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    värdelista.Insert(i + j, 10);
+                                }
+                            }
+                            break;
+                        case 50:
+                            if (värdelista[i] / tabortvärde == 20)
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(500);
+                                for (int j = 1; j < 5; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                                värdelista.Add(50);
+                            } else if (värdelista[i] / tabortvärde == 10)
+                            {
+                                värdelista.RemoveAt(i);
+                                 for (int j = 0; j < 4; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                                värdelista.Add(50);
+                            } else
+                            {
+                                värdelista.RemoveAt(i);
+                                värdelista.Add(50);
+                            }
+                                break;
+                        case 100:
+                            if (värdelista[i]/tabortvärde == 5)
+                            {
+                                värdelista.RemoveAt(i);
+                                for (int j = 0; j<4; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                            } else
+                            {
+                                värdelista.RemoveAt(i);
+                                for (int j = 0; j < 9; j++)
+                                {
+                                    värdelista.Insert(i + j, 100);
+                                }
+                            }
+                            break;
+                        case 500:
+                            värdelista[i] = 500;
+                            break;
+                        case 1000:
+                            värdelista.Clear();
+                            break;
+                    }
                     break;
                 }
             }
             if (värdelista.Count > 0)
             {
-                sorteraMarker(värdelista);
+                bytValör();
+                värdelista = sorteraMarker(värdelista);
             }
             return värdelista;
         }
-        private void förstaSortering(int räkna)
+
+
+        private bool bytValör()
         {
-            int räknare = räkna;
-            int summa = 0;
-            int antalMarker = 0;
-            switch (värdelista[räknare])
-            {
-                case 5:
-                    for (int i = räknare; i < värdelista.Count; i++)
-                    {
-                        summa += värdelista[i];
-                        antalMarker++;
-                        if (summa == 10)
-                        {
-                            värdelista.Insert(räknare, 10);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa = 0;
-                            break;
-                        }
-                    }
-                    break;
-                case 10:
-                    for (int i = räknare; i < värdelista.Count; i++)
-                    {
-                        summa += värdelista[i];
-                        antalMarker++;
-                        if (summa == 25)
-                        {
-                            värdelista.Insert(räknare, 25);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa=0;
-                            break;
-                        }
-                        else if (summa == 50)
-                        {
-                            värdelista.Insert(räknare, 50);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa = 0;
-                            break;
-                        }
-                    }
-                    break;
-                case 25:
-                    for (int i = räknare; i < värdelista.Count; i++)
-                    {
-                        summa += värdelista[i];
-                        antalMarker++;
-                        if (summa == 50)
-                        {
-                            värdelista.Insert(räknare, 50);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa = 0;
-                            break;
-                        }
-                        else if (summa == 100)
-                        {
-                            värdelista.Insert(räknare, 100);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa = 0;
-                            break;
-                        }
-                    }
-                    break;
-                case 50:
-                    for (int i = räknare; i < värdelista.Count; i++)
-                    {
-                        summa += värdelista[i];
-                        antalMarker++;
-                        if (summa == 100)
-                        {
-                            värdelista.Insert(räknare, 100);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa = 0;
-                            break;
-                        }
-                    }
-                    break;
-                case 100:
-                    for (int i = räknare; i < värdelista.Count; i++)
-                    {
-                        summa += värdelista[i];
-                        antalMarker++;
-                        if (summa == 500)
-                        {
-                            värdelista.Insert(räknare, 500);
-                            värdelista.RemoveRange(räknare + 1, antalMarker);
-                            sorteraMarker(värdelista);
-                            summa = 0;  
-                            break;
-                        }
-                    }
-                    break;
-            }
-        }
-        private void bytValör(int räknare)
-        {
- 
             int summa = 0;
             int antalRäknadeMarker = 0;
-
-            for (int i = värdelista.Count -1; i > 0; i--)
+            do
             {
-                summa += värdelista[i];
-                antalRäknadeMarker++;
-                switch (summa)
+                harBytt = false;
+                for (int j = värdelista.Count - 1; j >= 0; j--)
                 {
-                    case 10:
-                        if (antalRäknadeMarker > 1)
+                    for (int i = j; i > -1; i--)
+                    {
+
+                        summa += värdelista[i];
+                        antalRäknadeMarker++;
+                        switch (summa)
                         {
-                            värdelista.Insert(i, 10);
-                            värdelista.RemoveRange(i + 1, värdelista.Count - i - 1);
-                            bytValör(räknare);
+                            case 10:
+                                if (antalRäknadeMarker > 1)
+                                {
+                                    värdelista.Insert(i, 10);
+                                    värdelista.RemoveRange(i + 1, 2);
+                                    harBytt = true;
+                                }
+                                break;
+                            case 50:
+                                if (antalRäknadeMarker > 1)
+                                {
+                                    värdelista.Insert(i, 50);
+                                    värdelista.RemoveRange(i + 1, 5);
+                                    harBytt = true;
+                                }
+                                break;
+                            case 100:
+                                if (antalRäknadeMarker > 1)
+                                {
+                                    värdelista.Insert(i, 100);
+                                    värdelista.RemoveRange(i + 1, 2);
+                                    harBytt = true;
+                                }
+                                break;
+                            case 500:
+                                if (antalRäknadeMarker > 1)
+                                {
+                                    värdelista.Insert(i, 500);
+                                    värdelista.RemoveRange(i + 1, 5);
+                                    harBytt = true;
+                                }
+                                break;
+                            case 1000:
+                                if (antalRäknadeMarker > 1)
+                                {
+                                    värdelista.Insert(i, 1000);
+                                    värdelista.RemoveRange(i + 1, 2);
+                                    harBytt = true;
+                                }
+                                break;
                         }
-                        break;
-                    case 25:
-                        if (antalRäknadeMarker > 1)
+                        if (harBytt)
                         {
-                            värdelista.Insert(i, 25);
-                            värdelista.RemoveRange(i + 1, värdelista.Count - i - 1);
-                            bytValör(räknare);
+                            summa = 0;
+                            antalRäknadeMarker = 0;
+                            break;
                         }
-                        break;
-                    case 50:
-                        if (antalRäknadeMarker > 1)
+                        if (i == 0)
                         {
-                            värdelista.Insert(i, 50);
-                            värdelista.RemoveRange(i + 1, värdelista.Count - i - 1);
-                            bytValör(räknare);
+                            summa = 0;
+                            antalRäknadeMarker = 0;
                         }
-                        break;
-                    case 100:
-                        if (antalRäknadeMarker > 1)
-                        {
-                            värdelista.Insert(i, 100);
-                            värdelista.RemoveRange(i + 1, värdelista.Count - i - 1);
-                            bytValör(räknare);
-                        }
-                        break;
-                    case 500:
-                        if (antalRäknadeMarker > 1)
-                        {
-                            värdelista.Insert(i, 500);
-                            värdelista.RemoveRange(i + 1, värdelista.Count - i - 1);
-                            bytValör(räknare);
-                        }
-                        break; 
+                    
+                    }
+                    if (harBytt) break;
                 }
- 
-            }
-
-        }
-
-        
+            } while (harBytt);
+            return harBytt;
+        } 
     }
-
-
 }

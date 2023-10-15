@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Black_Jack
 {
-    internal class RitaKort
+    internal static class spelarinfo
     {
-
-
+        public static string spelare { get; set; }
     }
 }
