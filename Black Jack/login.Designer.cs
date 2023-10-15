@@ -98,6 +98,7 @@
             Controls.Add(button1);
             Name = "login";
             Text = "Form2";
+            FormClosing += login_FormClosing;
             Load += login_Load;
             ResumeLayout(false);
             PerformLayout();

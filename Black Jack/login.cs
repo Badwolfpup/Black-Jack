@@ -20,7 +20,7 @@ namespace Black_Jack
 
         }
         string filgenväg = @"C:\\Black Jack\spelarinfo.txt";
-        bool valtNamn = false;
+        bool stängtsjälv = true;
 
         private void login_Load(object sender, EventArgs e)
         {
@@ -78,6 +78,7 @@ namespace Black_Jack
             if (listBox1.SelectedIndex > -1)
             {
                 spelarinfo.spelare = listBox1.Text;
+                stängtsjälv = false;
                 this.Close();
             }
             else
@@ -117,6 +118,12 @@ namespace Black_Jack
             }
         }
 
-
+        private void login_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (stängtsjälv)
+            {
+                Environment.Exit(0);
+            }
+        }
     }
 }
