@@ -134,6 +134,7 @@ namespace Black_Jack
             this.Hide();
             loggain = new login();
             loggain.ShowDialog();
+            //this.WindowState = FormWindowState.Maximized;
             this.Size = new System.Drawing.Size(1440, 800);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

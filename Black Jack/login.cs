@@ -26,7 +26,7 @@ namespace Black_Jack
         {
             if (!File.Exists(filgenväg))
             {
-                File.Create(filgenväg);
+                File.Create(filgenväg).Close();
             }
             laddaSpelare();
         }
