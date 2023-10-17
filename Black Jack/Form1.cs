@@ -37,7 +37,8 @@ namespace Black_Jack
         private Panel spelkortPanel;
         private Panel satsatPanel;
         private Panel knapparPanel;
-
+        PictureBox dollar5, dollar10, dollar50, dollar100, dollar500, dollar1000;
+        PictureBox knappHit, knappPass, knappDouble, knappSplit, knappInsurance;
         Marker marker = new Marker();
         Label totalBet = new Label();
         Label betInfo = new Label();
@@ -181,13 +182,13 @@ namespace Black_Jack
             spelarPosX = this.Width / 2 - 50; ;
             spelarPosY = this.Height / 2;
 
-            markerPanel = new Panel();
-            markerPanel.Size = new Size(600, 200);
-            markerPanel.Location = new Point(this.Width/2-244, this.Height/2 + 225);
-            markerPanel.BackColor = Color.Transparent;
-            markerPanel.Paint += new PaintEventHandler(ritaMarker);
-            this.Controls.Add(markerPanel);
-            markerPanel.MouseClick += new MouseEventHandler(markerPanel_MouseClick);
+            //markerPanel = new Panel();
+            //markerPanel.Size = new Size(600, 200);
+            //markerPanel.Location = new Point(this.Width/2-244, this.Height/2 + 225);
+            //markerPanel.BackColor = Color.Transparent;
+            //markerPanel.Paint += new PaintEventHandler(ritaMarker);
+            //this.Controls.Add(markerPanel);
+            //markerPanel.MouseClick += new MouseEventHandler(markerPanel_MouseClick);
 
 
             spelkortPanel = new Panel();
@@ -198,26 +199,27 @@ namespace Black_Jack
             this.Controls.Add(spelkortPanel);
 
             satsatPanel = new Panel();
-            satsatPanel.Size = new Size(350, 200);
-            satsatPanel.Location = new Point(this.Width / 2 - 90, this.Height / 2 +95);
+            satsatPanel.Size = new Size(350, 120);
+            satsatPanel.Location = new Point(this.Width / 2 - 90, this.Height / 2 + 95);
             satsatPanel.BackColor = Color.Transparent;
             satsatPanel.Paint += new PaintEventHandler(ritaSatsadeMarker);
             this.Controls.Add(satsatPanel);
 
-            knapparPanel = new Panel();
-            knapparPanel.Size = new Size(100, 300);
-            knapparPanel.Location = new Point(this.Width / 2 - 120, this.Height / 2 - 50);
-            knapparPanel.BackColor = Color.Transparent;
-            knapparPanel.Paint += new PaintEventHandler(ritaknapparPanel);
-            this.Controls.Add(knapparPanel);
-            knapparPanel.MouseClick += new MouseEventHandler(knapparPanel_MouseClick);
+            //knapparPanel = new Panel();
+            //knapparPanel.Size = new Size(100, 300);
+            //knapparPanel.Location = new Point(this.Width / 2 - 120, this.Height / 2 - 50);
+            //knapparPanel.BackColor = Color.Transparent;
+            //knapparPanel.Paint += new PaintEventHandler(ritaknapparPanel);
+            //this.Controls.Add(knapparPanel);
+            //knapparPanel.MouseClick += new MouseEventHandler(knapparPanel_MouseClick);
 
 
+            skapaMarkerBilder();
+            skapaKnappBilder();
 
-            läggTillMarkerBilder();
-            läggTillKnappBilder();
 
         }
+
 
         #region onPaint
         private void ritaMarker(object sender, PaintEventArgs e)
@@ -476,10 +478,6 @@ namespace Black_Jack
         private void passa()
         {
             spelaresTur = false;
-            //while (kortvärdeBank < 17 && kortvärdeBank < kortvärdeSpelare)
-            //{
-            //    spelaKort();
-            //}
             kollaVinnare();
 
 
@@ -499,8 +497,6 @@ namespace Black_Jack
                 uppdateraFil();
                 markervärde.Clear();
                 maxBet();
-                knapparPanel.Invalidate();
-                markerPanel.Invalidate();
                 satsatPanel.Invalidate();
             }
             else if (kortvärdeBank > 21)
@@ -514,8 +510,6 @@ namespace Black_Jack
                 uppdateraFil();
                 markervärde.Clear();
                 maxBet();
-                knapparPanel.Invalidate();
-                markerPanel.Invalidate();
                 satsatPanel.Invalidate();
             }
             else if (kortvärdeBank >= kortvärdeSpelare && kortvärdeBank > 16 && kortvärdeBank < 22)
@@ -529,8 +523,6 @@ namespace Black_Jack
                 uppdateraFil();
                 markervärde.Clear();
                 maxBet();
-                knapparPanel.Invalidate();
-                markerPanel.Invalidate();
                 satsatPanel.Invalidate();
             }
             else if (!spelaresTur) spelaKort();
@@ -582,278 +574,504 @@ namespace Black_Jack
 
 
         #region läggtillbilder
-        private void läggTillKnappBilder()
+        private void skapaKnappBilder()
         {
-            ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
-            knappar.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 0)));
+            knappHit = new PictureBox();
+            knappHit.Size = new Size(50, 50);
+            knappHit.Location = new Point(this.Width / 2 - 120, this.Height / 2 - 50);
+            knappHit.BackColor = Color.Transparent;
+            knappHit.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
+            this.Controls.Add(knappHit);
+            knappHit.MouseClick += new MouseEventHandler(knappHit_click);
 
-
-            ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
-            knappar.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 50)));
-
-            knapparPanel.Invalidate();
-            PictureBox test = new PictureBox();
-            test.Size = new Size(50, 50);
-            test.Location = new Point(100, 100);
-            test.BackColor = Color.Transparent;
-            test.BorderStyle = BorderStyle.None;
-
-            test.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
-            this.Controls.Add(test);
-
-            PictureBox test1 = new PictureBox();
-            test1.Size = new Size(50, 50);
-            test1.Location = new Point(100, 120);
-            test1.BackColor = Color.Transparent;
-            test1.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
-            test1.BringToFront();
-            test1.BorderStyle = BorderStyle.None;
-            this.Controls.Add(test1);
+            knappPass = new PictureBox();
+            knappPass.Size = new Size(50, 50);
+            knappPass.Location = new Point(this.Width / 2 - 120, this.Height / 2 + 10);
+            knappPass.BackColor = Color.Transparent;
+            knappPass.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
+            knappPass.BringToFront();
+            this.Controls.Add(knappPass);
+            knappPass.MouseClick += new MouseEventHandler(knappPass_click);
         }
-        private void läggTillMarkerBilder()
+
+        private void skapaMarkerBilder()
         {
-            for (int i = 0; i < 6; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
-                        markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 0)));
-                        break;
-                    case 1:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
-                        markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(70, 10)));
-                        break;
-                    case 2:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
-                        markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(140, 20)));
-                        break;
-                    case 3:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
-                        markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(230, 20)));
-                        break;
-                    case 4:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
-                        markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(300, 10)));
-                        break;
-                    case 5:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
-                        markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(370, 0)));
-                        break;
-                }
-            }
-            markerPanel.Invalidate();
+            dollar5 = new PictureBox();
+            dollar5.Location = new Point(this.Width / 2 - 244, this.Height / 2 + 225);
+            dollar5.Size = new Size(80, 80);
+            dollar5.BackColor = Color.Transparent;
+            dollar5.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
+            dollar5.BringToFront();
+            this.Controls.Add(dollar5);
+            dollar5.MouseClick += new MouseEventHandler(dollar5_click);
+
+            dollar10 = new PictureBox();
+            dollar10.Location = new Point(this.Width / 2 - 174, this.Height / 2 + 235);
+            dollar10.Size = new Size(80, 80);
+            dollar10.BackColor = Color.Transparent;
+            dollar10.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
+            dollar10.BringToFront();
+            this.Controls.Add(dollar10);
+            dollar10.MouseClick += new MouseEventHandler(dollar10_click);
+
+            dollar50 = new PictureBox();
+            dollar50.Location = new Point(this.Width / 2 - 104, this.Height / 2 + 245);
+            dollar50.Size = new Size(80, 80);
+            dollar50.BackColor = Color.Transparent;
+            dollar50.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
+            dollar50.BringToFront();
+            this.Controls.Add(dollar50);
+            dollar50.MouseClick += new MouseEventHandler(dollar50_click);
+
+            dollar100 = new PictureBox();
+            dollar100.Location = new Point(this.Width / 2 - 34, this.Height / 2 + 245);
+            dollar100.Size = new Size(80, 80);
+            dollar100.BackColor = Color.Transparent;
+            dollar100.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
+            dollar100.BringToFront();
+            this.Controls.Add(dollar100);
+            dollar100.MouseClick += new MouseEventHandler(dollar100_click);
+
+            dollar500 = new PictureBox();
+            dollar500.Location = new Point(this.Width / 2 + 44, this.Height / 2 + 235);
+            dollar500.Size = new Size(80, 80);
+            dollar500.BackColor = Color.Transparent;
+            dollar500.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
+            dollar500.BringToFront();
+            this.Controls.Add(dollar500);
+            dollar500.MouseClick += new MouseEventHandler(dollar500_click);
+
+            dollar1000 = new PictureBox();
+            dollar1000.Location = new Point(this.Width / 2 + 114, this.Height / 2 + 225);
+            dollar1000.Size = new Size(80, 80);
+            dollar1000.BackColor = Color.Transparent;
+            dollar1000.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
+            dollar1000.BringToFront();  
+            this.Controls.Add(dollar1000);
+            dollar1000.MouseClick += new MouseEventHandler(dollar1000_click);
         }
+        
         #endregion
-
 
         #region Mouseclick
-        private void knapparPanel_MouseClick(object sender, MouseEventArgs e)
+        private void dollar5_click(object sender, MouseEventArgs e)
         {
-            int x = 0;
-            foreach (var imageTuple in knappar)
+            if (e.Button == MouseButtons.Right)
             {
-                Rectangle imageBounds = new Rectangle(imageTuple.Item2, new Size(50, 50));
-                if (imageBounds.Contains(e.Location))
+                markervärde = marker.raderaMarker(markervärde, 5);
+            }
+            else
+            {
+                if (!kollaKryss[0])
                 {
-                    switch (x)
-                    {
-                        case 0:
-                            spelaKort();
-                            break;
-                        case 1:
-                            if (pågåendeRunda)
-                            {
-                                passa();
-                            }
-                            break;
-                    }
 
+                    if (antalMarker > 5)
+                    {
+                        markervärde.Add(5);
+                        markervärde = marker.sortera(markervärde);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
-                x++;
+            }
+            maxBet();
+            spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+            satsatPanel.Invalidate();
+        }
+        private void dollar10_click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                markervärde = marker.raderaMarker(markervärde, 10);
+            }
+            else
+            {
+                if (!kollaKryss[1])
+                {
+                    if (antalMarker >= 10)
+                    {
+                        markervärde.Add(10);
+                        markervärde = marker.sortera(markervärde);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            maxBet();
+            spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+            satsatPanel.Invalidate();
+        }
+        private void dollar50_click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                markervärde = marker.raderaMarker(markervärde, 50);
+            }
+            else
+            {
+                if (!kollaKryss[2])
+                {
+                    if (antalMarker >= 50)
+                    {
+                        markervärde.Add(50);
+                        markervärde = marker.sortera(markervärde);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            maxBet();
+            spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+            satsatPanel.Invalidate();
+        }
+        private void dollar100_click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                markervärde = marker.raderaMarker(markervärde, 100);
+            }
+            else
+            {
+                if (!kollaKryss[3])
+                {
+                    if (antalMarker >= 100)
+                    {
+                        markervärde.Add(100);
+                        markervärde = marker.sortera(markervärde);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            maxBet();
+            spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+            satsatPanel.Invalidate();
+        }
+        private void dollar500_click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                markervärde = marker.raderaMarker(markervärde, 500);
+            }
+            else
+            {
+                if (!kollaKryss[4])
+                {
+                    if (antalMarker >= 500)
+                    {
+                        markervärde.Add(500);
+                        markervärde = marker.sortera(markervärde);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            maxBet();
+            spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+            satsatPanel.Invalidate();
+        }
+        private void dollar1000_click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                markervärde = marker.raderaMarker(markervärde, 1000);
+            }
+            else
+            {
+                if (!kollaKryss[5])
+                {
+                    if (antalMarker >= 1000)
+                    {
+                        markervärde.Add(1000);
+                        markervärde = marker.sortera(markervärde);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            maxBet();
+            spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+            satsatPanel.Invalidate();
+        }
+
+        private void knappHit_click(object sender, MouseEventArgs e)
+        {
+            spelaKort();
+        }
+
+        private void knappPass_click(object sender, MouseEventArgs e)
+        {
+            if (pågåendeRunda)
+            {
+                passa();
             }
         }
 
-
-        private void markerPanel_MouseClick(object sender, MouseEventArgs e)
-        {
-            int x = 0;
-            if (!pågåendeRunda)
-            {
-                dragnaKort.Clear();
-                spelkortPanel.Invalidate();
-                foreach (var imageTuple in markerBild)
-                {
-                    Rectangle imageBounds = new Rectangle(imageTuple.Item2, new Size(80, 80));
-                    if (imageBounds.Contains(e.Location))
-                    {
-                        switch (x)
-                        {
-                            case 0:
-                                if (e.Button == MouseButtons.Right)
-                                {
-                                    markervärde = marker.raderaMarker(markervärde, 5);
-                                }
-                                else
-                                {
-                                    if (!kollaKryss[0])
-                                    {
-
-                                        if (antalMarker > 5)
-                                        {
-                                            markervärde.Add(5);
-                                            markervärde = marker.sortera(markervärde);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                    }
-                                }
-                                maxBet();
-                                spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-                                markerPanel.Invalidate();
-                                satsatPanel.Invalidate();
-                                break;
-                            case 1:
-                                if (e.Button == MouseButtons.Right)
-                                {
-                                    markervärde = marker.raderaMarker(markervärde, 10);
-                                }
-                                else
-                                {
-                                    if (!kollaKryss[1])
-                                    {
-                                        if (antalMarker >= 10)
-                                        {
-                                            markervärde.Add(10);
-                                            markervärde = marker.sortera(markervärde);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                    }
-                                }
-                                maxBet();
-                                spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-                                markerPanel.Invalidate();
-                                satsatPanel.Invalidate();
-                                break;
-                            case 2:
-                                if (e.Button == MouseButtons.Right)
-                                {
-                                    markervärde = marker.raderaMarker(markervärde, 50);
-                                }
-                                else
-                                {
-                                    if (!kollaKryss[2])
-                                    {
-                                        if (antalMarker >= 50)
-                                        {
-                                            markervärde.Add(50);
-                                            markervärde = marker.sortera(markervärde);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                    }
-                                }
-                                maxBet();
-                                spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-                                markerPanel.Invalidate();
-                                satsatPanel.Invalidate();
-                                break;
-                            case 3:
-                                if (e.Button == MouseButtons.Right)
-                                {
-                                    markervärde = marker.raderaMarker(markervärde, 100);
-                                }
-                                else
-                                {
-                                    if (!kollaKryss[3])
-                                    {
-                                        if (antalMarker >= 100)
-                                        {
-                                            markervärde.Add(100);
-                                            markervärde = marker.sortera(markervärde);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                    }
-                                }
-                                maxBet();
-                                spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-                                markerPanel.Invalidate();
-                                satsatPanel.Invalidate();
-                                break;
-                            case 4:
-                                if (e.Button == MouseButtons.Right)
-                                {
-                                    markervärde = marker.raderaMarker(markervärde, 500);
-                                }
-                                else
-                                {
-                                    if (!kollaKryss[4])
-                                    {
-                                        if (antalMarker >= 500)
-                                        {
-                                            markervärde.Add(500);
-                                            markervärde = marker.sortera(markervärde);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                    }
-                                }
-                                maxBet();
-                                spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-                                markerPanel.Invalidate();
-                                satsatPanel.Invalidate();
-                                break;
-                            case 5:
-                                if (e.Button == MouseButtons.Right)
-                                {
-                                    markervärde = marker.raderaMarker(markervärde, 1000);
-                                }
-                                else
-                                {
-                                    if (!kollaKryss[5])
-                                    {
-                                        if (antalMarker >= 1000)
-                                        {
-                                            markervärde.Add(1000);
-                                            markervärde = marker.sortera(markervärde);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                    }
-                                }
-                                maxBet();
-                                spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-                                markerPanel.Invalidate();
-                                satsatPanel.Invalidate();
-                                break;
-                        }
-                        knapparPanel.Invalidate();
-                    }
-                    x++;
-                    totalBet.Text = "$" + markervärde.Sum();
-                }
-            }
-        }
 
         #endregion
 
+        #region gamla saker
+        //private void markerPanel_MouseClick(object sender, MouseEventArgs e)
+        //{
+        //    int x = 0;
+        //    if (!pågåendeRunda)
+        //    {
+        //        dragnaKort.Clear();
+        //        spelkortPanel.Invalidate();
+        //        foreach (var imageTuple in markerBild)
+        //        {
+        //            Rectangle imageBounds = new Rectangle(imageTuple.Item2, new Size(80, 80));
+        //            if (imageBounds.Contains(e.Location))
+        //            {
+        //                switch (x)
+        //                {
+        //                    case 0:
+        //                        if (e.Button == MouseButtons.Right)
+        //                        {
+        //                            markervärde = marker.raderaMarker(markervärde, 5);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (!kollaKryss[0])
+        //                            {
+
+        //                                if (antalMarker > 5)
+        //                                {
+        //                                    markervärde.Add(5);
+        //                                    markervärde = marker.sortera(markervärde);
+        //                                }
+        //                                else
+        //                                {
+        //                                    MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                                }
+        //                            }
+        //                        }
+        //                        maxBet();
+        //                        spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+        //                        //markerPanel.Invalidate();
+        //                        satsatPanel.Invalidate();
+        //                        break;
+        //                    case 1:
+        //                        if (e.Button == MouseButtons.Right)
+        //                        {
+        //                            markervärde = marker.raderaMarker(markervärde, 10);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (!kollaKryss[1])
+        //                            {
+        //                                if (antalMarker >= 10)
+        //                                {
+        //                                    markervärde.Add(10);
+        //                                    markervärde = marker.sortera(markervärde);
+        //                                }
+        //                                else
+        //                                {
+        //                                    MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                                }
+        //                            }
+        //                        }
+        //                        maxBet();
+        //                        spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+        //                        //markerPanel.Invalidate();
+        //                        satsatPanel.Invalidate();
+        //                        break;
+        //                    case 2:
+        //                        if (e.Button == MouseButtons.Right)
+        //                        {
+        //                            markervärde = marker.raderaMarker(markervärde, 50);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (!kollaKryss[2])
+        //                            {
+        //                                if (antalMarker >= 50)
+        //                                {
+        //                                    markervärde.Add(50);
+        //                                    markervärde = marker.sortera(markervärde);
+        //                                }
+        //                                else
+        //                                {
+        //                                    MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                                }
+        //                            }
+        //                        }
+        //                        maxBet();
+        //                        spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+        //                        //markerPanel.Invalidate();
+        //                        satsatPanel.Invalidate();
+        //                        break;
+        //                    case 3:
+        //                        if (e.Button == MouseButtons.Right)
+        //                        {
+        //                            markervärde = marker.raderaMarker(markervärde, 100);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (!kollaKryss[3])
+        //                            {
+        //                                if (antalMarker >= 100)
+        //                                {
+        //                                    markervärde.Add(100);
+        //                                    markervärde = marker.sortera(markervärde);
+        //                                }
+        //                                else
+        //                                {
+        //                                    MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                                }
+        //                            }
+        //                        }
+        //                        maxBet();
+        //                        spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+        //                        //markerPanel.Invalidate();
+        //                        satsatPanel.Invalidate();
+        //                        break;
+        //                    case 4:
+        //                        if (e.Button == MouseButtons.Right)
+        //                        {
+        //                            markervärde = marker.raderaMarker(markervärde, 500);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (!kollaKryss[4])
+        //                            {
+        //                                if (antalMarker >= 500)
+        //                                {
+        //                                    markervärde.Add(500);
+        //                                    markervärde = marker.sortera(markervärde);
+        //                                }
+        //                                else
+        //                                {
+        //                                    MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                                }
+        //                            }
+        //                        }
+        //                        maxBet();
+        //                        spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+        //                        //markerPanel.Invalidate();
+        //                        satsatPanel.Invalidate();
+        //                        break;
+        //                    case 5:
+        //                        if (e.Button == MouseButtons.Right)
+        //                        {
+        //                            markervärde = marker.raderaMarker(markervärde, 1000);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (!kollaKryss[5])
+        //                            {
+        //                                if (antalMarker >= 1000)
+        //                                {
+        //                                    markervärde.Add(1000);
+        //                                    markervärde = marker.sortera(markervärde);
+        //                                }
+        //                                else
+        //                                {
+        //                                    MessageBox.Show("Du har inte tillräckligt med marker", "Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //                                }
+        //                            }
+        //                        }
+        //                        maxBet();
+        //                        spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
+        //                        //markerPanel.Invalidate();
+        //                        satsatPanel.Invalidate();
+        //                        break;
+        //                }
+        //                knapparPanel.Invalidate();
+        //            }
+        //            x++;
+        //            totalBet.Text = "$" + markervärde.Sum();
+        //        }
+        //    }
+        //}
 
 
 
+
+        //private void läggTillMarkerBilder()
+        //{
+        //    for (int i = 0; i < 6; i++)
+        //    {
+        //        switch (i)
+        //        {
+        //            case 0:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
+        //                markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 0)));
+        //                break;
+        //            case 1:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
+        //                markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(70, 10)));
+        //                break;markerPanel.Invalidate();
+        //            case 2:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
+        //                markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(140, 20)));
+        //                break;
+        //            case 3:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
+        //                markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(230, 20)));
+        //                break;
+        //            case 4:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
+        //                markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(300, 10)));
+        //                break;
+        //            case 5:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
+        //                markerBild.Add(new Tuple<Image, Point>(ritaBild, new Point(370, 0)));
+        //                break;
+        //        }
+        //    }
+        //    //markerPanel.Invalidate();
+        //}
+        //private void läggTillKnappBilder()
+        //{
+        //    ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
+        //    knappar.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 0)));
+
+
+        //    ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
+        //    knappar.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 50)));
+
+        //    knapparPanel.Invalidate();
+
+        //}
+        //private void knapparPanel_MouseClick(object sender, MouseEventArgs e)
+        //{
+        //    int x = 0;
+        //    foreach (var imageTuple in knappar)
+        //    {
+        //        Rectangle imageBounds = new Rectangle(imageTuple.Item2, new Size(50, 50));
+        //        if (imageBounds.Contains(e.Location))
+        //        {
+        //            switch (x)
+        //            {
+        //                case 0:
+        //                    spelaKort();
+        //                    break;
+        //                case 1:
+        //                    if (pågåendeRunda)
+        //                    {
+        //                        passa();
+        //                    }
+        //                    break;
+        //            }
+
+        //        }
+        //        x++;
+        //    }
+        //}
+        #endregion
     }
 
 }
