@@ -50,7 +50,7 @@ namespace Black_Jack
                         listBox1.Items.Add(spelare);
                     }
                 }
-
+                listBox1.SelectedIndex = listBox1.Items.Count - 1;
             }
         }
 

@@ -37,6 +37,7 @@ namespace Black_Jack
         private Panel spelkortPanel;
         private Panel satsatPanel;
         private Panel knapparPanel;
+
         Marker marker = new Marker();
         Label totalBet = new Label();
         Label betInfo = new Label();
@@ -124,11 +125,18 @@ namespace Black_Jack
                 {
                     Environment.Exit(0);
                 }
-                //MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
             
         }
+
+        private void bytSpelareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            loggain.ShowDialog();
+
+        }
+
+
         private void Form1_Load_1(object sender, EventArgs e)
         {
             this.Hide();
@@ -144,23 +152,23 @@ namespace Black_Jack
             this.BackgroundImageLayout = ImageLayout.Stretch;
             spelarNamnMarker();
 
-            totalBet.Location = new Point(680, 485);
-            totalBet.Font = new Font("MS Gothic", 18, FontStyle.Bold);
+            totalBet.Location = new Point(this.Width / 2 - 40, this.Height / 2 + 85);
+            totalBet.Font = new Font("MS Gothic", 14, FontStyle.Bold);
             totalBet.BackColor = Color.Transparent;
             totalBet.AutoSize = true;
             this.Controls.Add(totalBet);
             totalBet.BringToFront();
 
-            betInfo.Location = new Point(615, 625);
-            betInfo.Font = new Font("MS Gothic", 18, FontStyle.Bold);
+            betInfo.Location = new Point(this.Width / 2 - 105, this.Height / 2 + 225);
+            betInfo.Font = new Font("MS Gothic", 14, FontStyle.Bold);
             betInfo.BackColor = Color.Transparent;
             betInfo.AutoSize = true;
             this.Controls.Add(betInfo);
             betInfo.BringToFront();
             betInfo.Text = "Maxbet är $1000";
 
-            bankrulle.Location = new Point(300, 500);
-            bankrulle.Font = new Font("MS Gothic", 18, FontStyle.Bold);
+            bankrulle.Location = new Point(this.Width / 2 - 420, this.Height / 2 + 100);
+            bankrulle.Font = new Font("MS Gothic", 14, FontStyle.Bold);
             bankrulle.BackColor = Color.Transparent;
             bankrulle.AutoSize = true;
             this.Controls.Add(bankrulle);
@@ -175,7 +183,7 @@ namespace Black_Jack
 
             markerPanel = new Panel();
             markerPanel.Size = new Size(600, 200);
-            markerPanel.Location = new Point(476, 625);
+            markerPanel.Location = new Point(this.Width/2-244, this.Height/2 + 225);
             markerPanel.BackColor = Color.Transparent;
             markerPanel.Paint += new PaintEventHandler(ritaMarker);
             this.Controls.Add(markerPanel);
@@ -191,7 +199,7 @@ namespace Black_Jack
 
             satsatPanel = new Panel();
             satsatPanel.Size = new Size(350, 200);
-            satsatPanel.Location = new Point(630, 495);
+            satsatPanel.Location = new Point(this.Width / 2 - 90, this.Height / 2 +95);
             satsatPanel.BackColor = Color.Transparent;
             satsatPanel.Paint += new PaintEventHandler(ritaSatsadeMarker);
             this.Controls.Add(satsatPanel);
@@ -203,6 +211,8 @@ namespace Black_Jack
             knapparPanel.Paint += new PaintEventHandler(ritaknapparPanel);
             this.Controls.Add(knapparPanel);
             knapparPanel.MouseClick += new MouseEventHandler(knapparPanel_MouseClick);
+
+
 
             läggTillMarkerBilder();
             läggTillKnappBilder();
@@ -360,12 +370,13 @@ namespace Black_Jack
 
                 foreach (var imageTuple in knappar)
                 {
-
                     canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(50, 50)));
+
                 }
 
                 g.DrawImageUnscaled(canvas, Point.Empty);
             }
+
             knapparPanel.ResumeLayout();
         }
 
@@ -576,9 +587,28 @@ namespace Black_Jack
             ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
             knappar.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 0)));
 
+
             ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
             knappar.Add(new Tuple<Image, Point>(ritaBild, new Point(0, 50)));
+
             knapparPanel.Invalidate();
+            PictureBox test = new PictureBox();
+            test.Size = new Size(50, 50);
+            test.Location = new Point(100, 100);
+            test.BackColor = Color.Transparent;
+            test.BorderStyle = BorderStyle.None;
+
+            test.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
+            this.Controls.Add(test);
+
+            PictureBox test1 = new PictureBox();
+            test1.Size = new Size(50, 50);
+            test1.Location = new Point(100, 120);
+            test1.BackColor = Color.Transparent;
+            test1.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
+            test1.BringToFront();
+            test1.BorderStyle = BorderStyle.None;
+            this.Controls.Add(test1);
         }
         private void läggTillMarkerBilder()
         {
@@ -643,6 +673,7 @@ namespace Black_Jack
                 x++;
             }
         }
+
 
         private void markerPanel_MouseClick(object sender, MouseEventArgs e)
         {
