@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Drawing.Drawing2D;
+using System.Timers;
 
 namespace Black_Jack
 {
@@ -26,10 +27,10 @@ namespace Black_Jack
         int antalMarker = 5000; //Hur många marker spelaren har
         int posX = 0;
         int posY = 0;
+        int spelare1bet;
         bool pågåendeRunda = false;
         bool spelaresTur = true;
         Image ritaBild;
-        Image pokerchipimage;
         List<Tuple<Image, Point>> imagesToDraw = new List<Tuple<Image, Point>>();
         //List<Tuple<Image, Point>> markerBild = new List<Tuple<Image, Point>>();
         //List<Tuple<Image, Point>> dragnaKort = new List<Tuple<Image, Point>>();
@@ -39,10 +40,12 @@ namespace Black_Jack
         private Panel satsatPanel;
         PictureBox dollar5, dollar10, dollar50, dollar100, dollar500, dollar1000;
         PictureBox knappHit, knappPass, knappDouble, knappSplit, knappInsurance;
+        PictureBox ram;
         Marker marker = new Marker();
         Label totalBet = new Label();
         Label betInfo = new Label();
         Label bankrulle = new Label();
+        Label visaspelare1bet = new Label();
         string spelarNamn = "";
         login loggain;
         System.Windows.Forms.ToolTip hitTooltip;
@@ -52,6 +55,7 @@ namespace Black_Jack
         System.Windows.Forms.ToolTip insuranceTooltip;
 
 
+ 
         private void spelaLjud(string genväg)
         {
             using (SoundPlayer ljudspelare = new SoundPlayer(genväg))
@@ -142,88 +146,23 @@ namespace Black_Jack
 
         }
 
-        private void Form1_Load_1(object sender, EventArgs e)
-        {
-            this.Hide();
-            loggain = new login();
-            loggain.ShowDialog();
-            //this.WindowState = FormWindowState.Maximized;
-            this.Size = new System.Drawing.Size(1440, 800);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            Image bakgrundbild = Image.FromFile(@"C:\\Black Jack\bilder\blackjackbord.png");
-            Bitmap nystorlek = new Bitmap(bakgrundbild, 1440, 647);
-            this.BackgroundImage = nystorlek;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            spelarNamnMarker();
-
-            totalBet.Location = new Point(this.Width / 2 - 40, this.Height / 2 + 85);
-            totalBet.Font = new Font("MS Gothic", 14, FontStyle.Bold);
-            totalBet.BackColor = Color.Transparent;
-            totalBet.AutoSize = true;
-            this.Controls.Add(totalBet);
-            totalBet.BringToFront();
-
-            betInfo.Location = new Point(this.Width / 2 - 105, this.Height / 2 + 225);
-            betInfo.Font = new Font("MS Gothic", 14, FontStyle.Bold);
-            betInfo.BackColor = Color.Transparent;
-            betInfo.AutoSize = true;
-            this.Controls.Add(betInfo);
-            betInfo.BringToFront();
-            betInfo.Text = "Maxbet är $1000";
-
-            bankrulle.Location = new Point(this.Width / 2 - 420, this.Height / 2 + 100);
-            bankrulle.Font = new Font("MS Gothic", 14, FontStyle.Bold);
-            bankrulle.BackColor = Color.Transparent;
-            bankrulle.AutoSize = true;
-            this.Controls.Add(bankrulle);
-            totalBet.BringToFront();
-            bankrulle.Text = spelarNamn + ", du har $" + antalMarker;
-
-            this.DoubleBuffered = true;
-
-            bankkortPanel = new Panel();
-            bankkortPanel.Size = new Size(50, 72);
-            bankkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2  - 185);
-            bankkortPanel.BackColor = Color.Transparent;
-            this.Controls.Add(bankkortPanel);
-
-            spelarkortPanel = new Panel();
-            spelarkortPanel.Size = new Size(50, 72);
-            spelarkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 - 40);
-            spelarkortPanel.BackColor = Color.Transparent;
-            this.Controls.Add(spelarkortPanel);
-
-            satsatPanel = new Panel();
-            satsatPanel.Size = new Size(350, 120);
-            satsatPanel.Location = new Point(this.Width / 2 - 90, this.Height / 2 + 95);
-            satsatPanel.BackColor = Color.Transparent;
-            satsatPanel.Paint += new PaintEventHandler(ritaSatsadeMarker);
-            this.Controls.Add(satsatPanel);
-
-            skapaMarkerBilder();
-            skapaKnappBilder();
-            tooltips();
-
-        }
-
         private void tooltips()
         {
             hitTooltip = new System.Windows.Forms.ToolTip();
             hitTooltip.AutoPopDelay = 5000;
-            hitTooltip.InitialDelay = 1000;
+            hitTooltip.InitialDelay = 400;
             hitTooltip.ReshowDelay = 200;
             hitTooltip.SetToolTip(this.knappHit, "Hit!");
 
             passTooltip = new System.Windows.Forms.ToolTip();
             passTooltip.AutoPopDelay = 5000;
-            passTooltip.InitialDelay = 1000;
+            passTooltip.InitialDelay = 400;
             passTooltip.ReshowDelay = 200;
-            passTooltip.SetToolTip(this.knappHit, "Pass!");
+            passTooltip.SetToolTip(this.knappPass, "Pass!");
 
             doubleTooltip = new System.Windows.Forms.ToolTip();
             doubleTooltip.AutoPopDelay = 5000;
-            doubleTooltip.InitialDelay = 1000;
+            doubleTooltip.InitialDelay = 400;
             doubleTooltip.ReshowDelay = 200;
             doubleTooltip.SetToolTip(this.knappDouble, "Double!");
 
@@ -240,145 +179,165 @@ namespace Black_Jack
             //insuranceTooltip.SetToolTip(this.knappInsurance, "Insurance!");
 
         }
-        //private void ritaSatsadeMarker(object sender, PaintEventArgs e)
-        //{
-        //    satsatPanel.SuspendLayout();
-        //    int y = 0;
-        //    posX = 0;
-        //    posY = 0;
-        //    imagesToDraw.Clear();
-        //    foreach (int x in markervärde)
-        //    {
-        //        if (y == 5)
-        //        {
-        //            posX = 0;
-        //            posY = 50;
-        //        }
-        //        switch (x)
-        //        {
-        //            case 5:
-        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
-        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-        //                posX += 10;
-        //                break;
-        //            case 10:
-        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
-        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-        //                posX += 10;
-        //                break;
-        //            case 50:
-        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
-        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-        //                posX += 10;
-        //                break;
-        //            case 100:
-        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
-        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-        //                posX += 10;
-        //                break;
-        //            case 500:
-        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
-        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-        //                posX += 10;
-        //                break;
-        //            case 1000:
-        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
-        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-        //                posX += 10;
-        //                break;
-        //        }
-        //        y++;
-        //    }
-        //    Graphics g = e.Graphics;
 
-        //    base.OnPaint(e);
-
-
-        //    Bitmap canvas = new Bitmap(satsatPanel.Width, satsatPanel.Height);
-        //    using (Graphics canvasGraphics = Graphics.FromImage(canvas))
-        //    {
-        //        canvasGraphics.Clear(Color.Transparent);
-
-        //        // Draw all images stored in the list
-        //        foreach (var imageTuple in imagesToDraw)
-        //        {
-        //            canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(80, 80)));
-        //        }
-
-        //        g.DrawImageUnscaled(canvas, Point.Empty);
-        //    }
-        //    satsatPanel.ResumeLayout();
-        //}
-
-        private void ritaSatsadeMarker(object sender, PaintEventArgs e)
+        private void Form1_Load_1(object sender, EventArgs e)
         {
-            satsatPanel.SuspendLayout();
-            int y = 0;
-            posX = 0;
-            posY = 0;
-            imagesToDraw.Clear();
-            for(int i = 0 ; i < markervärde.Count; i++) 
-            {
-                if (y == 5)
-                {
-                    posX = 50;
-                    posY = 0;
-                }
-                switch (markervärde[i])
-                {
-                    case 5:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
-                        imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-                        posY -= 5;
-                        break;
-                    case 10:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
-                        imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-                        posY -= 5;
-                        break;
-                    case 50:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
-                        imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-                        posY -= 5;
-                        break;
-                    case 100:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
-                        imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-                        posY -= 5;
-                        break;
-                    case 500:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
-                        imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-                        posY -= 5;
-                        break;
-                    case 1000:
-                        ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
-                        imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
-                        posY -= 5;
-                        break;
-                }
-                y++;
-            }
-            Graphics g = e.Graphics;
+            this.Hide();
+            loggain = new login();
+            loggain.ShowDialog();
+            this.Size = new System.Drawing.Size(1440, 800);
+            this.Location = new Point(0,0);
+            this.StartPosition = FormStartPosition.Manual;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            Image bakgrundbild = Image.FromFile(@"C:\\Black Jack\bilder\blackjackbord.png");
+            Bitmap nystorlek = new Bitmap(bakgrundbild, 1440, 647);
+            this.BackgroundImage = nystorlek;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            spelarNamnMarker();
 
-            base.OnPaint(e);
+            totalBet.Location = new Point(this.Width / 2 - 40, this.Height / 2 + 85);
+            totalBet.Font = new Font("MS Gothic", 14, FontStyle.Bold);
+            totalBet.BackColor = Color.Transparent;
+            totalBet.AutoSize = true;
+            this.Controls.Add(totalBet);
+            totalBet.BringToFront();
 
+            bankrulle.Location = new Point(this.Width / 2 - 420, this.Height / 2 + 100);
+            bankrulle.Font = new Font("MS Gothic", 14, FontStyle.Bold);
+            bankrulle.BackColor = Color.Transparent;
+            bankrulle.AutoSize = true;
+            this.Controls.Add(bankrulle);
+            totalBet.BringToFront();
+            bankrulle.Text = spelarNamn + ", du har $" + antalMarker;
 
-            Bitmap canvas = new Bitmap(satsatPanel.Width, satsatPanel.Height);
-            using (Graphics canvasGraphics = Graphics.FromImage(canvas))
-            {
-                canvasGraphics.Clear(Color.Transparent);
+            visaspelare1bet.Location = new Point(this.Width / 2 - 35, this.Height / 2 + 200);
+            visaspelare1bet.Font = new Font("MS Gothic", 14, FontStyle.Bold);
+            visaspelare1bet.BackColor = Color.LightGray;
+            visaspelare1bet.AutoSize = true;
+            this.Controls.Add(visaspelare1bet);
+            visaspelare1bet.BringToFront();
+            visaspelare1bet.Text = "$" + markervärde.Sum();
 
-                // Draw all images stored in the list
-                foreach (var imageTuple in imagesToDraw)
-                {
-                    canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(50, 50)));
-                }
+            this.DoubleBuffered = true;
 
-                g.DrawImageUnscaled(canvas, Point.Empty);
-            }
-            satsatPanel.ResumeLayout();
+            bankkortPanel = new Panel();
+            bankkortPanel.Size = new Size(50, 72);
+            bankkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2  - 185);
+            bankkortPanel.BackColor = Color.Transparent;
+            this.Controls.Add(bankkortPanel);
+
+            spelarkortPanel = new Panel();
+            spelarkortPanel.Size = new Size(50, 72);
+            spelarkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 + 125);
+            spelarkortPanel.BackColor = Color.Transparent;
+            this.Controls.Add(spelarkortPanel);
+            spelarkortPanel.Hide();
+
+            ram = new PictureBox();
+            ram.Size = new Size(50, 72);
+            ram.Location = new Point(200,200);
+            ram.BackColor = Color.Transparent;
+            Image rambild = Image.FromFile(@"C:\\Black Jack\bilder\vitram.png");
+            //ram.Image = DrawTranslucentRoundedRectangle();
+            ram.SizeMode = PictureBoxSizeMode.StretchImage;
+            this.Controls.Add(ram);
+            DrawTranslucentRoundedRectangle();
+            ram.Click += new EventHandler(ram_click);
+
+            //satsatPanel = new Panel();
+            //satsatPanel.Size = new Size(70, 60);
+            //satsatPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 + 125);
+            //satsatPanel.BackColor = Color.Transparent;
+            //satsatPanel.Paint += new PaintEventHandler(ritaSatsadeMarker);
+            //this.Controls.Add(satsatPanel);
+
+            skapaMarkerBilder();
+            skapaKnappBilder();
+            tooltips();
+
         }
+        
+        private void ram_click(object sender, EventArgs e)
+        {
+            DrawTranslucentRoundedRectangle1();
+        }
+
+        #region ritaramar
+        private void DrawTranslucentRoundedRectangle()
+        {
+            // Define the rectangle dimensions
+            int width = 50;
+            int height = 72;
+
+            // Create a bitmap with a transparent background
+            Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.Clear(Color.Transparent);
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                Pen pen = new Pen(Color.Black, 2); // Adjust the color and width of the border
+
+                // Draw the border of the rounded rectangle
+                RectangleF rect = new RectangleF(0, 0, width - 1, height - 1);
+                float radius = 10; // Adjust the corner radius as needed
+                GraphicsPath path = GetRoundedRectangle(rect, radius);
+                g.DrawPath(pen, path);
+            }
+
+            // Display the bitmap in the PictureBox
+            ram.Image = bitmap;
+        }
+
+        private void DrawTranslucentRoundedRectangle1()
+        {
+            // Define the rectangle dimensions
+            int width = 50;
+            int height = 72;
+
+            // Create a bitmap with a transparent background
+            Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.Clear(Color.Transparent);
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                SolidBrush brush = new SolidBrush(Color.LightBlue); // Change the color as needed
+
+                // Draw the rounded rectangle
+                RectangleF rect = new RectangleF(0, 0, width - 1, height - 1);
+                float radius = 10; // Adjust the corner radius as needed
+                GraphicsPath path = GetRoundedRectangle(rect, radius);
+                g.FillPath(brush, path);
+
+                // Draw the border of the rounded rectangle
+                Pen pen = new Pen(Color.Black, 2); // Adjust the color and width of the border
+                g.DrawPath(pen, path);
+            }
+
+            // Display the bitmap in the PictureBox
+            ram.Image = bitmap;
+        }
+
+        private GraphicsPath GetRoundedRectangle(RectangleF baseRect, float radius)
+        {
+            float diameter = radius * 2;
+            SizeF sizeF = new SizeF(diameter, diameter);
+            RectangleF arc = new RectangleF(baseRect.Location, sizeF);
+            GraphicsPath path = new GraphicsPath();
+
+            path.AddArc(arc, 180, 90);
+            arc.X = baseRect.Right - diameter;
+            path.AddArc(arc, 270, 90);
+            arc.Y = baseRect.Bottom - diameter;
+            path.AddArc(arc, 0, 90);
+            arc.X = baseRect.Left;
+            path.AddArc(arc, 90, 90);
+            path.CloseFigure();
+
+            return path;
+        }
+
+        #endregion
 
 
         private void rensaKort()
@@ -453,6 +412,8 @@ namespace Black_Jack
                         }
 
                     }
+                    knappDouble.Show();
+                    knappPass.Show();
                     pågåendeRunda = true;
                 }
                 else if (spelaresTur)
@@ -465,7 +426,8 @@ namespace Black_Jack
                     visaSpelarKort();
                     nyKortlek.RemoveAt(draKort);
                     await Task.Delay(500);
-                    kollaVinnare();
+                    knappDouble.Location = new Point(this.Width / 2 - 50 + spelarkortPanel.Width + 25, this.Height / 2 + 125);
+                    //kollaVinnare();
                 }
                 else
                 {
@@ -497,7 +459,7 @@ namespace Black_Jack
         {
             if (kortvärdeSpelare > 21)
             {
-                antalMarker -= markervärde.Sum();
+                antalMarker -= spelare1bet;
                 pågåendeRunda = false;
                 totalBet.Text = "Du förlorade $" + markervärde.Sum();
                 bankrulle.Text = spelarNamn + " du har $" + antalMarker;
@@ -506,11 +468,10 @@ namespace Black_Jack
                 uppdateraFil();
                 markervärde.Clear();
                 maxBet();
-                satsatPanel.Invalidate();
             }
             else if (kortvärdeBank > 21)
             {
-                antalMarker += markervärde.Sum();
+                antalMarker += spelare1bet;
                 pågåendeRunda = false;
                 totalBet.Text = "Du vann $" + markervärde.Sum();
                 bankrulle.Text = spelarNamn + " du har $" + antalMarker;
@@ -519,11 +480,10 @@ namespace Black_Jack
                 uppdateraFil();
                 markervärde.Clear();
                 maxBet();
-                satsatPanel.Invalidate();
             }
             else if (kortvärdeBank >= kortvärdeSpelare && kortvärdeBank > 16 && kortvärdeBank < 22)
             {
-                antalMarker -= markervärde.Sum();
+                antalMarker -= spelare1bet;
                 pågåendeRunda = false;
                 totalBet.Text = "Du förlorade $" + markervärde.Sum();
                 bankrulle.Text = spelarNamn + " du har $" + antalMarker;
@@ -532,7 +492,6 @@ namespace Black_Jack
                 uppdateraFil();
                 markervärde.Clear();
                 maxBet();
-                satsatPanel.Invalidate();
             }
             else if (!spelaresTur) spelaKort();
         }
@@ -588,7 +547,6 @@ namespace Black_Jack
         }
         private void resetKort()
         {
-            //dragnaKort.Clear();
             kortvärdeBank = 0;
             kortvärdeSpelare = 0;
             spelarListaKort.Clear();
@@ -604,6 +562,10 @@ namespace Black_Jack
 
         #region läggtillbilder
 
+        private void skapaRamarBilder()
+        {
+
+        }
         private void skapaBankkortsBilder(int x)
         {
             PictureBox kort = new PictureBox();
@@ -630,7 +592,7 @@ namespace Black_Jack
         {
             knappHit = new PictureBox();
             knappHit.Size = new Size(30, 30);
-            knappHit.Location = new Point(this.Width / 2 - 90, this.Height / 2 - 35);
+            knappHit.Location = new Point(this.Width / 2 - 90, this.Height / 2 +125);
             knappHit.BackColor = Color.Transparent;
             knappHit.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\hit.png");
             knappHit.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -640,23 +602,25 @@ namespace Black_Jack
 
             knappPass = new PictureBox();
             knappPass.Size = new Size(30, 30);
-            knappPass.Location = new Point(this.Width / 2 - 90, this.Height / 2  );
+            knappPass.Location = new Point(this.Width / 2 - 90, this.Height / 2 + 160 );
             knappPass.BackColor = Color.Transparent;
             knappPass.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\pass.png");
             knappPass.SizeMode = PictureBoxSizeMode.StretchImage;
             knappPass.BringToFront();
             this.Controls.Add(knappPass);
             knappPass.MouseClick += new MouseEventHandler(knappPass_click);
+            knappPass.Hide();
 
             knappDouble = new PictureBox();
             knappDouble.Size = new Size(30, 30);
-            knappDouble.Location = new Point(this.Width / 2 - 50 + spelarkortPanel.Width + 25, this.Height / 2 - 35);
+            knappDouble.Location = new Point(this.Width / 2 -50 + spelarkortPanel.Width + 25, this.Height / 2 + 125);
             knappDouble.BackColor = Color.Transparent;
             knappDouble.Image = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\double.png");
             knappDouble.SizeMode = PictureBoxSizeMode.StretchImage;
             knappDouble.BringToFront();
             this.Controls.Add(knappDouble);
             knappDouble.MouseClick += new MouseEventHandler(knappDouble_click);
+            knappDouble.Hide();
         }
 
         private void skapaMarkerBilder()
@@ -732,6 +696,7 @@ namespace Black_Jack
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 5);
+                visaspelare1bet.Text = "$" + markervärde.Sum();
             }
             else
             {
@@ -742,6 +707,7 @@ namespace Black_Jack
                     {
                         markervärde.Add(5);
                         markervärde = marker.sortera(markervärde);
+                        visaspelare1bet.Text = "$" + markervärde.Sum();
                     }
                     else
                     {
@@ -751,7 +717,6 @@ namespace Black_Jack
             }
             maxBet();
             spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-            satsatPanel.Invalidate();
         }
         private void dollar10_click(object sender, MouseEventArgs e)
         {
@@ -761,7 +726,17 @@ namespace Black_Jack
             }
             if (e.Button == MouseButtons.Right)
             {
-                markervärde = marker.raderaMarker(markervärde, 10);
+                if (10 > markervärde.Sum())
+                {
+                    markervärde.Clear();
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+
+                }
+                else
+                {
+                    markervärde = marker.raderaMarker(markervärde, 10);
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+                }
             }
             else
             {
@@ -771,6 +746,7 @@ namespace Black_Jack
                     {
                         markervärde.Add(10);
                         markervärde = marker.sortera(markervärde);
+                        visaspelare1bet.Text = "$" + markervärde.Sum();
                     }
                     else
                     {
@@ -780,7 +756,6 @@ namespace Black_Jack
             }
             maxBet();
             spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-            satsatPanel.Invalidate();
         }
         private void dollar50_click(object sender, MouseEventArgs e)
         {
@@ -790,7 +765,17 @@ namespace Black_Jack
             }
             if (e.Button == MouseButtons.Right)
             {
-                markervärde = marker.raderaMarker(markervärde, 50);
+                if (50 > markervärde.Sum())
+                {
+                    markervärde.Clear();
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+
+                }
+                else
+                {
+                    markervärde = marker.raderaMarker(markervärde, 50);
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+                }
             }
             else
             {
@@ -800,6 +785,7 @@ namespace Black_Jack
                     {
                         markervärde.Add(50);
                         markervärde = marker.sortera(markervärde);
+                        visaspelare1bet.Text = "$" + markervärde.Sum();
                     }
                     else
                     {
@@ -809,7 +795,6 @@ namespace Black_Jack
             }
             maxBet();
             spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-            satsatPanel.Invalidate();
         }
         private void dollar100_click(object sender, MouseEventArgs e)
         {
@@ -819,7 +804,17 @@ namespace Black_Jack
             }
             if (e.Button == MouseButtons.Right)
             {
-                markervärde = marker.raderaMarker(markervärde, 100);
+                if (100 > markervärde.Sum())
+                {
+                    markervärde.Clear();
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+
+                }
+                else
+                {
+                    markervärde = marker.raderaMarker(markervärde, 100);
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+                }
             }
             else
             {
@@ -829,6 +824,7 @@ namespace Black_Jack
                     {
                         markervärde.Add(100);
                         markervärde = marker.sortera(markervärde);
+                        visaspelare1bet.Text = "$" + markervärde.Sum();
                     }
                     else
                     {
@@ -838,7 +834,6 @@ namespace Black_Jack
             }
             maxBet();
             spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-            satsatPanel.Invalidate();
         }
         private void dollar500_click(object sender, MouseEventArgs e)
         {
@@ -848,7 +843,17 @@ namespace Black_Jack
             }
             if (e.Button == MouseButtons.Right)
             {
-                markervärde = marker.raderaMarker(markervärde, 500);
+                if (500 > markervärde.Sum())
+                {
+                    markervärde.Clear();
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+
+                }
+                else
+                {
+                    markervärde = marker.raderaMarker(markervärde, 500);
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+                }
             }
             else
             {
@@ -858,6 +863,7 @@ namespace Black_Jack
                     {
                         markervärde.Add(500);
                         markervärde = marker.sortera(markervärde);
+                        visaspelare1bet.Text = "$" + markervärde.Sum();
                     }
                     else
                     {
@@ -867,7 +873,6 @@ namespace Black_Jack
             }
             maxBet();
             spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-            satsatPanel.Invalidate();
         }
         private void dollar1000_click(object sender, MouseEventArgs e)
         {
@@ -877,7 +882,17 @@ namespace Black_Jack
             }
             if (e.Button == MouseButtons.Right)
             {
-                markervärde = marker.raderaMarker(markervärde, 1000);
+                if (1000 > markervärde.Sum())
+                {
+                    markervärde.Clear();
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+
+                }
+                else
+                {
+                    markervärde = marker.raderaMarker(markervärde, 1000);
+                    visaspelare1bet.Text = "$" + markervärde.Sum();
+                }
             }
             else
             {
@@ -887,6 +902,7 @@ namespace Black_Jack
                     {
                         markervärde.Add(1000);
                         markervärde = marker.sortera(markervärde);
+                        visaspelare1bet.Text = "$" + markervärde.Sum();
                     }
                     else
                     {
@@ -896,11 +912,13 @@ namespace Black_Jack
             }
             maxBet();
             spelaLjudUtanSync(@"C:\\Black Jack\Audio\satsamarker.wav");
-            satsatPanel.Invalidate();
         }
 
         private void knappHit_click(object sender, MouseEventArgs e)
         {
+            spelarkortPanel.Show();
+            satsatPanel.Hide();
+            spelare1bet = markervärde.Sum();
             spelaKort();
         }
 
@@ -914,10 +932,157 @@ namespace Black_Jack
 
         private void knappDouble_click(object sender, MouseEventArgs e)
         {
-
+            spelare1bet *= 2;
+            visaspelare1bet.Text = "$" + spelare1bet;
+            knappDouble.Hide();
+            knappPass.Hide();
+            spelaKort();
+            passa();
         }
         #endregion
 
+        //#region ritamarker
+ 
+        ////private void ritaSatsadeMarker(object sender, PaintEventArgs e)
+        ////{
+        ////    satsatPanel.SuspendLayout();
+        ////    int y = 0;
+        ////    posX = 0;
+        ////    posY = 0;
+        ////    imagesToDraw.Clear();
+        ////    foreach (int x in markervärde)
+        ////    {
+        ////        if (y == 5)
+        ////        {
+        ////            posX = 0;
+        ////            posY = 50;
+        ////        }
+        ////        switch (x)
+        ////        {
+        ////            case 5:
+        ////                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
+        ////                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        ////                posX += 10;
+        ////                break;
+        ////            case 10:
+        ////                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
+        ////                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        ////                posX += 10;
+        ////                break;
+        ////            case 50:
+        ////                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
+        ////                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        ////                posX += 10;
+        ////                break;
+        ////            case 100:
+        ////                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
+        ////                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        ////                posX += 10;
+        ////                break;
+        ////            case 500:
+        ////                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
+        ////                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        ////                posX += 10;
+        ////                break;
+        ////            case 1000:
+        ////                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
+        ////                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        ////                posX += 10;
+        ////                break;
+        ////        }
+        ////        y++;
+        ////    }
+        ////    Graphics g = e.Graphics;
+
+        ////    base.OnPaint(e);
+
+
+        ////    Bitmap canvas = new Bitmap(satsatPanel.Width, satsatPanel.Height);
+        ////    using (Graphics canvasGraphics = Graphics.FromImage(canvas))
+        ////    {
+        ////        canvasGraphics.Clear(Color.Transparent);
+
+        ////        // Draw all images stored in the list
+        ////        foreach (var imageTuple in imagesToDraw)
+        ////        {
+        ////            canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(80, 80)));
+        ////        }
+
+        ////        g.DrawImageUnscaled(canvas, Point.Empty);
+        ////    }
+        ////    satsatPanel.ResumeLayout();
+        ////}
+
+        //private void ritaSatsadeMarker(object sender, PaintEventArgs e)
+        //{
+        //    satsatPanel.SuspendLayout();
+        //    int y = 0;
+        //    posX = 0;
+        //    posY = 0;
+        //    imagesToDraw.Clear();
+        //    for(int i = 0 ; i < markervärde.Count; i++) 
+        //    {
+        //        if (y == 5)
+        //        {
+        //            posX = 32;
+        //            posY = 0;
+        //        }
+        //        switch (markervärde[i])
+        //        {
+        //            case 5:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\5$.png");
+        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        //                posY += 5;
+        //                break;
+        //            case 10:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\10$.png");
+        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        //                posY += 5;
+        //                break;
+        //            case 50:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\50$.png");
+        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        //                posY += 5;
+        //                break;
+        //            case 100:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\100$.png");
+        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        //                posY += 5;
+        //                break;
+        //            case 500:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\500$.png");
+        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        //                posY += 5;
+        //                break;
+        //            case 1000:
+        //                ritaBild = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
+        //                imagesToDraw.Add(new Tuple<Image, Point>(ritaBild, new Point(posX, posY)));
+        //                posY += 5;
+        //                break;
+        //        }
+        //        y++;
+        //    }
+        //    Graphics g = e.Graphics;
+
+        //    base.OnPaint(e);
+
+
+        //    Bitmap canvas = new Bitmap(satsatPanel.Width, satsatPanel.Height);
+        //    using (Graphics canvasGraphics = Graphics.FromImage(canvas))
+        //    {
+        //        canvasGraphics.Clear(Color.Transparent);
+
+        //        // Draw all images stored in the list
+        //        foreach (var imageTuple in imagesToDraw)
+        //        {
+        //            canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(50, 50)));
+        //        }
+
+        //        g.DrawImageUnscaled(canvas, Point.Empty);
+        //    }
+        //    satsatPanel.ResumeLayout();
+        //}
+        //#endregion
 
     }
 
