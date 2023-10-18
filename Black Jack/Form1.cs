@@ -17,6 +17,8 @@ namespace Black_Jack
         List<int> markervärde = new List<int>(); //Hur många marker spelar har satsat
         List<int> bankListaKort = new List<int>();
         List<int> spelarListaKort = new List<int>();
+        List<PictureBox> bankkort = new List<PictureBox>();
+        List<PictureBox> spelarkort = new List<PictureBox>();
         bool[] kollaKryss = new bool[] { false, false, false, false, false, false };
         int kortvärdeBank, kortvärdeSpelare;
         int antalMarker = 5000; //Hur många marker spelaren har
@@ -26,6 +28,8 @@ namespace Black_Jack
         int bankPosY;
         int spelarPosX;
         int spelarPosY;
+        //int bankkortspanelStorlek = 50;
+        //int spelarkortspanelStorkek = 50;
         bool pågåendeRunda = false;
         bool spelaresTur = true;
         Image ritaBild;
@@ -33,8 +37,8 @@ namespace Black_Jack
         List<Tuple<Image, Point>> markerBild = new List<Tuple<Image, Point>>();
         List<Tuple<Image, Point>> dragnaKort = new List<Tuple<Image, Point>>();
         List<Tuple<Image, Point>> knappar = new List<Tuple<Image, Point>>();
-        private Panel markerPanel;
-        private Panel spelkortPanel;
+        private Panel bankkortPanel;
+        private Panel spelarkortPanel;
         private Panel satsatPanel;
         private Panel knapparPanel;
         PictureBox dollar5, dollar10, dollar50, dollar100, dollar500, dollar1000;
@@ -191,12 +195,19 @@ namespace Black_Jack
             //markerPanel.MouseClick += new MouseEventHandler(markerPanel_MouseClick);
 
 
-            spelkortPanel = new Panel();
-            spelkortPanel.Size = new Size(350, 300);
-            spelkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 - 242);
-            spelkortPanel.BackColor = Color.Transparent;
-            spelkortPanel.Paint += new PaintEventHandler(ritaSpelkort);
-            this.Controls.Add(spelkortPanel);
+            bankkortPanel = new Panel();
+            bankkortPanel.Size = new Size(50, 72);
+            bankkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2  - 185);
+            bankkortPanel.BackColor = Color.Transparent;
+            //bankkortPanel.Paint += new PaintEventHandler(ritaSpelkort);
+            this.Controls.Add(bankkortPanel);
+
+            spelarkortPanel = new Panel();
+            spelarkortPanel.Size = new Size(50, 72);
+            spelarkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 - 40);
+            spelarkortPanel.BackColor = Color.Transparent;
+            //spelarkortPanel.Paint += new PaintEventHandler(ritaSpelkort);
+            this.Controls.Add(spelarkortPanel);
 
             satsatPanel = new Panel();
             satsatPanel.Size = new Size(350, 120);
@@ -222,72 +233,72 @@ namespace Black_Jack
 
 
         #region onPaint
-        private void ritaMarker(object sender, PaintEventArgs e)
-        {
-            markerPanel.SuspendLayout();
-            Graphics g = e.Graphics;
+        //private void ritaMarker(object sender, PaintEventArgs e)
+        //{
+        //    markerPanel.SuspendLayout();
+        //    Graphics g = e.Graphics;
 
-            base.OnPaint(e);
+        //    base.OnPaint(e);
 
-            Bitmap canvas = new Bitmap(markerPanel.Width, markerPanel.Height);
-            using (Graphics canvasGraphics = Graphics.FromImage(canvas))
-            {
-                canvasGraphics.Clear(Color.Transparent);
+        //    Bitmap canvas = new Bitmap(markerPanel.Width, markerPanel.Height);
+        //    using (Graphics canvasGraphics = Graphics.FromImage(canvas))
+        //    {
+        //        canvasGraphics.Clear(Color.Transparent);
 
-                // Draw all images stored in the list
-                foreach (var imageTuple in markerBild)
-                {
-                    canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(80, 80)));
-                }
-                for (int i = 0; i < kollaKryss.Length; i++)
-                {
-                    if (kollaKryss[i])
-                    {
-                        Point imagePosition = markerBild[i].Item2;
-                        Size imageSize = markerBild[i].Item1.Size;
-                        // Calculate the center of the image
-                        int centerX = imagePosition.X + (imageSize.Width / 2);
-                        int centerY = imagePosition.Y + (imageSize.Height / 2);
+        //        // Draw all images stored in the list
+        //        foreach (var imageTuple in markerBild)
+        //        {
+        //            canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(80, 80)));
+        //        }
+        //        for (int i = 0; i < kollaKryss.Length; i++)
+        //        {
+        //            if (kollaKryss[i])
+        //            {
+        //                Point imagePosition = markerBild[i].Item2;
+        //                Size imageSize = markerBild[i].Item1.Size;
+        //                // Calculate the center of the image
+        //                int centerX = imagePosition.X + (imageSize.Width / 2);
+        //                int centerY = imagePosition.Y + (imageSize.Height / 2);
 
-                        // Calculate half of the diagonal length of the image
-                        int halfDiagonal = ((int)(Math.Sqrt(Math.Pow(imageSize.Width, 2) + Math.Pow(imageSize.Height, 2)) / 2)) / 3;
+        //                // Calculate half of the diagonal length of the image
+        //                int halfDiagonal = ((int)(Math.Sqrt(Math.Pow(imageSize.Width, 2) + Math.Pow(imageSize.Height, 2)) / 2)) / 3;
 
-                        Pen redPen = new Pen(Color.Red, 5);
+        //                Pen redPen = new Pen(Color.Red, 5);
 
-                        // Draw the first diagonal line of the "X" from top-left to bottom-right
-                        canvasGraphics.DrawLine(redPen, centerX - halfDiagonal, centerY - halfDiagonal, centerX + halfDiagonal, centerY + halfDiagonal);
+        //                // Draw the first diagonal line of the "X" from top-left to bottom-right
+        //                canvasGraphics.DrawLine(redPen, centerX - halfDiagonal, centerY - halfDiagonal, centerX + halfDiagonal, centerY + halfDiagonal);
 
-                        // Draw the second diagonal line of the "X" from top-right to bottom-left
-                        canvasGraphics.DrawLine(redPen, centerX + halfDiagonal, centerY - halfDiagonal, centerX - halfDiagonal, centerY + halfDiagonal);
-                    }
-                }
-                g.DrawImageUnscaled(canvas, Point.Empty);
-            }
-            markerPanel.ResumeLayout();
-        }
+        //                // Draw the second diagonal line of the "X" from top-right to bottom-left
+        //                canvasGraphics.DrawLine(redPen, centerX + halfDiagonal, centerY - halfDiagonal, centerX - halfDiagonal, centerY + halfDiagonal);
+        //            }
+        //        }
+        //        g.DrawImageUnscaled(canvas, Point.Empty);
+        //    }
+        //    markerPanel.ResumeLayout();
+        //}
 
-        private void ritaSpelkort(object sender, PaintEventArgs e)
-        {
-            spelkortPanel.SuspendLayout();
-            Graphics g = e.Graphics;
+        //private void ritaSpelkort(object sender, PaintEventArgs e)
+        //{
+        //    spelkortPanel.SuspendLayout();
+        //    Graphics g = e.Graphics;
 
-            base.OnPaint(e);
+        //    base.OnPaint(e);
 
-            Bitmap canvas = new Bitmap(spelkortPanel.Width, spelkortPanel.Height);
-            using (Graphics canvasGraphics = Graphics.FromImage(canvas))
-            {
-                canvasGraphics.Clear(Color.Transparent);
+        //    Bitmap canvas = new Bitmap(spelkortPanel.Width, spelkortPanel.Height);
+        //    using (Graphics canvasGraphics = Graphics.FromImage(canvas))
+        //    {
+        //        canvasGraphics.Clear(Color.Transparent);
 
-                foreach (var imageTuple in dragnaKort)
-                {
+        //        foreach (var imageTuple in dragnaKort)
+        //        {
 
-                    canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(70, 101)));
-                }
+        //            canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(70, 101)));
+        //        }
 
-                g.DrawImageUnscaled(canvas, Point.Empty);
-            }
-            spelkortPanel.ResumeLayout();
-        }
+        //        g.DrawImageUnscaled(canvas, Point.Empty);
+        //    }
+        //    spelkortPanel.ResumeLayout();
+        //}
 
         private void ritaSatsadeMarker(object sender, PaintEventArgs e)
         {
@@ -358,29 +369,29 @@ namespace Black_Jack
             satsatPanel.ResumeLayout();
         }
 
-        private void ritaknapparPanel(object sender, PaintEventArgs e)
-        {
-            knapparPanel.SuspendLayout();
-            Graphics g = e.Graphics;
+        //private void ritaknapparPanel(object sender, PaintEventArgs e)
+        //{
+        //    knapparPanel.SuspendLayout();
+        //    Graphics g = e.Graphics;
 
-            base.OnPaint(e);
+        //    base.OnPaint(e);
 
-            Bitmap canvas = new Bitmap(knapparPanel.Width, knapparPanel.Height);
-            using (Graphics canvasGraphics = Graphics.FromImage(canvas))
-            {
-                canvasGraphics.Clear(Color.Transparent);
+        //    Bitmap canvas = new Bitmap(knapparPanel.Width, knapparPanel.Height);
+        //    using (Graphics canvasGraphics = Graphics.FromImage(canvas))
+        //    {
+        //        canvasGraphics.Clear(Color.Transparent);
 
-                foreach (var imageTuple in knappar)
-                {
-                    canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(50, 50)));
+        //        foreach (var imageTuple in knappar)
+        //        {
+        //            canvasGraphics.DrawImage(imageTuple.Item1, new Rectangle(imageTuple.Item2, new Size(50, 50)));
 
-                }
+        //        }
 
-                g.DrawImageUnscaled(canvas, Point.Empty);
-            }
+        //        g.DrawImageUnscaled(canvas, Point.Empty);
+        //    }
 
-            knapparPanel.ResumeLayout();
-        }
+        //    knapparPanel.ResumeLayout();
+        //}
 
 
         #endregion
@@ -402,7 +413,7 @@ namespace Black_Jack
                     bankPosX = 0;
                     bankPosY = 0;
                     spelarPosX = 0;
-                    spelarPosY = 200;
+                    spelarPosY = 0;
                     nyKortlek = kortlek.Nykortlek();
                     for (int i = 0; i < 3; i++)
                     {
@@ -413,24 +424,23 @@ namespace Black_Jack
                         {
                             bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
                             kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
-                            genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[draKort] + ".png";
-                            ritaBild = Image.FromFile(genväg);
-                            dragnaKort.Add(new Tuple<Image, Point>(ritaBild, new Point(bankPosX, bankPosY)));
+                            skapaBankkortsBilder(draKort);
+                            visaBankKort();
+
+                            //bankkortPanel.Width += 15;
                             bankPosX += 15;
                             nyKortlek.RemoveAt(draKort);
-                            spelkortPanel.Invalidate();
                             await Task.Delay(500);
                         }
                         else
                         {
                             spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
                             kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
-                            genväg = @"C:\\Black Jack\\bilder\\Spelkort\\" + nyKortlek[draKort] + ".png";
-                            ritaBild = Image.FromFile(genväg);
-                            dragnaKort.Add(new Tuple<Image, Point>(ritaBild, new Point(spelarPosX, spelarPosY)));
+                            skapaSpelarkortsBilder(draKort);
+                            visaSpelarKort();
+                            //spelarkortPanel.Width += 15;
                             spelarPosX += 15;
                             nyKortlek.RemoveAt(draKort);
-                            spelkortPanel.Invalidate();
                             await Task.Delay(500);
                         }
 
@@ -443,13 +453,11 @@ namespace Black_Jack
                     draKort = rnd.Next(nyKortlek.Count);
                     spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
                     kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
-                    genväg = @"C:\\Black Jack\\bilder\\Spelkort\\" + nyKortlek[draKort] + ".png";
-                    ritaBild = Image.FromFile(genväg);
-                    dragnaKort.Add(new Tuple<Image, Point>(ritaBild, new Point(spelarPosX, spelarPosY)));
+                    skapaSpelarkortsBilder(draKort);
+                    visaSpelarKort();
                     spelarPosX += 15;
                     nyKortlek.RemoveAt(draKort);
                     kollaVinnare();
-                    spelkortPanel.Invalidate();
                     await Task.Delay(500);
                 }
                 else
@@ -458,12 +466,10 @@ namespace Black_Jack
                     draKort = rnd.Next(nyKortlek.Count);
                     bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
                     kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
-                    genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[draKort] + ".png";
-                    ritaBild = Image.FromFile(genväg);
-                    dragnaKort.Add(new Tuple<Image, Point>(ritaBild, new Point(bankPosX, bankPosY)));
+                    skapaBankkortsBilder(draKort);
+                    visaBankKort(); ;
                     bankPosX += 15;
                     nyKortlek.RemoveAt(draKort);
-                    spelkortPanel.Invalidate();
                     await Task.Delay(500);
                     kollaVinnare();
 
@@ -481,7 +487,7 @@ namespace Black_Jack
             kollaVinnare();
 
 
-            spelkortPanel.Invalidate();
+            //spelkortPanel.Invalidate();
         }
 
         private void kollaVinnare()
@@ -538,7 +544,9 @@ namespace Black_Jack
             if (markervärde.Sum() > 0)
             {
                 kollaKryss[5] = true;
+                dollar1000.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$kryss.png");
             }
+            else dollar1000.Image = Image.FromFile(@"C:\\Black Jack\bilder\Spelmarker\1000$.png");
             if (markervärde.Sum() > 500)
             {
                 kollaKryss[4] = true;
@@ -566,14 +574,70 @@ namespace Black_Jack
             kortvärdeBank = 0;
             kortvärdeSpelare = 0;
             spelarListaKort.Clear();
+            bankkort.Clear();
+            spelarkort.Clear();
             bankListaKort.Clear();
             nyKortlek.Clear();
         }
 
         #endregion
 
+        private void rensaKort()
+        {
+            foreach (Control control in bankkortPanel.Controls.OfType<Control>().ToList())
+            {
+                bankkortPanel.Controls.Remove(control);
+            }
+            foreach (Control control in spelarkortPanel.Controls.OfType<Control>().ToList())
+            {
+                spelarkortPanel.Controls.Remove(control);
+            }
+        }
+
+        private void visaBankKort()
+        {
+            bankkortPanel.Width = 50 + (bankkort.Count - 1) * 15;
+            for (int i = bankkort.Count - 1; i >= 0; i--)
+            {
+                bankkort[i].Location = new Point(i * 15, 0);
+                bankkortPanel.Controls.Add(bankkort[i]);
+            }
+        }
+
+        private void visaSpelarKort()
+        {
+            spelarkortPanel.Width = 50 + (spelarkort.Count - 1) * 15;
+            for (int i = spelarkort.Count - 1; i > -1; i--)
+            {
+                spelarkort[i].Location = new Point(i * 15, 0);
+                spelarkortPanel.Controls.Add(spelarkort[i]);
+            }
+        }
 
         #region läggtillbilder
+
+        private void skapaBankkortsBilder(int x)
+        {
+            PictureBox kort = new PictureBox();
+            kort.Size = new Size(50, 72);
+            kort.BringToFront();
+            string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
+            ritaBild = Image.FromFile(genväg);
+            kort.Image = ritaBild;
+            bankkort.Add(kort);
+        }
+
+        private void skapaSpelarkortsBilder(int x)
+        {
+
+            PictureBox kort = new PictureBox();
+            kort.Size = new Size(50, 72);
+            kort.BringToFront();
+            string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
+            ritaBild = Image.FromFile(genväg);
+            kort.Image = ritaBild;
+            spelarkort.Add(kort);
+        }
         private void skapaKnappBilder()
         {
             knappHit = new PictureBox();
@@ -656,6 +720,10 @@ namespace Black_Jack
         #region Mouseclick
         private void dollar5_click(object sender, MouseEventArgs e)
         {
+            if (!pågåendeRunda)
+            {
+                rensaKort();
+            }
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 5);
@@ -682,6 +750,10 @@ namespace Black_Jack
         }
         private void dollar10_click(object sender, MouseEventArgs e)
         {
+            if (!pågåendeRunda)
+            {
+                rensaKort();
+            }
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 10);
@@ -707,6 +779,10 @@ namespace Black_Jack
         }
         private void dollar50_click(object sender, MouseEventArgs e)
         {
+            if (!pågåendeRunda)
+            {
+                rensaKort();
+            }
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 50);
@@ -732,6 +808,10 @@ namespace Black_Jack
         }
         private void dollar100_click(object sender, MouseEventArgs e)
         {
+            if (!pågåendeRunda)
+            {
+                rensaKort();
+            }
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 100);
@@ -757,6 +837,10 @@ namespace Black_Jack
         }
         private void dollar500_click(object sender, MouseEventArgs e)
         {
+            if (!pågåendeRunda)
+            {
+                rensaKort();
+            }
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 500);
@@ -782,6 +866,10 @@ namespace Black_Jack
         }
         private void dollar1000_click(object sender, MouseEventArgs e)
         {
+            if (!pågåendeRunda)
+            {
+                rensaKort();
+            }
             if (e.Button == MouseButtons.Right)
             {
                 markervärde = marker.raderaMarker(markervärde, 1000);
