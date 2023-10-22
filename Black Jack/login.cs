@@ -28,6 +28,8 @@ namespace Black_Jack
             {
                 File.Create(filgenväg).Close();
             }
+            radioButton1.Checked = true;
+            spelarinfo.antalspelare = 1;
             laddaSpelare();
         }
 
@@ -58,6 +60,10 @@ namespace Black_Jack
         {
             if (textBox1.Text != "")
             {
+                if ((textBox1.Text.Length > 8))
+                {
+                    textBox1.Text = textBox1.Text.Remove(8);
+                }
                 using (StreamWriter skrivTillFil = new StreamWriter(filgenväg, true))
                 {
                     skrivTillFil.WriteLine(textBox1.Text + ", 5000");
@@ -123,6 +129,62 @@ namespace Black_Jack
             if (stängtsjälv)
             {
                 Environment.Exit(0);
+            }
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked)
+            {
+                spelarinfo.antalspelare = 1;
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton2.Checked)
+            {
+                spelarinfo.antalspelare = 2;
+            }
+        }
+
+        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton3.Checked)
+            {
+                spelarinfo.antalspelare = 3;
+            }
+        }
+
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton4.Checked)
+            {
+                spelarinfo.antalspelare = 4;
+            }
+        }
+
+        private void radioButton5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton5.Checked)
+            {
+                spelarinfo.antalspelare = 5;
+            }
+        }
+
+        private void radioButton6_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton6.Checked)
+            {
+                spelarinfo.antalspelare = 6;
+            }
+        }
+
+        private void radioButton7_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton7.Checked)
+            {
+                spelarinfo.antalspelare = 7;
             }
         }
     }

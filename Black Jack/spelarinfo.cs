@@ -10,5 +10,6 @@ namespace Black_Jack
     internal static class spelarinfo
     {
         public static string spelare { get; set; }
+        public static int antalspelare { get; set; }
 }
 }

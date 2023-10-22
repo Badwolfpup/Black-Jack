@@ -13,39 +13,42 @@ namespace Black_Jack
 		{
 			List<string> kortlek = new List<string>();
 			char[] färger = new char[4] { 'H', 'S', 'R', 'K' };
-			for (int i = 0; i < 4; i++)
+			for (int h = 0; h < 4; h++)
 			{
-				for (int j = 2; j < 15; j++)
+				for (int i = 0; i < 4; i++)
 				{
-					if (j < 10)
+					for (int j = 2; j < 15; j++)
 					{
-						string kort = färger[i].ToString() + j.ToString();
-						kortlek.Add(kort);
-					}
-					else if (j == 10)
-                    {
-						string kort = färger[i].ToString() + "T";
-						kortlek.Add(kort);
-					}
-					else if (j == 11)
-                    {
-						string kort = färger[i].ToString() + "J";
-						kortlek.Add(kort);
-					} 
-					else if (j == 12)
-                    {
-						string kort = färger[i].ToString() + "Q";
-						kortlek.Add(kort);
-					}
-					else if (j == 13)
-					{
-						string kort = färger[i].ToString() + "K";
-						kortlek.Add(kort);
-					}
-					else 
-					{
-						string kort = färger[i].ToString() + "A";
-						kortlek.Add(kort);
+						if (j < 10)
+						{
+							string kort = färger[i].ToString() + j.ToString();
+							kortlek.Add(kort);
+						}
+						else if (j == 10)
+						{
+							string kort = färger[i].ToString() + "T";
+							kortlek.Add(kort);
+						}
+						else if (j == 11)
+						{
+							string kort = färger[i].ToString() + "J";
+							kortlek.Add(kort);
+						}
+						else if (j == 12)
+						{
+							string kort = färger[i].ToString() + "Q";
+							kortlek.Add(kort);
+						}
+						else if (j == 13)
+						{
+							string kort = färger[i].ToString() + "K";
+							kortlek.Add(kort);
+						}
+						else
+						{
+							string kort = färger[i].ToString() + "A";
+							kortlek.Add(kort);
+						}
 					}
 				}
 			}
