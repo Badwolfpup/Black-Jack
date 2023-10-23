@@ -9,6 +9,7 @@ using System.Timers;
 using System.Drawing;
 using System.Linq;
 using System.Diagnostics.Eventing.Reader;
+using System.ComponentModel;
 
 namespace Black_Jack
 {
@@ -26,7 +27,7 @@ namespace Black_Jack
         List<int> spelarListaKort = new List<int>();
         List<PictureBox> bankkort = new List<PictureBox>();
         List<PictureBox> spelarkort = new List<PictureBox>();
-        List<List<PictureBox>> dragnakort = new List<List<PictureBox>>();
+        List<List<PictureBox>> dragnakort = new List<List<PictureBox>>(); //Lista över dragna kort för varje spelare
         List<Panel> panelLista = new List<Panel>(); //Håller lista över panel för datorspelare
         List<List<Label>> datorLabelLista = new List<List<Label>>(); //Håller lista över alla labels för varje panel för datorspelare
         List<Label> spelarLabel = new List<Label>(); //Håller lista över alla labels för spelaren
@@ -223,7 +224,7 @@ namespace Black_Jack
             skapaSpelarPaneler();
             skapaMarkerBilder();
             tooltips();
-            //datorBet();
+            datorBet();
 
         }
 
@@ -271,7 +272,7 @@ namespace Black_Jack
             if (spelarNummer == i) ram1.Click += new EventHandler(ram_click);
         }
 
-        private void läggTillBetLabel(int betPosXskillnad, int i, int spelarnummer)
+        private void läggTillBetLabel(int betPosXskillnad, int i)
         {
             visaspelarebet = new Label();
             visaspelarebet.Location = new Point(betPosXskillnad, 77);
@@ -280,7 +281,7 @@ namespace Black_Jack
             visaspelarebet.AutoSize = true;        
             visaspelarebet.BringToFront();
             visaspelarebet.Text = "$0";
-            if (i == spelarnummer)
+            if (i == spelarNummer)
             {
                 datorPanel.Controls.Add(visaspelarebet);
                 spelarLabel.Add(visaspelarebet);
@@ -305,7 +306,7 @@ namespace Black_Jack
             spelarLabel.Add(visaspelareinfo);
         }
 
-        private void läggTillDatorinfoLabel(int i)
+        private void läggTillDatorinfoLabel(int spelarpos)
         {
             visaspelareinfo = new Label();
             visaspelareinfo.Location = new Point(35, 100);
@@ -313,12 +314,11 @@ namespace Black_Jack
             visaspelareinfo.BackColor = Color.LightGray;
             visaspelareinfo.AutoSize = true;
             visaspelareinfo.BringToFront();
-            visaspelareinfo.Text = "Dator" + i + ": $5000";
+            visaspelareinfo.Text = "Dator" + (spelarpos+1) + ": $5000";
             datorPanel.Controls.Add(visaspelareinfo);
-            datorLabelLista[nummer1].Add(visaspelareinfo);
+            datorLabelLista[spelarpos].Add(visaspelareinfo);
             
         }
-
 
         private void läggTillKnapp()
         {
@@ -381,15 +381,17 @@ namespace Black_Jack
             knappSplit.MouseClick += new MouseEventHandler(knappSplit_click);
             //knappSplit.Hide();
         }
+ 
         private void skapaSpelarPaneler()
         {
             int spelarPanelposX = 110; 
             int[] spelarPanelposY = new int[7] { 350, 470, 500, 525, 500, 470, 350 };
             int ramPosXskillnad = 35;
             int betPosXskillnad = 35;
-            int nummer = 0;
+            nummer1 = 0;
             läggTillBankPanel();
-
+            Random random = new Random();
+            spelarNummer = random.Next(spelarinfo.antalspelare);
             for (int i = 0; i < spelarinfo.antalspelare; i++)
             {
                 labels = new List<Label>();
@@ -404,7 +406,7 @@ namespace Black_Jack
                     läggTillPicturebox(ramPosXskillnad, i);
                     ramPosXskillnad += 60;
 
-                    läggTillBetLabel(betPosXskillnad, nummer1, spelarNummer);
+                    läggTillBetLabel(betPosXskillnad, i);
                     betPosXskillnad += 60;
 
                     if (i == spelarNummer)
@@ -462,7 +464,7 @@ namespace Black_Jack
                     {
                         balans = hämtaBalans(i);
                         bet = betAI(balans);
-                        datorLabelLista[i][j].Text = bet.ToString();
+                        datorLabelLista[i][j].Text = "$" + bet.ToString();
                         datorLabelLista[i][2].Text = datorLabelLista[i][2].Text.Replace(datorLabelLista[i][2].Text.Substring(9), (balans - bet).ToString());
                     }
                 }
@@ -475,7 +477,7 @@ namespace Black_Jack
             int bet1 = 0;
             double storlekBet = 0;
             Random r = new Random();
-            storlekBet = r.Next(5,20);
+            storlekBet = r.Next(3,10);
             storlekBet = storlekBet / 100;
             bet = balans * storlekBet;
             if (balans < 50)
@@ -496,8 +498,8 @@ namespace Black_Jack
         {
             int balans = 0;
             string x;
-            x = datorLabelLista[i][2].Text;
-            label1.Text = x;
+            x = datorLabelLista[0].Count.ToString() + datorLabelLista[1].Count.ToString() + datorLabelLista[2].Count.ToString();
+            label1.Text = datorLabelLista[0][0].Text + datorLabelLista[0][1].Text + datorLabelLista[0][2].Text + datorLabelLista[1][0].Text + datorLabelLista[1][1].Text + datorLabelLista[1][2].Text;
             x = datorLabelLista[i][2].Text.Substring(9);
             int.TryParse(x, out balans);
             return balans;
@@ -649,30 +651,31 @@ namespace Black_Jack
                     spelaLjud(@"C:\\Black Jack\Audio\lekblandas.wav");
                     resetKort();
                     nyKortlek = kortlek.Nykortlek();
-                    for (int i = 0; i < 3; i++)
-                    {
-                        spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
 
-                        draKort = rnd.Next(nyKortlek.Count);
-                        if (i == 0)
+                    draKort = rnd.Next(nyKortlek.Count);
+                    bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
+                    kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
+                    skapaBankkortsBilder(draKort);
+                    visaBankKort();
+                    nyKortlek.RemoveAt(draKort);
+                    await Task.Delay(50);
+
+                    for (int h = 0; h < spelarinfo.antalspelare; h++)
+                    {
+                        for (int i = 0; i < 3; i++)
                         {
-                            bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                            kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
-                            skapaBankkortsBilder(draKort);
-                            visaBankKort();
-                            nyKortlek.RemoveAt(draKort);
-                            await Task.Delay(50);
-                        }
-                        else
-                        {
+                            spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+
+                            draKort = rnd.Next(nyKortlek.Count);
                             spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
                             kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
                             skapaSpelarkortsBilder(draKort);
                             visaSpelarKort(draKort);
                             nyKortlek.RemoveAt(draKort);
                             await Task.Delay(50);
-                        }
 
+
+                        }
                     }
                     knappDouble.Show();
                     knappPass.Show();
