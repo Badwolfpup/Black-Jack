@@ -28,13 +28,15 @@ namespace Black_Jack
         List<PictureBox> bankkort = new List<PictureBox>();
         List<PictureBox> spelarkort = new List<PictureBox>();
         List<List<PictureBox>> dragnakort = new List<List<PictureBox>>(); //Lista över dragna kort för varje spelare
+        List<List<int>> kortvärdeDator = new List<List<int>>();
         List<Panel> panelLista = new List<Panel>(); //Håller lista över panel för datorspelare
         List<List<Label>> datorLabelLista = new List<List<Label>>(); //Håller lista över alla labels för varje panel för datorspelare
         List<Label> spelarLabel = new List<Label>(); //Håller lista över alla labels för spelaren
         List<Label> labels; //Listan för den enskilde datorpanelen
         List<PictureBox> pics; //Lista över vilka kort datorn har
         bool[] kollaKryss = new bool[] { false, false, false, false, false, false };
-        int kortvärdeBank, kortvärdeSpelare;
+        List<int> kortvärdeSpelare = new List<int>();
+        List<int> dator;
         int antalMarker = 5000; //Hur många marker spelaren har
         int spelarebet;
         int nummer1;
@@ -652,23 +654,28 @@ namespace Black_Jack
                     resetKort();
                     nyKortlek = kortlek.Nykortlek();
 
-                    draKort = rnd.Next(nyKortlek.Count);
-                    bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                    kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
-                    skapaBankkortsBilder(draKort);
-                    visaBankKort();
-                    nyKortlek.RemoveAt(draKort);
-                    await Task.Delay(50);
+                    //dator = new List<int>();
+                    //kortvärdeDator.Add(dator);
+                    //draKort = rnd.Next(nyKortlek.Count);
+                    //bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
+                    //kortvärdeDator[0].Add(kortlek.beräknaKortvärde(bankListaKort));
+                    //skapaBankkortsBilder(draKort);
+                    //visaBankKort();
+                    //nyKortlek.RemoveAt(draKort);
+                    //await Task.Delay(50);
 
-                    for (int h = 0; h < spelarinfo.antalspelare; h++)
+                    for (int h = 0; h < (spelarinfo.antalspelare + 1); h++)
                     {
+                        List<int> dator = new List<int>();
+                        kortvärdeDator.Add(dator);
                         for (int i = 0; i < 3; i++)
                         {
                             spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
 
                             draKort = rnd.Next(nyKortlek.Count);
                             spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                            kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
+                            if ((i+1) == spelarNummer) kortvärdeSpelare.Add(kortlek.beräknaKortvärde(spelarListaKort));
+                            else kortvärdeDator[i+1].Add(kortlek.beräknaKortvärde(spelarListaKort));
                             skapaSpelarkortsBilder(draKort);
                             visaSpelarKort(draKort);
                             nyKortlek.RemoveAt(draKort);
@@ -681,32 +688,32 @@ namespace Black_Jack
                     knappPass.Show();
                     pågåendeRunda = true;
                 }
-                else if (spelaresTur)
-                {
-                    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                    draKort = rnd.Next(nyKortlek.Count);
-                    spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                    kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
-                    skapaSpelarkortsBilder(draKort);
-                    visaSpelarKort(draKort);
-                    nyKortlek.RemoveAt(draKort);
-                    await Task.Delay(500);
+                //else if (spelaresTur)
+                //{
+                //    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                //    draKort = rnd.Next(nyKortlek.Count);
+                //    spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
+                //    kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
+                //    skapaSpelarkortsBilder(draKort);
+                //    visaSpelarKort(draKort);
+                //    nyKortlek.RemoveAt(draKort);
+                //    await Task.Delay(500);
 
-                    //kollaVinnare();
-                }
-                else
-                {
-                    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                    draKort = rnd.Next(nyKortlek.Count);
-                    bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                    kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
-                    skapaBankkortsBilder(draKort);
-                    visaBankKort(); ;
-                    nyKortlek.RemoveAt(draKort);
-                    await Task.Delay(500);
-                    kollaVinnare();
+                //    //kollaVinnare();
+                //}
+                //else
+                //{
+                //    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                //    draKort = rnd.Next(nyKortlek.Count);
+                //    bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
+                //    kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
+                //    skapaBankkortsBilder(draKort);
+                //    visaBankKort(); ;
+                //    nyKortlek.RemoveAt(draKort);
+                //    await Task.Delay(500);
+                //    kollaVinnare();
 
-                }
+                //}
             }
             else
             {
@@ -812,7 +819,7 @@ namespace Black_Jack
         }
         private void resetKort()
         {
-            kortvärdeBank = 0;
+            //kortvärdeBank = 0;
             kortvärdeSpelare = 0;
             spelarListaKort.Clear();
             bankkort.Clear();
