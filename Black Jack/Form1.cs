@@ -23,20 +23,21 @@ namespace Black_Jack
         List<string> nyKortlek = new List<string>();
         List<int> markervärde = new List<int>(); //Hur många marker spelare har satsat
         List<int> markervärde1 = new List<int>(); // Hur många marker spelare har satsat på andra
-        List<int> bankListaKort = new List<int>();
         List<int> spelarListaKort = new List<int>();
         List<PictureBox> bankkort = new List<PictureBox>();
         List<PictureBox> spelarkort = new List<PictureBox>();
         List<List<PictureBox>> dragnakort = new List<List<PictureBox>>(); //Lista över dragna kort för varje spelare
-        List<List<int>> kortvärdeDator = new List<List<int>>();
-        List<Panel> panelLista = new List<Panel>(); //Håller lista över panel för datorspelare
+        List<List<int>> kortvärdeDator = new List<List<int>>(); //Håller stringvärdet för varje kort för datorn
+        List<int> dator; //Initierar listan i kortvärdeDator
+        List<int> kortvärdeTotaltDator = new List<int>(); //Håller det totala kortvärdet för datorns kort
+        List<Panel> panelLista = new List<Panel>(); //Håller lista över panel för alla
         List<List<Label>> datorLabelLista = new List<List<Label>>(); //Håller lista över alla labels för varje panel för datorspelare
         List<Label> spelarLabel = new List<Label>(); //Håller lista över alla labels för spelaren
         List<Label> labels; //Listan för den enskilde datorpanelen
         List<PictureBox> pics; //Lista över vilka kort datorn har
-        bool[] kollaKryss = new bool[] { false, false, false, false, false, false };
-        List<int> kortvärdeSpelare = new List<int>();
-        List<int> dator;
+        bool[] kollaKryss = new bool[] { false, false, false, false, false, false }; //True om spelarens inte har tillräckligt med marker för att betta en vissa valör
+        List<int> kortvärdeSpelare = new List<int>(); //Håller stringvärdet för varje kort för spelaren
+        int kortvärdeTotaltSpelare; //Håller det totala kortvärdet för spelarens kort
         int antalMarker = 5000; //Hur många marker spelaren har
         int spelarebet;
         int nummer1;
@@ -233,6 +234,8 @@ namespace Black_Jack
         #region läggtillcontrols
         private void läggTillBankPanel()
         {
+            pics = new List<PictureBox>();
+            dragnakort.Add(pics);
             bankkortPanel = new Panel();
             bankkortPanel.Size = new Size(50, 72);
             bankkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 - 185);
@@ -605,43 +608,13 @@ namespace Black_Jack
 
         }
 
-        private void visaSpelarKort(int x)
-        {
-            int a = 1;
-            foreach (Control c in this.Controls)
-            {
-                int y = 0;
-                if (c is Panel)
-                {
-                    Panel panel = (Panel)c;
-                    foreach (Control v in panel.Controls)
-                    {
-                        if (v is PictureBox)
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                PictureBox kort = (PictureBox)v;
-                                kort.Size = new Size(50, 72);
-                                kort.Location = new Point(35, y);
-                                kort.BringToFront();
-                                string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
-                                ritaBild = Image.FromFile(genväg);
-                                kort.Image = ritaBild;
-                                dragnakort[a].Add(kort);
-                                panel.Controls.Add(kort);
-                                y -= 15;
-                            }
-                        }
-                    }
-                    a++;
-                }
-            }
-        }
 
 
         #region spellogik
         private async Task spelaKort()
         {
+            int posX = 35;
+            int posY = 0;
             if (markervärde.Sum() > 0)
             {
 
@@ -668,22 +641,42 @@ namespace Black_Jack
                     {
                         List<int> dator = new List<int>();
                         kortvärdeDator.Add(dator);
-                        for (int i = 0; i < 3; i++)
+                        if (h == 0)
                         {
                             spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-
                             draKort = rnd.Next(nyKortlek.Count);
-                            spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                            if ((i+1) == spelarNummer) kortvärdeSpelare.Add(kortlek.beräknaKortvärde(spelarListaKort));
-                            else kortvärdeDator[i+1].Add(kortlek.beräknaKortvärde(spelarListaKort));
-                            skapaSpelarkortsBilder(draKort);
-                            visaSpelarKort(draKort);
-                            nyKortlek.RemoveAt(draKort);
-                            await Task.Delay(50);
-
+                            kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
+                            kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
+                            hämtaSpelkortsBilder(draKort, 0, 0, 0); //Laddar listan med Picturebox
 
                         }
+                        else
+                        {
+                            posX = 35;
+                            for (int i = 0; i < 3; i++)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                                draKort = rnd.Next(nyKortlek.Count);
+                                if (h == spelarNummer)
+                                {
+                                    kortvärdeSpelare.Add(kortlek.beräknaKortvärde(spelarListaKort)); //Lägger till kortvärdet av det dragna kortet
+                                    kortvärdeTotaltSpelare = kortlek.beräknaKortvärde(kortvärdeSpelare); //Hämtar summan av alla kort
+                                }
+                                else
+                                {
+                                    kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
+                                    kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
+                                }
+                                hämtaSpelkortsBilder(draKort, i, posX, posY); //Laddar listan med Picturebox
+                                nyKortlek.RemoveAt(draKort);
+                                await Task.Delay(50);
+                                posX += 60;
+
+
+                            }
+                        }
                     }
+                    visaSpelkort();
                     knappDouble.Show();
                     knappPass.Show();
                     pågåendeRunda = true;
@@ -729,43 +722,43 @@ namespace Black_Jack
 
         private void kollaVinnare()
         {
-            if (kortvärdeSpelare > 21)
-            {
-                antalMarker -= spelarebet;
-                pågåendeRunda = false;
-                totalBet.Text = "Du förlorade $" + markervärde.Sum();
-                bankrulle.Text = spelarNamn + " du har $" + antalMarker;
-                spelaresTur = true;
-                spelaLjudUtanSync(@"C:\\Black Jack\Audio\förlust.wav");
-                uppdateraFil();
-                markervärde.Clear();
-                maxBet();
-            }
-            else if (kortvärdeBank > 21)
-            {
-                antalMarker += spelarebet;
-                pågåendeRunda = false;
-                totalBet.Text = "Du vann $" + markervärde.Sum();
-                bankrulle.Text = spelarNamn + " du har $" + antalMarker;
-                spelaresTur = true;
-                spelaLjudUtanSync(@"C:\\Black Jack\Audio\vinst.wav");
-                uppdateraFil();
-                markervärde.Clear();
-                maxBet();
-            }
-            else if (kortvärdeBank >= kortvärdeSpelare && kortvärdeBank > 16 && kortvärdeBank < 22)
-            {
-                antalMarker -= spelarebet;
-                pågåendeRunda = false;
-                totalBet.Text = "Du förlorade $" + markervärde.Sum();
-                bankrulle.Text = spelarNamn + " du har $" + antalMarker;
-                spelaresTur = true;
-                spelaLjudUtanSync(@"C:\\Black Jack\Audio\förlust.wav");
-                uppdateraFil();
-                markervärde.Clear();
-                maxBet();
-            }
-            else if (!spelaresTur) spelaKort();
+        //    if (kortvärdeSpelare > 21)
+        //    {
+        //        antalMarker -= spelarebet;
+        //        pågåendeRunda = false;
+        //        totalBet.Text = "Du förlorade $" + markervärde.Sum();
+        //        bankrulle.Text = spelarNamn + " du har $" + antalMarker;
+        //        spelaresTur = true;
+        //        spelaLjudUtanSync(@"C:\\Black Jack\Audio\förlust.wav");
+        //        uppdateraFil();
+        //        markervärde.Clear();
+        //        maxBet();
+        //    }
+        //    else if (kortvärdeBank > 21)
+        //    {
+        //        antalMarker += spelarebet;
+        //        pågåendeRunda = false;
+        //        totalBet.Text = "Du vann $" + markervärde.Sum();
+        //        bankrulle.Text = spelarNamn + " du har $" + antalMarker;
+        //        spelaresTur = true;
+        //        spelaLjudUtanSync(@"C:\\Black Jack\Audio\vinst.wav");
+        //        uppdateraFil();
+        //        markervärde.Clear();
+        //        maxBet();
+        //    }
+        //    else if (kortvärdeBank >= kortvärdeSpelare && kortvärdeBank > 16 && kortvärdeBank < 22)
+        //    {
+        //        antalMarker -= spelarebet;
+        //        pågåendeRunda = false;
+        //        totalBet.Text = "Du förlorade $" + markervärde.Sum();
+        //        bankrulle.Text = spelarNamn + " du har $" + antalMarker;
+        //        spelaresTur = true;
+        //        spelaLjudUtanSync(@"C:\\Black Jack\Audio\förlust.wav");
+        //        uppdateraFil();
+        //        markervärde.Clear();
+        //        maxBet();
+        ////    }
+        //    else if (!spelaresTur) spelaKort();
         }
 
         private void maxBet()
@@ -834,26 +827,49 @@ namespace Black_Jack
 
         #region läggtillbilder
 
-        private void skapaBankkortsBilder(int x)
+        private void visaSpelkort()
         {
-            PictureBox kort = new PictureBox();
-            kort.Size = new Size(50, 72);
-            kort.BringToFront();
-            string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
-            ritaBild = Image.FromFile(genväg);
-            kort.Image = ritaBild;
-            bankkort.Add(kort);
+            int a = 1;
+            foreach (Control c in this.Controls)
+            {
+                int y = 0;
+                if (c is Panel)
+                {
+                    Panel panel = (Panel)c;
+                    foreach (Control v in panel.Controls)
+                    {
+                        if (v is PictureBox)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                PictureBox kort = (PictureBox)v;
+                                kort.Size = new Size(50, 72);
+                                kort.Location = new Point(35, y);
+                                kort.BringToFront();
+                                string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
+                                ritaBild = Image.FromFile(genväg);
+                                kort.Image = ritaBild;
+                                dragnakort[a].Add(kort);
+                                panel.Controls.Add(kort);
+                                y -= 15;
+                            }
+                        }
+                    }
+                    a++;
+                }
+            }
         }
 
-        private void skapaSpelarkortsBilder(int x)
+        private void hämtaSpelkortsBilder(int x, int i, int posX, int posY)
         {
             PictureBox kort = new PictureBox();
             kort.Size = new Size(50, 72);
+            kort.Location = new Point(posX, posY);
             kort.BringToFront();
             string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
             ritaBild = Image.FromFile(genväg);
             kort.Image = ritaBild;
-            spelarkort.Add(kort);
+            dragnakort[i].Add(kort);
         }
 
         private void skapaMarkerBilder()
