@@ -35,12 +35,13 @@ namespace Black_Jack
         List<PictureBox> pics; //Initierar listan, i dragnakort över vilka kort som dragits.
         PictureBox dollar5, dollar10, dollar50, dollar100, dollar500, dollar1000; //För bilder på de olika markerna
 
-        List<List<int>> kortvärdeDator = new List<List<int>>(); //Håller stringvärdet för varje kort för datorn
-        List<int> dator; //Initierar listan i kortvärdeDator
+        List<List<List<int>>> kortvärdeDator = new List<List<List<int>>>(); //Håller stringvärdet för varje kort för datorn
+        List<List<int>> kortvärdeSpelare = new List<List<int>>(); //Håller stringvärdet för varje kort för spelaren
+
+        List<int> kortlista; //Initierar listan i kortvärdeDator och kortvärdeSpelare
         
         List<int> kortvärdeTotaltDator = new List<int>(); //Håller det totala kortvärdet för datorns kort
-        List<int> kortvärdeSpelare = new List<int>(); //Håller stringvärdet för varje kort för spelaren
-        int kortvärdeTotaltSpelare; //Håller det totala kortvärdet för spelarens kort
+        List<int> kortvärdeTotaltSpelare = new List<int>(); //Håller det totala kortvärdet för spelarens kort
 
         List<List<Label>> datorLabelLista = new List<List<Label>>(); //Håller lista över alla labels för varje panel för datorspelare
         List<Label> labels; //Listan för den enskilde datorpanelen
@@ -273,7 +274,7 @@ namespace Black_Jack
             if (spelarNummer == i) ram1.Click += new EventHandler(ram_click);
         }
 
-        private void läggTillBetLabel(int betPosXskillnad, int i)
+        private void läggTillBetLabel(int betPosXskillnad, int i, int j)
         {
             visaspelarebet = new Label();
             visaspelarebet.Location = new Point(betPosXskillnad, 217);
@@ -282,16 +283,21 @@ namespace Black_Jack
             visaspelarebet.AutoSize = true;        
             visaspelarebet.BringToFront();
             visaspelarebet.Text = "$0";
+            
             if (i == spelarNummer)
             {
-                datorPanel.Controls.Add(visaspelarebet);
+                if (j == 0) visaspelarebet.Tag = "bet1";
+                else visaspelarebet.Tag = "bet2";
+                //datorPanel.Controls.Add(visaspelarebet);
                 spelarLabel.Add(visaspelarebet);
             }
             else
             {
-                datorPanel.Controls.Add(visaspelarebet);
+                if (j == 0) visaspelarebet.Tag = "bet1";
+                else visaspelarebet.Tag = "bet2";
                 datorLabelLista[nummer1].Add(visaspelarebet);
             }
+            datorPanel.Controls.Add(visaspelarebet);
         }
 
         private void läggTillSpelarinfoLabel()
@@ -303,11 +309,12 @@ namespace Black_Jack
             visaspelareinfo.AutoSize = true;
             visaspelareinfo.BringToFront();
             visaspelareinfo.Text = spelarNamn + ": $" + antalMarker;
+            visaspelareinfo.Tag = "spelarinfo";
             datorPanel.Controls.Add(visaspelareinfo);
             spelarLabel.Add(visaspelareinfo);
         }
 
-        private void läggTillKortvärdeLabel(int i, int posX)
+        private void läggTillKortvärdeLabel(int i, int j, int posX)
         {
             visaspelareinfo = new Label();
             visaspelareinfo.Location = new Point(posX+15, 120);
@@ -318,16 +325,20 @@ namespace Black_Jack
             datorPanel.Controls.Add(visaspelareinfo);
             if (i == spelarNummer)
             {
+                if (j == 0) visaspelareinfo.Tag = "kort1";
+                else visaspelareinfo.Tag = "kort2";
                 spelarLabel.Add(visaspelareinfo);
             }
             else
             {
-                datorLabelLista[i].Add(visaspelareinfo);
+                if (j == 0) visaspelareinfo.Tag = "kort1";
+                else visaspelareinfo.Tag = "kort2";
+                datorLabelLista[nummer1].Add(visaspelareinfo);
 
             }
         }
 
-        private void läggTillDatorinfoLabel(int spelarpos)
+        private void läggTillDatorinfoLabel()
         {
             visaspelareinfo = new Label();
             visaspelareinfo.Location = new Point(35, 240);
@@ -335,9 +346,10 @@ namespace Black_Jack
             visaspelareinfo.BackColor = Color.LightGray;
             visaspelareinfo.AutoSize = true;
             visaspelareinfo.BringToFront();
-            visaspelareinfo.Text = "Dator" + (spelarpos+1) + ": $5000";
+            visaspelareinfo.Text = "Dator" + (nummer1+1) + ": $5000";
+            visaspelareinfo.Tag = "spelarinfo";
             datorPanel.Controls.Add(visaspelareinfo);
-            datorLabelLista[spelarpos].Add(visaspelareinfo);
+            datorLabelLista[nummer1].Add(visaspelareinfo);
             
         }
 
@@ -415,12 +427,13 @@ namespace Black_Jack
             spelarNummer = random.Next(1, spelarinfo.antalspelare);
             for (int i = 1; i < spelarinfo.antalspelare+1; i++)
             {
-                labels = new List<Label>();
-                datorLabelLista.Add(labels);
-                labels = new List<Label>();
-                datorLabelLista.Add(labels);
+                if (i != spelarNummer)
+                {
+                    labels = new List<Label>();
+                    datorLabelLista.Add(labels);
+                }
                 pics = new List<PictureBox>();
-                dragnakort.Add(new List<List<PictureBox>>()); //Fixa logik lägga till nya listor
+                dragnakort.Add(new List<List<PictureBox>>()); 
                 dragnakort[i].Add(pics);
                 pics = new List<PictureBox>();
                 dragnakort.Add(new List<List<PictureBox>>());
@@ -433,8 +446,8 @@ namespace Black_Jack
                     läggTillPicturebox(ramPosXskillnad, i);
                     ramPosXskillnad += 60;
 
-                    läggTillBetLabel(betPosXskillnad, i);
-
+                    läggTillBetLabel(betPosXskillnad, i, j);
+                    läggTillKortvärdeLabel(i, j, betPosXskillnad);
                     betPosXskillnad += 60;
 
                     if (i == spelarNummer)
@@ -449,7 +462,7 @@ namespace Black_Jack
                 }
                 if (i != spelarNummer)
                 {
-                    läggTillDatorinfoLabel(nummer1);
+                    läggTillDatorinfoLabel();
 
                     nummer1++;
                 }
@@ -473,11 +486,17 @@ namespace Black_Jack
 
             if (vilkensatsat)
             {
-                spelarLabel[0].Text = "$" + markervärde.Sum();
+                for (int i = 0; i < spelarLabel.Count; i++)
+                {
+                    if ((string)spelarLabel[i].Tag == "bet1") spelarLabel[i].Text = "$" + markervärde.Sum();
+                }
             }
             else
             {
-                spelarLabel[1].Text = "$" + markervärde1.Sum();
+                for (int i = 0; i < spelarLabel.Count; i++)
+                {
+                    if ((string)spelarLabel[i].Tag == "bet2") spelarLabel[i].Text = "$" + markervärde1.Sum();
+                }
             }
         }
 
@@ -495,8 +514,25 @@ namespace Black_Jack
                     {
                         balans = hämtaBalans(i);
                         bet = betAI(balans);
-                        datorLabelLista[i][j].Text = "$" + bet.ToString();
-                        datorLabelLista[i][2].Text = datorLabelLista[i][2].Text.Replace(datorLabelLista[i][2].Text.Substring(9), (balans - bet).ToString());
+                        for (int k = 0; k < datorLabelLista[i].Count; k++)
+                        {
+                            if ((string)datorLabelLista[i][k].Tag == "bet1" && j == 0)
+                            {
+                                datorLabelLista[i][k].Text = "$" + bet.ToString();
+
+                            } else if ((string)datorLabelLista[i][k].Tag == "bet2" && j == 1)
+                            {
+                                datorLabelLista[i][k].Text = "$" + bet.ToString();
+                            }
+                            if ((string) datorLabelLista[i][k].Tag == "spelarinfo" && j == 0)
+                            {
+                                datorLabelLista[i][k].Text = datorLabelLista[i][k].Text.Replace(datorLabelLista[i][k].Text.Substring(9), (balans - bet).ToString());
+                            } else if ((string)datorLabelLista[i][k].Tag == "spelarinfo" && j == 1)
+                            {
+                                datorLabelLista[i][k].Text = datorLabelLista[i][k].Text.Replace(datorLabelLista[i][k].Text.Substring(9), (balans - bet).ToString());
+
+                            }
+                        }
                     }
                 }
             }
@@ -528,10 +564,14 @@ namespace Black_Jack
         private int hämtaBalans(int i)
         {
             int balans = 0;
-            string x;
-            //x = datorLabelLista[0].Count.ToString() + datorLabelLista[1].Count.ToString() + datorLabelLista[2].Count.ToString();
-            //label1.Text = datorLabelLista[i].Count.ToString();
-            x = datorLabelLista[i][2].Text.Substring(9);
+            string x = "";
+            for (int j = 0; j < datorLabelLista[i].Count; j++)
+            {
+                if ((string)datorLabelLista[i][j].Tag == "spelarinfo")
+                {
+                    x = datorLabelLista[i][j].Text.Substring(9);
+                }
+            }
             int.TryParse(x, out balans);
             return balans;
         }
@@ -656,11 +696,13 @@ namespace Black_Jack
                     {
                         posX = 35;
                         posY = 140;
-                        List<int> dator = new List<int>();
-                        kortvärdeDator.Add(dator);
+                        kortlista = new List<int>();
+                        kortvärdeDator[h].Add(kortlista);
                         if (h == 0)
                         {
                             //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                            kortlista = new List<int>();
+                            kortvärdeDator[h].Add(kortlista);
                             draKort = rnd.Next(nyKortlek.Count);
                             kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
                             kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
@@ -678,13 +720,16 @@ namespace Black_Jack
                                     draKort = rnd.Next(nyKortlek.Count);
                                     if (h == spelarNummer)
                                     {
-                                        kortvärdeSpelare.Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
-                                        kortvärdeTotaltSpelare = kortlek.beräknaKortvärde(kortvärdeSpelare); //Hämtar summan av alla kort
+                                        kortlista = new List<int>();
+                                        kortvärdeSpelare.Add(kortlista);
+                                        kortvärdeSpelare[i].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
                                     }
                                     else
                                     {
+                                        kortlista = new List<int>();
+                                        kortvärdeDator.Add(kortlista);
                                         kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
-                                        kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
+
                                     }
                                     hämtaSpelkortsBilder(draKort, h, i, posX, posY); //Laddar listan med Picturebox
                                     
@@ -692,7 +737,10 @@ namespace Black_Jack
                                     //await Task.Delay(50);
                                     posY -= 15;
                                 }
-                                
+                                kortvärdeTotaltSpelare.Add(kortlek.beräknaKortvärde(kortvärdeSpelare[i])); //Hämtar summan av alla kort
+                                kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[i])); //Hämtar summan av alla kort
+
+
                                 posY = 140;
                                 posX += 60;
                             }
@@ -849,11 +897,45 @@ namespace Black_Jack
                     //for (int j = dragnakort[h][i].Count - 1; j > -1; j--)
                     for (int j= 0; j < dragnakort[h][i].Count; j++)    
                     {
-
                         panelLista[h].Controls.Add(dragnakort[h][i][j]);
                     }
                 }
             }
+
+            for (int k = 0; k < spelarLabel.Count; k++)
+            {
+                if ((string)spelarLabel[k].Tag == "kort1")
+                {
+                    spelarLabel[k].Location = new Point(spelarLabel[k].Location.X, spelarLabel[k].Location.Y - 15);
+                    spelarLabel[k].Text = kortvärdeTotaltSpelare[0].ToString();
+                }
+                else if ((string)spelarLabel[k].Tag == "kort2")
+                {
+                    spelarLabel[k].Location = new Point(spelarLabel[k].Location.X, spelarLabel[k].Location.Y - 15);
+                    spelarLabel[k].Text = kortvärdeTotaltSpelare[1].ToString();
+                }
+            }
+            label1.Text = kortvärdeTotaltDator[0].ToString() + " " + kortvärdeTotaltDator[0].ToString();
+            for (int k = 0; k < datorLabelLista.Count; k++)
+            {
+                for (int m = 0; m < 2; m++)
+                {
+                    for (int l = 0; l < datorLabelLista[k].Count; l++)
+                    {
+                        if ((string)datorLabelLista[k][l].Tag == "kort1" && m == 0)
+                        {
+                            datorLabelLista[k][l].Text = kortvärdeTotaltDator[0].ToString();
+                            datorLabelLista[k][l].Location = new Point(datorLabelLista[k][l].Location.X, datorLabelLista[k][l].Location.Y - 15);
+                        }
+                        else if ((string)datorLabelLista[k][l].Tag == "kort2" && m == 1)
+                        {
+                            datorLabelLista[k][l].Text = kortvärdeTotaltDator[1].ToString();
+                            datorLabelLista[k][l].Location = new Point(datorLabelLista[k][l].Location.X, datorLabelLista[k][l].Location.Y - 15);
+                        }
+                    }
+                }
+            }
+            
         }
 
         private void hämtaSpelkortsBilder(int x, int i, int j, int posX, int posY)
