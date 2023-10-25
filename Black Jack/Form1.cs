@@ -26,7 +26,7 @@ namespace Black_Jack
         List<int> spelarListaKort = new List<int>();
         List<PictureBox> bankkort = new List<PictureBox>();
         List<PictureBox> spelarkort = new List<PictureBox>();
-        List<List<PictureBox>> dragnakort = new List<List<PictureBox>>(); //Lista över dragna kort för varje spelare
+        List<List<List<PictureBox>>> dragnakort = new List<List<List<PictureBox>>>(); //Lista över dragna kort för varje spelare
         List<List<int>> kortvärdeDator = new List<List<int>>(); //Håller stringvärdet för varje kort för datorn
         List<int> dator; //Initierar listan i kortvärdeDator
         List<int> kortvärdeTotaltDator = new List<int>(); //Håller det totala kortvärdet för datorns kort
@@ -235,7 +235,8 @@ namespace Black_Jack
         private void läggTillBankPanel()
         {
             pics = new List<PictureBox>();
-            dragnakort.Add(pics);
+            dragnakort.Add(new List<List<PictureBox>>());
+            dragnakort[0].Add(pics);
             labels = new List<Label>();
             datorLabelLista.Add(labels);
             bankkortPanel = new Panel();
@@ -406,9 +407,11 @@ namespace Black_Jack
                 labels = new List<Label>();
                 datorLabelLista.Add(labels);
                 pics = new List<PictureBox>();
-                dragnakort.Add(pics);
+                dragnakort.Add(new List<List<PictureBox>>());
+                dragnakort[i].Add(pics);
                 pics = new List<PictureBox>();
-                dragnakort.Add(pics);
+                dragnakort.Add(new List<List<PictureBox>>());
+                dragnakort[i+1].Add(pics);
 
                 läggTillPanel(spelarPanelposX, spelarPanelposY[i], spelarNummer, i);
 
@@ -644,7 +647,7 @@ namespace Black_Jack
                             draKort = rnd.Next(nyKortlek.Count);
                             kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
                             kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
-                            hämtaSpelkortsBilder(draKort, 0, 0, 0); //Laddar listan med Picturebox
+                            hämtaSpelkortsBilder(draKort,0, 0, 0, 0); //Laddar listan med Picturebox
 
                         }
                         else
@@ -666,7 +669,7 @@ namespace Black_Jack
                                         kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
                                         kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
                                     }
-                                    hämtaSpelkortsBilder(draKort, h, posX, posY); //Laddar listan med Picturebox
+                                    hämtaSpelkortsBilder(draKort, h, i, posX, posY); //Laddar listan med Picturebox
                                     
                                     nyKortlek.RemoveAt(draKort);
                                     //await Task.Delay(50);
@@ -841,32 +844,34 @@ namespace Black_Jack
                 }
             }
             label1.Text = "";
-            panelLista[0].Controls.Add(dragnakort[0][0]); //Bankens kort
+            panelLista[0].Controls.Add(dragnakort[0][0][0]); //Bankens kort
             int x;
-            for (int i = 1; i < panelLista.Count; i++) 
+            for (int h = 1; h < panelLista.Count; h++) 
             {
-                x = 1;
-                for (int j = dragnakort[i].Count -1; j > -1; j--)
+                for (int i = 0; i < dragnakort[h].Count; i++)
                 {
-                    
-                    panelLista[i].Controls.Add(dragnakort[x][j]);
-                    panelLista[i].Controls.Add(dragnakort[(x + 1)][j]);
-                    x += 2;
-                    //if (i == 0)
-                    //{
-                    //    panelLista[i].Controls.Add(dragnakort[i][j]);
-                    //    panelLista[i].Controls.Add(dragnakort[(i + 1)][j]);
-                    //}
-                    //else
-                    //{
-                    //    panelLista[i].Controls.Add(dragnakort[(i*2)][j]);
-                    //    panelLista[i].Controls.Add(dragnakort[((i * 2) +1)][j]);
-                    //}
+                    x = 1;
+                    for (int j = dragnakort[h][i].Count - 1; j > -1; j--)
+                    {
+
+                        panelLista[i].Controls.Add(dragnakort[h][i][j]);
+                        x += 2;
+                        //if (i == 0)
+                        //{
+                        //    panelLista[i].Controls.Add(dragnakort[i][j]);
+                        //    panelLista[i].Controls.Add(dragnakort[(i + 1)][j]);
+                        //}
+                        //else
+                        //{
+                        //    panelLista[i].Controls.Add(dragnakort[(i*2)][j]);
+                        //    panelLista[i].Controls.Add(dragnakort[((i * 2) +1)][j]);
+                        //}
+                    }
                 }
             }
         }
 
-        private void hämtaSpelkortsBilder(int x, int i, int posX, int posY)
+        private void hämtaSpelkortsBilder(int x, int i, int j, int posX, int posY)
         {
             PictureBox kort = new PictureBox();
             kort.Size = new Size(50, 72);
@@ -875,7 +880,7 @@ namespace Black_Jack
             string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
             ritaBild = Image.FromFile(genväg);
             kort.Image = ritaBild;
-            dragnakort[i].Add(kort);
+            dragnakort[i][j].Add(kort);
         }
 
         private void skapaMarkerBilder()
