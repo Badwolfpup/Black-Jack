@@ -167,32 +167,32 @@ namespace Black_Jack
 
         }
 
-        private void tooltips()
-        {
-            hitTooltip = new System.Windows.Forms.ToolTip();
-            hitTooltip.AutoPopDelay = 5000;
-            hitTooltip.InitialDelay = 400;
-            hitTooltip.ReshowDelay = 200;
-            hitTooltip.SetToolTip(this.knappHit, "Hit!");
+        //private void tooltips()
+        //{
+        //    hitTooltip = new System.Windows.Forms.ToolTip();
+        //    hitTooltip.AutoPopDelay = 5000;
+        //    hitTooltip.InitialDelay = 400;
+        //    hitTooltip.ReshowDelay = 200;
+        //    hitTooltip.SetToolTip(this.knappHit, "Hit!");
 
-            passTooltip = new System.Windows.Forms.ToolTip();
-            passTooltip.AutoPopDelay = 5000;
-            passTooltip.InitialDelay = 400;
-            passTooltip.ReshowDelay = 200;
-            passTooltip.SetToolTip(this.knappPass, "Pass!");
+        //    passTooltip = new System.Windows.Forms.ToolTip();
+        //    passTooltip.AutoPopDelay = 5000;
+        //    passTooltip.InitialDelay = 400;
+        //    passTooltip.ReshowDelay = 200;
+        //    passTooltip.SetToolTip(this.knappPass, "Pass!");
 
-            doubleTooltip = new System.Windows.Forms.ToolTip();
-            doubleTooltip.AutoPopDelay = 5000;
-            doubleTooltip.InitialDelay = 400;
-            doubleTooltip.ReshowDelay = 200;
-            doubleTooltip.SetToolTip(this.knappDouble, "Double!");
+        //    doubleTooltip = new System.Windows.Forms.ToolTip();
+        //    doubleTooltip.AutoPopDelay = 5000;
+        //    doubleTooltip.InitialDelay = 400;
+        //    doubleTooltip.ReshowDelay = 200;
+        //    doubleTooltip.SetToolTip(this.knappDouble, "Double!");
 
-            splitTooltip = new System.Windows.Forms.ToolTip();
-            splitTooltip.AutoPopDelay = 5000;
-            splitTooltip.InitialDelay = 1000;
-            splitTooltip.ReshowDelay = 200;
-            splitTooltip.SetToolTip(this.knappSplit, "Split!");
-        }
+        //    //splitTooltip = new System.Windows.Forms.ToolTip();
+        //    //splitTooltip.AutoPopDelay = 5000;
+        //    //splitTooltip.InitialDelay = 1000;
+        //    //splitTooltip.ReshowDelay = 200;
+        //    //splitTooltip.SetToolTip(this.knappSplit, "Split!");
+        //}
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
@@ -226,7 +226,7 @@ namespace Black_Jack
 
             skapaSpelarPaneler();
             skapaMarkerBilder();
-            tooltips();
+            //tooltips();
             datorBet();
 
         }
@@ -374,20 +374,20 @@ namespace Black_Jack
             knappDouble.MouseClick += new MouseEventHandler(knappDouble_click);
             //knappDouble.Hide();
 
-            knappSplit = new System.Windows.Forms.Button();
-            knappSplit.Size = new Size(30, 30);
-            knappSplit.Location = new Point(150, 175);
-            knappSplit.FlatStyle = FlatStyle.Flat;
-            knappSplit.FlatAppearance.BorderSize = 0;
-            knappSplit.BackColor = Color.Transparent;
-            knappSplit.BackgroundImage = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\split.png");
-            knappSplit.BackgroundImageLayout = ImageLayout.Stretch;
-            knappSplit.FlatAppearance.MouseOverBackColor = Color.Transparent;
-            knappSplit.FlatAppearance.MouseDownBackColor = Color.Transparent;
-            knappSplit.BringToFront();
-            spelarensPlats.Controls.Add(knappSplit);
-            knappSplit.MouseClick += new MouseEventHandler(knappSplit_click);
-            //knappSplit.Hide();
+            //knappSplit = new System.Windows.Forms.Button();
+            //knappSplit.Size = new Size(30, 30);
+            //knappSplit.Location = new Point(150, 175);
+            //knappSplit.FlatStyle = FlatStyle.Flat;
+            //knappSplit.FlatAppearance.BorderSize = 0;
+            //knappSplit.BackColor = Color.Transparent;
+            //knappSplit.BackgroundImage = Image.FromFile(@"C:\\Black Jack\bilder\Knappar\split.png");
+            //knappSplit.BackgroundImageLayout = ImageLayout.Stretch;
+            //knappSplit.FlatAppearance.MouseOverBackColor = Color.Transparent;
+            //knappSplit.FlatAppearance.MouseDownBackColor = Color.Transparent;
+            //knappSplit.BringToFront();
+            //spelarensPlats.Controls.Add(knappSplit);
+            //knappSplit.MouseClick += new MouseEventHandler(knappSplit_click);
+            ////knappSplit.Hide();
         }
  
         private void skapaSpelarPaneler()
@@ -399,19 +399,19 @@ namespace Black_Jack
             nummer1 = 0;
             läggTillBankPanel();
             Random random = new Random();
-            spelarNummer = random.Next(spelarinfo.antalspelare);
-            for (int i = 1; i < spelarinfo.antalspelare; i++)
+            spelarNummer = random.Next(1, spelarinfo.antalspelare);
+            for (int i = 1; i < spelarinfo.antalspelare+1; i++)
             {
                 labels = new List<Label>();
                 datorLabelLista.Add(labels);
                 labels = new List<Label>();
                 datorLabelLista.Add(labels);
                 pics = new List<PictureBox>();
-                dragnakort.Add(new List<List<PictureBox>>());
+                dragnakort.Add(new List<List<PictureBox>>()); //Fixa logik lägga till nya listor
                 dragnakort[i].Add(pics);
                 pics = new List<PictureBox>();
                 dragnakort.Add(new List<List<PictureBox>>());
-                dragnakort[i+1].Add(pics);
+                dragnakort[i].Add(pics);
 
                 läggTillPanel(spelarPanelposX, spelarPanelposY[i], spelarNummer, i);
 
@@ -655,7 +655,7 @@ namespace Black_Jack
 
                             for (int i = 0; i < 2; i++)
                             {
-                                for (int j = 0; j < 2; j++)
+                                for (int j = 0; j < 3; j++)
                                 {
                                     //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
                                     draKort = rnd.Next(nyKortlek.Count);
@@ -686,32 +686,7 @@ namespace Black_Jack
                     knappPass.Show();
                     pågåendeRunda = true;
                 }
-                //else if (spelaresTur)
-                //{
-                //    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                //    draKort = rnd.Next(nyKortlek.Count);
-                //    spelarListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                //    kortvärdeSpelare = kortlek.beräknaKortvärde(spelarListaKort);
-                //    skapaSpelarkortsBilder(draKort);
-                //    visaSpelarKort(draKort);
-                //    nyKortlek.RemoveAt(draKort);
-                //    await Task.Delay(500);
 
-                //    //kollaVinnare();
-                //}
-                //else
-                //{
-                //    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                //    draKort = rnd.Next(nyKortlek.Count);
-                //    bankListaKort.Add(kortlek.hämtaKortvärde(nyKortlek[draKort]));
-                //    kortvärdeBank = kortlek.beräknaKortvärde(bankListaKort);
-                //    skapaBankkortsBilder(draKort);
-                //    visaBankKort(); ;
-                //    nyKortlek.RemoveAt(draKort);
-                //    await Task.Delay(500);
-                //    kollaVinnare();
-
-                //}
             }
             else
             {
@@ -839,8 +814,11 @@ namespace Black_Jack
             {
                 foreach (Control c in panel.Controls)
                 {
-                    panel.Controls.Remove(c);
-                    c.Dispose();
+                    if (c is PictureBox)
+                    {
+                        panel.Controls.Remove(c);
+                        c.Dispose();
+                    }
                 }
             }
             label1.Text = "";
@@ -851,21 +829,11 @@ namespace Black_Jack
                 for (int i = 0; i < dragnakort[h].Count; i++)
                 {
                     x = 1;
-                    for (int j = dragnakort[h][i].Count - 1; j > -1; j--)
+                    //for (int j = dragnakort[h][i].Count - 1; j > -1; j--)
+                    for (int j= 0; j < dragnakort[h][i].Count; j++)    
                     {
 
-                        panelLista[i].Controls.Add(dragnakort[h][i][j]);
-                        x += 2;
-                        //if (i == 0)
-                        //{
-                        //    panelLista[i].Controls.Add(dragnakort[i][j]);
-                        //    panelLista[i].Controls.Add(dragnakort[(i + 1)][j]);
-                        //}
-                        //else
-                        //{
-                        //    panelLista[i].Controls.Add(dragnakort[(i*2)][j]);
-                        //    panelLista[i].Controls.Add(dragnakort[((i * 2) +1)][j]);
-                        //}
+                        panelLista[h].Controls.Add(dragnakort[h][i][j]);
                     }
                 }
             }
@@ -880,6 +848,7 @@ namespace Black_Jack
             string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
             ritaBild = Image.FromFile(genväg);
             kort.Image = ritaBild;
+            label1.Text += i.ToString() + "" + j.ToString();
             dragnakort[i][j].Add(kort);
         }
 
