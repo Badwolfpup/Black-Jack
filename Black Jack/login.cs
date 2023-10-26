@@ -179,13 +179,5 @@ namespace Black_Jack
                 spelarinfo.antalspelare = 6;
             }
         }
-
-        private void radioButton7_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton7.Checked)
-            {
-                spelarinfo.antalspelare = 7;
-            }
-        }
     }
 }

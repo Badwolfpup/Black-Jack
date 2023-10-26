@@ -39,7 +39,6 @@
             radioButton4 = new RadioButton();
             radioButton5 = new RadioButton();
             radioButton6 = new RadioButton();
-            radioButton7 = new RadioButton();
             SuspendLayout();
             // 
             // button1
@@ -97,7 +96,7 @@
             // 
             radioButton1.AutoSize = true;
             radioButton1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton1.Location = new Point(419, 12);
+            radioButton1.Location = new Point(419, 29);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(91, 25);
             radioButton1.TabIndex = 4;
@@ -110,7 +109,7 @@
             // 
             radioButton2.AutoSize = true;
             radioButton2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton2.Location = new Point(419, 37);
+            radioButton2.Location = new Point(419, 54);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new Size(91, 25);
             radioButton2.TabIndex = 4;
@@ -123,7 +122,7 @@
             // 
             radioButton3.AutoSize = true;
             radioButton3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton3.Location = new Point(419, 62);
+            radioButton3.Location = new Point(419, 79);
             radioButton3.Name = "radioButton3";
             radioButton3.Size = new Size(91, 25);
             radioButton3.TabIndex = 4;
@@ -136,7 +135,7 @@
             // 
             radioButton4.AutoSize = true;
             radioButton4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton4.Location = new Point(419, 87);
+            radioButton4.Location = new Point(419, 104);
             radioButton4.Name = "radioButton4";
             radioButton4.Size = new Size(91, 25);
             radioButton4.TabIndex = 4;
@@ -149,7 +148,7 @@
             // 
             radioButton5.AutoSize = true;
             radioButton5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton5.Location = new Point(419, 112);
+            radioButton5.Location = new Point(419, 129);
             radioButton5.Name = "radioButton5";
             radioButton5.Size = new Size(91, 25);
             radioButton5.TabIndex = 4;
@@ -162,7 +161,7 @@
             // 
             radioButton6.AutoSize = true;
             radioButton6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton6.Location = new Point(419, 137);
+            radioButton6.Location = new Point(419, 154);
             radioButton6.Name = "radioButton6";
             radioButton6.Size = new Size(91, 25);
             radioButton6.TabIndex = 4;
@@ -171,25 +170,11 @@
             radioButton6.UseVisualStyleBackColor = true;
             radioButton6.CheckedChanged += radioButton6_CheckedChanged;
             // 
-            // radioButton7
-            // 
-            radioButton7.AutoSize = true;
-            radioButton7.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton7.Location = new Point(419, 162);
-            radioButton7.Name = "radioButton7";
-            radioButton7.Size = new Size(91, 25);
-            radioButton7.TabIndex = 4;
-            radioButton7.TabStop = true;
-            radioButton7.Text = "7 spelare";
-            radioButton7.UseVisualStyleBackColor = true;
-            radioButton7.CheckedChanged += radioButton7_CheckedChanged;
-            // 
             // login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(545, 285);
-            Controls.Add(radioButton7);
             Controls.Add(radioButton6);
             Controls.Add(radioButton5);
             Controls.Add(radioButton4);
@@ -222,6 +207,5 @@
         private RadioButton radioButton4;
         private RadioButton radioButton5;
         private RadioButton radioButton6;
-        private RadioButton radioButton7;
     }
 }
