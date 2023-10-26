@@ -91,5 +91,6 @@ namespace Black_Jack
 			return värde;
 		}
 
+
 	}
 }

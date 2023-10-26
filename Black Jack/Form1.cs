@@ -207,7 +207,7 @@ namespace Black_Jack
             loggain = new login();
             loggain.ShowDialog();
 
-            this.Size = new System.Drawing.Size(1440, 800);
+            this.Size = new System.Drawing.Size(1600, 900);
             this.Location = new Point(0, 0);
             this.StartPosition = FormStartPosition.Manual;
             this.MaximizeBox = false;
@@ -226,33 +226,26 @@ namespace Black_Jack
         }
 
         #region läggtillcontrols
-        private void läggTillBankPanel()
-        {
-            pics = new List<PictureBox>();
-            dragnakort.Add(new List<List<PictureBox>>());
-            dragnakort[0].Add(pics);
-            labels = new List<Label>();
-            datorLabelLista.Add(labels);
-            bankkortPanel = new Panel();
-            bankkortPanel.Size = new Size(50, 72);
-            bankkortPanel.Location = new Point(this.Width / 2 - 50, this.Height / 2 - 185);
-            bankkortPanel.BackColor = Color.Transparent;
-            this.Controls.Add(bankkortPanel);
-            panelLista.Add(bankkortPanel);
-        }
 
-        private void läggTillPanel(int VspelarPanelposX, int VspelarPanelposY, int spelarnummer, int i)
+        private void läggTillPanel(int VspelarPanelposX, int VspelarPanelposY, int i)
         {
             datorPanel = new Panel();
-            datorPanel.Size = new Size(180, 270);
-            datorPanel.Location = new Point(VspelarPanelposX, VspelarPanelposY);
+            if (i == 0)
+            {
+                datorPanel.Size = new Size(50, 200);
+                datorPanel.Location = new Point(670, 215);
+            }
+            else
+            {
+                datorPanel.Size = new Size(180, 270);
+                datorPanel.Location = new Point(VspelarPanelposX, VspelarPanelposY);
+            }
             datorPanel.BackColor = Color.Transparent;
             datorPanel.Tag = true; //Bet på första
-            if (spelarnummer == i)
+            if (spelarNummer == i)
             {
-                spelarensPlats = datorPanel;
-                this.Controls.Add(spelarensPlats);
-                panelLista.Add(spelarensPlats);
+                this.Controls.Add(datorPanel);
+                panelLista.Add(datorPanel);
                 läggTillKnapp();
             }
             else
@@ -266,12 +259,24 @@ namespace Black_Jack
         private void läggTillPicturebox(int ramPosXskillnad, int i)
         {
             ram1 = new PictureBox();
-            ram1.Size = new Size(50, 72);
-            ram1.Location = new Point(ramPosXskillnad, 140);
+            if (i == 0)
+            {
+                ram1.Location = new Point(0, 220);
+                ram1.Size = new Size(50, 102);
+            }
+            else
+            {
+                ram1.Size = new Size(50, 72);
+                ram1.Location = new Point(ramPosXskillnad, 140);
+            }
             ram1.BackColor = Color.Transparent;
             ram1.SizeMode = PictureBoxSizeMode.StretchImage;
             datorPanel.Controls.Add(ram1);
-            if (spelarNummer == i) ram1.Click += new EventHandler(ram_click);
+            if (spelarNummer == i)
+            {
+                ram1.Tag = true;
+                ram1.Click += new EventHandler(ram_click);
+            }
         }
 
         private void läggTillBetLabel(int betPosXskillnad, int i, int j)
@@ -284,23 +289,29 @@ namespace Black_Jack
             visaspelarebet.BringToFront();
             visaspelarebet.Text = "$0";
             
-            if (i == spelarNummer)
-            {
-                if (j == 0) visaspelarebet.Tag = "bet1";
-                else visaspelarebet.Tag = "bet2";
-                //datorPanel.Controls.Add(visaspelarebet);
-                spelarLabel.Add(visaspelarebet);
-            }
-            else
-            {
-                if (j == 0) visaspelarebet.Tag = "bet1";
-                else visaspelarebet.Tag = "bet2";
-                datorLabelLista[nummer1].Add(visaspelarebet);
-            }
+            if (j == 0) visaspelarebet.Tag = "bet1";
+            else visaspelarebet.Tag = "bet2";
+            
+            datorLabelLista[i].Add(visaspelarebet);
             datorPanel.Controls.Add(visaspelarebet);
         }
 
-        private void läggTillSpelarinfoLabel()
+
+        private void läggTillKortvärdeLabel(int i, int posX)
+        {
+            visaspelareinfo = new Label();
+            if (i == spelarNummer) visaspelareinfo.Location = new Point(15, 0);
+            else visaspelareinfo.Location = new Point(posX+15, 120);
+            visaspelareinfo.Font = new Font("MS Gothic", 12, FontStyle.Bold);
+            visaspelareinfo.BackColor = Color.LightGray;
+            visaspelareinfo.AutoSize = true;
+            visaspelareinfo.BringToFront();
+            
+            datorPanel.Controls.Add(visaspelareinfo);
+            datorLabelLista[i].Add(visaspelareinfo);
+        }
+
+        private void läggTillInfoLabel(int i)
         {
             visaspelareinfo = new Label();
             visaspelareinfo.Location = new Point(35, 240);
@@ -308,48 +319,11 @@ namespace Black_Jack
             visaspelareinfo.BackColor = Color.LightGray;
             visaspelareinfo.AutoSize = true;
             visaspelareinfo.BringToFront();
-            visaspelareinfo.Text = spelarNamn + ": $" + antalMarker;
+            if (i == spelarNummer) visaspelareinfo.Text = spelarNamn + ": $" + antalMarker;
+            else visaspelareinfo.Text = "Dator" + nummer1 + ": $5000";
             visaspelareinfo.Tag = "spelarinfo";
             datorPanel.Controls.Add(visaspelareinfo);
-            spelarLabel.Add(visaspelareinfo);
-        }
-
-        private void läggTillKortvärdeLabel(int i, int j, int posX)
-        {
-            visaspelareinfo = new Label();
-            visaspelareinfo.Location = new Point(posX+15, 120);
-            visaspelareinfo.Font = new Font("MS Gothic", 12, FontStyle.Bold);
-            visaspelareinfo.BackColor = Color.LightGray;
-            visaspelareinfo.AutoSize = true;
-            visaspelareinfo.BringToFront();
-            datorPanel.Controls.Add(visaspelareinfo);
-            if (i == spelarNummer)
-            {
-                if (j == 0) visaspelareinfo.Tag = "kort1";
-                else visaspelareinfo.Tag = "kort2";
-                spelarLabel.Add(visaspelareinfo);
-            }
-            else
-            {
-                if (j == 0) visaspelareinfo.Tag = "kort1";
-                else visaspelareinfo.Tag = "kort2";
-                datorLabelLista[nummer1].Add(visaspelareinfo);
-
-            }
-        }
-
-        private void läggTillDatorinfoLabel()
-        {
-            visaspelareinfo = new Label();
-            visaspelareinfo.Location = new Point(35, 240);
-            visaspelareinfo.Font = new Font("MS Gothic", 12, FontStyle.Bold);
-            visaspelareinfo.BackColor = Color.LightGray;
-            visaspelareinfo.AutoSize = true;
-            visaspelareinfo.BringToFront();
-            visaspelareinfo.Text = "Dator" + (nummer1+1) + ": $5000";
-            visaspelareinfo.Tag = "spelarinfo";
-            datorPanel.Controls.Add(visaspelareinfo);
-            datorLabelLista[nummer1].Add(visaspelareinfo);
+            datorLabelLista[i].Add(visaspelareinfo);
             
         }
 
@@ -417,62 +391,66 @@ namespace Black_Jack
  
         private void skapaSpelarPaneler()
         {
-            int spelarPanelposX = 110; 
-            int[] spelarPanelposY = new int[7] { 210, 330, 360, 385, 360, 330, 210 };
+            int spelarPanelposX = 85; 
+            int[] spelarPanelposY = new int[8] {0, 210, 330, 360, 385, 360, 330, 210 };
             int ramPosXskillnad = 35;
             int betPosXskillnad = 35;
             nummer1 = 0;
-            läggTillBankPanel();
+            
             Random random = new Random();
-            spelarNummer = random.Next(1, spelarinfo.antalspelare);
-            for (int i = 1; i < spelarinfo.antalspelare+1; i++)
+            spelarNummer = random.Next(1, spelarinfo.antalspelare+1);
+            for (int i = 0; i < spelarinfo.antalspelare+1; i++)
             {
-                if (i != spelarNummer)
+                labels = new List<Label>();
+                datorLabelLista.Add(labels);
+                if (i == 0)
                 {
-                    labels = new List<Label>();
-                    datorLabelLista.Add(labels);
-                }
-                pics = new List<PictureBox>();
-                dragnakort.Add(new List<List<PictureBox>>()); 
-                dragnakort[i].Add(pics);
-                pics = new List<PictureBox>();
-                dragnakort.Add(new List<List<PictureBox>>());
-                dragnakort[i].Add(pics);
-
-                läggTillPanel(spelarPanelposX, spelarPanelposY[i], spelarNummer, i);
-
-                for (int j = 0; j < 2; j++)
-                {
-                    läggTillPicturebox(ramPosXskillnad, i);
-                    ramPosXskillnad += 60;
-
-                    läggTillBetLabel(betPosXskillnad, i, j);
-                    läggTillKortvärdeLabel(i, j, betPosXskillnad);
-                    betPosXskillnad += 60;
-
-                    if (i == spelarNummer)
-                    {
-                        if (j == 0) DrawFilledRoundedRectangle(ram1, grönpensel);
-                        else DrawFilledRoundedRectangle(ram1, rödpensel);
-                    }
-                    else
-                    {
-                        DrawTranslucentRoundedRectangle(ram1);
-                    }
-                }
-                if (i != spelarNummer)
-                {
-                    läggTillDatorinfoLabel();
-
-                    nummer1++;
+                    pics = new List<PictureBox>();
+                    dragnakort.Add(new List<List<PictureBox>>());
+                    dragnakort[i].Add(pics);
+                    läggTillPanel(spelarPanelposX, spelarPanelposY[i], i);
+                    läggTillKortvärdeLabel(i, 0);
                 }
                 else
                 {
-                    läggTillSpelarinfoLabel();
+                    pics = new List<PictureBox>();
+                    dragnakort.Add(new List<List<PictureBox>>());
+                    dragnakort[i].Add(pics);
+                    pics = new List<PictureBox>();
+                    dragnakort.Add(new List<List<PictureBox>>());
+                    dragnakort[i].Add(pics);
+
+                    läggTillPanel(spelarPanelposX, spelarPanelposY[i], i);
+
+                    for (int j = 0; j < 2; j++)
+                    {
+                        läggTillPicturebox(ramPosXskillnad, i);
+                        ramPosXskillnad += 60;
+
+                        läggTillBetLabel(betPosXskillnad, i, j);
+                        läggTillKortvärdeLabel(i, betPosXskillnad);
+                        betPosXskillnad += 60;
+
+                        if (i == spelarNummer)
+                        {
+                            if (j == 0) DrawFilledRoundedRectangle(ram1, grönpensel);
+                            else DrawFilledRoundedRectangle(ram1, rödpensel);
+                        }
+                        else
+                        {
+                            DrawTranslucentRoundedRectangle(ram1);
+                        }
+                    }
+                    if (i == spelarNummer) nummer1++;
+                    
+                    läggTillInfoLabel(i);
+                    nummer1++;
+
                 }
                 ramPosXskillnad = 35;
                 betPosXskillnad = 35;
-                spelarPanelposX += 180;
+                if (i == 0) spelarPanelposX = 90;
+                else spelarPanelposX += 200;
             }
 
         }
@@ -482,7 +460,17 @@ namespace Black_Jack
         #region bettar
         private void harGjortBet()
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            foreach (Control c in panelLista[spelarNummer].Controls)
+            {
+
+                if (c is PictureBox)
+                {
+                    PictureBox p = (PictureBox)c;
+                    vilkensatsat = (bool)p.Tag;
+                    break;
+                }
+            }
+            //vilkensatsat = (bool)spelarensPlats.Tag;
 
             if (vilkensatsat)
             {
@@ -505,7 +493,7 @@ namespace Black_Jack
             int balans;
             int bet;
             string x;
-            label1.Text = "";
+            //label1.Text = "";
             for (int i = 0; i < datorLabelLista.Count; i++)
             {
                 if (datorLabelLista[i].Count > 0)
@@ -681,6 +669,7 @@ namespace Black_Jack
         {
             int posX = 35;
             int posY = 140;
+            int x = 0;
             if (markervärde.Sum() > 0)
             {
 
@@ -696,49 +685,65 @@ namespace Black_Jack
                     {
                         posX = 35;
                         posY = 140;
-                        kortlista = new List<int>();
-                        kortvärdeDator[h].Add(kortlista);
+                        if (h != spelarNummer)
+                        {
+                            kortvärdeDator.Add(new List<List<int>>());
+                        }
+                        //kortlista = new List<int>();
+                        //kortvärdeDator[h].Add(kortlista);
                         if (h == 0)
                         {
                             //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                            draKort = rnd.Next(nyKortlek.Count);
                             kortlista = new List<int>();
                             kortvärdeDator[h].Add(kortlista);
-                            draKort = rnd.Next(nyKortlek.Count);
-                            kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
-                            kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h])); //Hämtar summan av alla kort
+                            kortvärdeDator[0][0].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
+                            kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[0][0])); //Hämtar summan av alla kort
                             hämtaSpelkortsBilder(draKort,0, 0, 0, 0); //Laddar listan med Picturebox
 
                         }
                         else
                         {
 
-                            for (int i = 0; i < 2; i++)
+                            for (int i = 0; i < 2; i++) //Loopar korthög
                             {
-                                for (int j = 0; j < 2; j++)
+                                for (int j = 0; j < 2; j++) //Delar ut två kort i korthögen
                                 {
                                     //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
                                     draKort = rnd.Next(nyKortlek.Count);
                                     if (h == spelarNummer)
                                     {
-                                        kortlista = new List<int>();
-                                        kortvärdeSpelare.Add(kortlista);
+                                        if (i == 0)
+                                        {
+                                            kortlista = new List<int>();
+                                            kortvärdeSpelare.Add(kortlista);
+                                        }
                                         kortvärdeSpelare[i].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
                                     }
                                     else
                                     {
-                                        kortlista = new List<int>();
-                                        kortvärdeDator.Add(kortlista);
-                                        kortvärdeDator[h].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
+                                        if (h > spelarNummer)
+                                        {
+                                            x = h - 1;
+                                        }
+                                        else x = h;
+                                        if (i == 0)
+                                        {
+                                            kortlista = new List<int>();
+                                            kortvärdeDator[x].Add(kortlista);
+                                        }
+                                        kortvärdeDator[x][i].Add(kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
 
                                     }
                                     hämtaSpelkortsBilder(draKort, h, i, posX, posY); //Laddar listan med Picturebox
-                                    
                                     nyKortlek.RemoveAt(draKort);
                                     //await Task.Delay(50);
                                     posY -= 15;
+                                    //label1.Text += kortvärdeDator[h].Count.ToString();
+
                                 }
-                                kortvärdeTotaltSpelare.Add(kortlek.beräknaKortvärde(kortvärdeSpelare[i])); //Hämtar summan av alla kort
-                                kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[i])); //Hämtar summan av alla kort
+                                if (h == spelarNummer) kortvärdeTotaltSpelare.Add(kortlek.beräknaKortvärde(kortvärdeSpelare[i])); //Hämtar summan av alla kort
+                                //kortvärdeTotaltDator.Add(kortlek.beräknaKortvärde(kortvärdeDator[h][i])); //Hämtar summan av alla kort
 
 
                                 posY = 140;
@@ -746,6 +751,7 @@ namespace Black_Jack
                             }
                         }
                     }
+
                     visaFörstaTvåSpelkort();
                     knappDouble.Show();
                     knappPass.Show();
@@ -886,7 +892,7 @@ namespace Black_Jack
                     }
                 }
             }
-            label1.Text = "";
+            //label1.Text = "";
             panelLista[0].Controls.Add(dragnakort[0][0][0]); //Bankens kort
             int x;
             for (int h = 1; h < panelLista.Count; h++) 
@@ -915,27 +921,53 @@ namespace Black_Jack
                     spelarLabel[k].Text = kortvärdeTotaltSpelare[1].ToString();
                 }
             }
-            label1.Text = kortvärdeTotaltDator[0].ToString() + " " + kortvärdeTotaltDator[0].ToString();
+
             for (int k = 0; k < datorLabelLista.Count; k++)
             {
-                for (int m = 0; m < 2; m++)
+                if (k == 0)
                 {
                     for (int l = 0; l < datorLabelLista[k].Count; l++)
                     {
-                        if ((string)datorLabelLista[k][l].Tag == "kort1" && m == 0)
+                        if ((string)datorLabelLista[k][l].Tag == "kort1")
                         {
-                            datorLabelLista[k][l].Text = kortvärdeTotaltDator[0].ToString();
+                            datorLabelLista[k][l].Text = kortlek.beräknaKortvärde(kortvärdeDator[0][0]).ToString();
+                        }
+                    }
+                }
+                else
+                {
+                    for (int l = 0; l < datorLabelLista[k].Count; l++)
+                    {
+                        if ((string)datorLabelLista[k][l].Tag == "kort1")
+                        {
+                            datorLabelLista[k][l].Text = kortlek.beräknaKortvärde(kortvärdeDator[k][0]).ToString();
+                            //datorLabelLista[k][l].Text = kortvärdeTotaltDator[0].ToString();
                             datorLabelLista[k][l].Location = new Point(datorLabelLista[k][l].Location.X, datorLabelLista[k][l].Location.Y - 15);
                         }
-                        else if ((string)datorLabelLista[k][l].Tag == "kort2" && m == 1)
+                        else if ((string)datorLabelLista[k][l].Tag == "kort2")
                         {
-                            datorLabelLista[k][l].Text = kortvärdeTotaltDator[1].ToString();
+                            datorLabelLista[k][l].Text = kortlek.beräknaKortvärde(kortvärdeDator[k][1]).ToString();
+                            //datorLabelLista[k][l].Text = kortvärdeTotaltDator[1].ToString();
                             datorLabelLista[k][l].Location = new Point(datorLabelLista[k][l].Location.X, datorLabelLista[k][l].Location.Y - 15);
                         }
                     }
                 }
             }
-            
+            label1.Text = kortvärdeTotaltSpelare[0].ToString() + " " + kortvärdeTotaltSpelare[1].ToString() + " ";
+            for (int i = 0; i < kortvärdeDator.Count; i++)
+            {
+                for (int j = 0; j < kortvärdeDator[i].Count; j++)
+                {
+
+                        label1.Text += kortlek.beräknaKortvärde(kortvärdeDator[i][j]);
+                        //label1.Text += kortvärdeDator[i][j][k].ToString();
+
+                    label1.Text += " ";
+                }
+                label1.Text += ", ";
+
+            }
+
         }
 
         private void hämtaSpelkortsBilder(int x, int i, int j, int posX, int posY)
@@ -947,7 +979,7 @@ namespace Black_Jack
             string genväg = @"C:\\Black Jack\bilder\Spelkort\" + nyKortlek[x] + ".png";
             ritaBild = Image.FromFile(genväg);
             kort.Image = ritaBild;
-            label1.Text += i.ToString() + "" + j.ToString();
+            //label1.Text += i.ToString() + "" + j.ToString();
             dragnakort[i][j].Add(kort);
         }
 
@@ -1017,7 +1049,7 @@ namespace Black_Jack
         #region Mouseclick
         private void dollar5_click(object sender, MouseEventArgs e)
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            //vilkensatsat = (bool)spelarensPlats.Tag;
             if (!pågåendeRunda)
             {
                 rensaKort();
@@ -1085,7 +1117,7 @@ namespace Black_Jack
         }
         private void dollar10_click(object sender, MouseEventArgs e)
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            //vilkensatsat = (bool)spelarensPlats.Tag;
             if (!pågåendeRunda)
             {
                 rensaKort();
@@ -1157,7 +1189,7 @@ namespace Black_Jack
         }
         private void dollar50_click(object sender, MouseEventArgs e)
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            //vilkensatsat = (bool)spelarensPlats.Tag;
             if (!pågåendeRunda)
             {
                 rensaKort();
@@ -1230,7 +1262,7 @@ namespace Black_Jack
         }
         private void dollar100_click(object sender, MouseEventArgs e)
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            //vilkensatsat = (bool)spelarensPlats.Tag;
             if (!pågåendeRunda)
             {
                 rensaKort();
@@ -1303,7 +1335,7 @@ namespace Black_Jack
         }
         private void dollar500_click(object sender, MouseEventArgs e)
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            //vilkensatsat = (bool)spelarensPlats.Tag;
             if (!pågåendeRunda)
             {
                 rensaKort();
@@ -1376,7 +1408,7 @@ namespace Black_Jack
         }
         private void dollar1000_click(object sender, MouseEventArgs e)
         {
-            vilkensatsat = (bool)spelarensPlats.Tag;
+            //vilkensatsat = (bool)spelarensPlats.Tag;
             if (!pågåendeRunda)
             {
                 rensaKort();
@@ -1480,22 +1512,28 @@ namespace Black_Jack
 
         private void ram_click(object sender, EventArgs e)
         {
-            bool y = (bool)spelarensPlats.Tag;
             PictureBox klickadRam = sender as PictureBox;
+            Panel panel = klickadRam.Parent as Panel;
             List<PictureBox> bilderIram = new List<PictureBox>();
             bilderIram.Add(klickadRam);
-            int x = 0;
-            foreach (Control c in spelarensPlats.Controls)
+            foreach (Control c in panel.Controls)
             {
-                if (c is PictureBox && c != klickadRam)
-                {
-                    y = !y;
-                    spelarensPlats.Tag = y;
-                    bilderIram.Add((PictureBox)c);
-                    //if (x == 3) betLabel = spelarensPlats.Controls[1];
-                    //else betLabel = spelarensPlats.Controls[0];
+                if (c is PictureBox) {
+                    PictureBox andraRam = (PictureBox)c;
+                    if (!c.Equals(klickadRam)) 
+                    {
+                        bool x = (bool)andraRam.Tag;
+                        x = !x;
+                        andraRam.Tag = x;
+                        bilderIram.Add(andraRam);
+                    }
+                    else
+                    {
+                        //bool y = (bool)klickadRam.Tag;
+                        //y = !y;
+                        klickadRam.Tag = true;
+                    }
                 }
-                x++;
             }
 
             DrawFilledRoundedRectangle(bilderIram[0], grönpensel);
