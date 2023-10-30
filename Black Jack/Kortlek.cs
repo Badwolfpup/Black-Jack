@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Black_Jack
 {
-	internal class Kortlek
+	public static class Kortlek
 	{
 
-		public List<string> Nykortlek()
+		public static List<string> Nykortlek()
 		{
 			List<string> kortlek = new List<string>();
 			char[] färger = new char[4] { 'H', 'S', 'R', 'K' };
@@ -55,7 +55,7 @@ namespace Black_Jack
 			return kortlek;
 		}
 
-		public int hämtaKortvärde(string kort)
+		public static int hämtaKortvärde(string kort)
 		{
 			int värde = 0;
 			if (!Char.IsLetter(kort[1]))
@@ -72,7 +72,7 @@ namespace Black_Jack
 			return värde;
 		}
 
-		public int beräknaKortvärde(List<int> kort)
+		public static int beräknaKortvärde(List<int> kort)
 		{
 			int värde = 0 ;
 			kort.Sort();
