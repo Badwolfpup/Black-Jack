@@ -86,6 +86,7 @@ namespace Black_Jack
                 spelarinfo.spelare = listBox1.Text;
                 stängtsjälv = false;
                 this.Close();
+                spelarinfo.spelarNamnMarker();
             }
             else
             {

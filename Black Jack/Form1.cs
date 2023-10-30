@@ -21,7 +21,8 @@ namespace Black_Jack
         }
         login loggain; //Klass för att hantera val av spelare och antal
         Marker marker = new Marker(); //Klass som hanterar satsning
-        List<Spelare> spelare = new List<Spelare>();
+        List<Spelare> spelarlista = new List<Spelare>();
+        Spelare spelare;
 
         List<bool> tags;
         List<string> nyKortlek = new List<string>(); //Tar emot kortleken från kortleksklassen
@@ -111,37 +112,7 @@ namespace Black_Jack
             }
         }
 
-        private void spelarNamnMarker()
-        {
 
-            string namn = "";
-            string marker = "";
-            bool namnellermarker = true;
-            string spelare = spelarinfo.spelare;
-            try
-            {
-                foreach (char c in spelare)
-                {
-                    if (namnellermarker && c != ',')
-                    {
-                        namn += c.ToString();
-                    }
-                    else if (!namnellermarker && c != ',') marker += c.ToString();
-                    else namnellermarker = false;
-                }
-                spelarNamn = namn;
-                int.TryParse(marker, out antalMarker);
-            }
-            catch (Exception e)
-            {
-                if (spelarNamn == "")
-                {
-                    Environment.Exit(0);
-                }
-            }
-
-
-        }
 
         private void bytSpelareToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -195,7 +166,6 @@ namespace Black_Jack
             this.BackgroundImageLayout = ImageLayout.Stretch;
             Random random = new Random();
             spelarNummer = random.Next(1, spelarinfo.antalspelare + 1);
-            spelarNamnMarker();
             läggtillInitialaRamar();
             skapaMarkerBilder();
             //tooltips();
@@ -270,23 +240,36 @@ namespace Black_Jack
 
         private void läggtillInitialaRamar()
         {
-            int spelarPanelposX = 155;
+            //int spelarPanelposX = 155;
+            int datornummer = 0;
             int posXskillnad = 0;
-            int[] spelarPanelposY = new int[7] {0, 410, 530, 620, 620, 530, 410 };
+            int[] spelarPanelposX = new int[7] { 0, 155, 385, 615, 845, 1975, 1305 };
+            int[] spelarPanelposY = new int[7] { 0, 380, 500, 590, 590, 500, 380 };
 
             for (int i = 0; i < spelarinfo.antalspelare+1; i++)
             {
                 if (i == 0)
                 {
-
+                    spelarlista.Add(spelare = new Spelare());
+                    spelarlista[i].läggtillSpelhög();
                 }
                 else
                 {
+                    if (i != spelarinfo.spelarNummer) datornummer++;
+                    spelarlista.Add(spelare = new Spelare());
+                    spelarlista[i].läggtillSpelarinfo(i, datornummer, spelarPanelposX[i], spelarPanelposY[i] + 102);
+                    this.Controls.Add(spelarlista[i].spelarinfolabel);
+
                     for (int j = 0; j < 2; j++)
-                    {                      
+                    {
+                        spelarlista[i].läggtillSpelhög();
+                        spelarlista[i].läggtillBetinfo(j, spelarPanelposX[i] + posXskillnad, spelarPanelposY[i] + 77);
+                        spelarlista[i].läggtillKortSumma(j, spelarPanelposX[i] + 15 + posXskillnad, spelarPanelposY[i] - 20);
+                        this.Controls.Add(spelarlista[i].spelhög[j].betinfo);
+                        this.Controls.Add(spelarlista[i].spelhög[j].kortsumma);
                         PictureBox p = new PictureBox();
                         p.Size = new Size(50, 72);
-                        p.Location = new Point(spelarPanelposX + posXskillnad, spelarPanelposY[i]);
+                        p.Location = new Point(spelarPanelposX[i] + posXskillnad, spelarPanelposY[i]);
                         p.BackColor = Color.Transparent;
                         p.SizeMode = PictureBoxSizeMode.StretchImage;
                         p.Click += new EventHandler(ram_click);
@@ -311,7 +294,6 @@ namespace Black_Jack
                         posXskillnad += 55;
                     }
                     posXskillnad = 0;
-                    spelarPanelposX += 230;
                 }
 
             }

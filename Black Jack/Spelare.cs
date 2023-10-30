@@ -9,23 +9,24 @@ namespace Black_Jack
     public class Spelare
     {
         public List<Spelhög> spelhög { get; set; }
-        public Label spelarinfo { get; set; }
+        public Label spelarinfolabel { get; set; }
 
         public Spelare()
         {
             spelhög = new List<Spelhög>();
-            spelarinfo = new Label();
+            spelarinfolabel = new Label();
         }
 
-        public void läggtillSpelarinfo(int posX, int posY)
+        public void läggtillSpelarinfo(int i, int datornummer, int posX, int posY)
         {
-            spelarinfo.Location = new Point(posX, posY);
-            spelarinfo.Font = new Font("MS Gothic", 12, FontStyle.Bold);
-            spelarinfo.BackColor = Color.LightGray;
-            spelarinfo.AutoSize = true;
-            spelarinfo.BringToFront();
-            //if (i == spelarNummer) visaspelareinfo.Text = spelarNamn + ": $" + antalMarker;
-            //else visaspelareinfo.Text = "Dator" + nummer1 + ": $5000";
+            spelarinfolabel.Location = new Point(posX, posY);
+            spelarinfolabel.Font = new Font("MS Gothic", 12, FontStyle.Bold);
+            spelarinfolabel.BackColor = Color.LightGray;
+            spelarinfolabel.AutoSize = true;
+            spelarinfolabel.BringToFront();
+
+            if (i == spelarinfo.spelarNummer) spelarinfolabel.Text = spelarinfo.spelarnamn + ": $" + spelarinfo.kontobalans;
+            else spelarinfolabel.Text = "Dator" + datornummer + ": $5000";
         }
 
         public void läggtillSpelhög()
@@ -40,17 +41,33 @@ namespace Black_Jack
             spelhög[i].läggtillKortvärde(kort);
         }
 
+        public void läggtillBetinfo(int i, int posX, int posY)
+        {
+            spelhög[i].läggtillBetinfo(posX, posY);
+        }
+
+        public void läggtillKortSumma(int i, int posX, int posY)
+        {
+            spelhög[i].läggtillKortsumma(posX, posY);
+        }
+
+
+
         public class Spelhög
         {
-            List<PictureBox> spelkort = new List<PictureBox>();
-            List<Button> knappar = new List<Button>();
-            List<int> kortvärde = new List<int>();
-            Label betinfo = new Label();
-            Label kortsumma = new Label();            
+            public List<PictureBox> spelkort { get; set; }
+            public List<Button> knappar { get; set; }
+            public List<int> kortvärde { get; set; }
+            public Label betinfo { get; set; }
+            public Label kortsumma { get; set; }
 
             public Spelhög()
             {
-
+                spelkort = new List<PictureBox>();
+                knappar = new List<Button>();
+                kortvärde = new List<int>();
+                betinfo = new Label();
+                kortsumma = new Label();
             }
 
             public void läggtillImage(string kort, int posX, int posY)
@@ -73,6 +90,7 @@ namespace Black_Jack
                 betinfo.BackColor = Color.LightGray;
                 betinfo.AutoSize = true;
                 betinfo.BringToFront();
+                betinfo.Text = "!";
             }
 
             public void läggtillKortsumma(int posX, int posY)
@@ -82,6 +100,7 @@ namespace Black_Jack
                 kortsumma.BackColor = Color.LightGray;
                 kortsumma.AutoSize = true;
                 kortsumma.BringToFront();
+                kortsumma.Text = "!";
             }
 
             public void läggtillKortvärde(string kort)
