@@ -97,9 +97,9 @@ namespace Black_Jack
                 kortbild.Size = new Size(50, 72);
                 kortbild.Location = new Point(posX, posY);
                 kortbild.BackColor = Color.Transparent;
+                kortbild.BringToFront();
                 kortbild.SizeMode = PictureBoxSizeMode.StretchImage;
-                spelkort.Add(kortbild);  
-                
+                spelkort.Add(kortbild);                 
             }
 
             public void läggtillBetinfo(int posX, int posY)

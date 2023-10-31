@@ -28,6 +28,9 @@ namespace Black_Jack
         List<int> markervärde = new List<int>(); //Hur många marker spelare har satsat
         List<int> markervärde1 = new List<int>(); // Hur många marker spelare har satsat på andra
 
+        int[] kortPosX = new int[7] { 200, 155, 385, 615, 845, 1075, 1305 };
+        int[] kortPosY = new int[7] { 200, 340, 460, 550, 550, 460, 340 };
+
         //För bilder på de olika markerna
         PictureBox dollar5 = new PictureBox(); 
         PictureBox dollar10 = new PictureBox();
@@ -195,7 +198,7 @@ namespace Black_Jack
 
             //knappPass = new System.Windows.Forms.Button();
             knappPass.Size = new Size(30, 30);
-            knappPass.Location = new Point(posX, posY);
+            knappPass.Location = new Point(posX, posY+35);
             knappPass.FlatStyle = FlatStyle.Flat;
             knappPass.FlatAppearance.BorderSize = 0;
             knappPass.BackColor = Color.Transparent;
@@ -210,7 +213,7 @@ namespace Black_Jack
 
             //knappDouble = new System.Windows.Forms.Button();
             knappDouble.Size = new Size(30, 30);
-            knappDouble.Location = new Point(posX, posY);
+            knappDouble.Location = new Point(posX+145, posY);
             knappDouble.FlatStyle = FlatStyle.Flat;
             knappDouble.FlatAppearance.BorderSize = 0;
             knappDouble.BackColor = Color.Transparent;
@@ -225,7 +228,7 @@ namespace Black_Jack
 
             //knappSplit = new System.Windows.Forms.Button();
             knappSplit.Size = new Size(30, 30);
-            knappSplit.Location = new Point(posX, posY);
+            knappSplit.Location = new Point(posX+145, posY+35);
             knappSplit.FlatStyle = FlatStyle.Flat;
             knappSplit.FlatAppearance.BorderSize = 0;
             knappSplit.BackColor = Color.Transparent;
@@ -244,8 +247,7 @@ namespace Black_Jack
             //int spelarPanelposX = 155;
             int datornummer = 0;
             int posXskillnad = 0;
-            int[] spelarPanelposX = new int[7] { 0, 155, 385, 615, 845, 1075, 1305 };
-            int[] spelarPanelposY = new int[7] { 0, 340, 460, 550, 550, 460, 340 };
+
 
             for (int i = 0; i < spelarinfo.antalspelare+1; i++)
             {
@@ -259,26 +261,28 @@ namespace Black_Jack
                     label1.Text += i.ToString();
                     if (i != spelarinfo.spelarNummer) datornummer++;
                     spelarlista.Add(spelare = new Spelare(i));
-                    spelarlista[i].läggtillSpelarinfo(i, datornummer, spelarPanelposX[i], spelarPanelposY[i] + 102);
+                    spelarlista[i].läggtillSpelarinfo(i, datornummer, kortPosX[i], kortPosY[i] + 102);
                     this.Controls.Add(spelarlista[i].spelarinfolabel);
 
                     for (int j = 0; j < 2; j++)
                     {
                         spelarlista[i].läggtillSpelhög();
-                        spelarlista[i].läggtillBetinfo(j, spelarPanelposX[i] + posXskillnad, spelarPanelposY[i] + 77);
-                        spelarlista[i].läggtillKortSumma(j, spelarPanelposX[i] + 15 + posXskillnad, spelarPanelposY[i] - 20);
+                        spelarlista[i].läggtillBetinfo(j, kortPosX[i] + posXskillnad, kortPosY[i] + 77);
+                        spelarlista[i].läggtillKortSumma(j, kortPosX[i] + 15 + posXskillnad, kortPosY[i] - 20);
                         this.Controls.Add(spelarlista[i].spelhög[j].betinfo);
                         this.Controls.Add(spelarlista[i].spelhög[j].kortsumma);
                         PictureBox p = new PictureBox();
                         p.Size = new Size(50, 72);
-                        p.Location = new Point(spelarPanelposX[i] + posXskillnad, spelarPanelposY[i]);
+                        p.Location = new Point(kortPosX[i] + posXskillnad, kortPosY[i]);
                         p.BackColor = Color.Transparent;
                         p.SizeMode = PictureBoxSizeMode.StretchImage;
                         if (i == spelarinfo.spelarNummer) p.Click += new EventHandler(ram_click);
                         if (i == spelarinfo.spelarNummer)
                         {
+                            
                             if (j == 0)
                             {
+                                läggTillKnapp(p.Location.X - 35, p.Location.Y);
                                 p.Tag = true;
                                 DrawFilledRoundedRectangle(p, grönpensel);
                             }
@@ -363,20 +367,6 @@ namespace Black_Jack
             }
         }
 
-        //private int hämtaBalans(int i)
-        //{
-        //    int balans = 0;
-        //    string x = "";
-        //    //for (int j = 0; j < datorLabelLista[i].Count; j++)
-        //    //{
-        //    //    if ((string)datorLabelLista[i][j].Tag == "spelarinfo")
-        //    //    {
-        //    //        x = datorLabelLista[i][j].Text.Substring(9);
-        //    //    }
-        //    //}
-        //    int.TryParse(x, out balans);
-        //    return balans;
-        //}
 
         #endregion
 
@@ -474,7 +464,16 @@ namespace Black_Jack
             int posX = 55;
             int posY = 140;
             int x = 0;
-            if (markervärde.Sum() > 0)
+                //foreach (Control c in Controls)
+                //{
+                //    if (c is PictureBox)
+                //    {
+                //        Controls.Remove(c);
+                //        c.Dispose();
+                //    }
+                //}
+
+            if (markervärde.Sum() > 0 || markervärde1.Sum() > 0)
             {
                 label1.Text = "";
                 string genväg;
@@ -485,46 +484,40 @@ namespace Black_Jack
                     //spelaLjud(@"C:\\Black Jack\Audio\lekblandas.wav");
                     resetKort();
                     nyKortlek = Kortlek.Nykortlek();
-                    //for (int h = 0; h < (spelarinfo.antalspelare + 1); h++)
-                    //{
-                    //    posX = 55;
-                    //    posY = 140;
-                    //    kortvärdeDator.Add(new List<List<int>>());
+                    for (int i = 0; i < (spelarinfo.antalspelare + 1); i++)
+                    {
+                        posX = 55;
+                        posY = 140;
+                        if (i == 0)
+                        {
+                            //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                            draKort = rnd.Next(nyKortlek.Count);
+                            spelarlista[i].läggtillKortochVärde(nyKortlek[draKort], i, kortPosX[i], kortPosY[i]);
+                            this.Controls.Add(spelarlista[i].spelhög[0].spelkort[0]);
+                        }
+                        //else
+                        //{
+                        //    for (int i = 0; i < 2; i++) //Loopar korthög
+                        //    {
+                        //        kortlista = new List<int>();
+                        //        kortvärdeDator[h].Add(kortlista);
+                        //        for (int j = 0; j < 2; j++) //Delar ut två kort i korthögen
+                        //        {
+                        //            //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                        //            draKort = rnd.Next(nyKortlek.Count);
+                        //            kortlista = new List<int>();
+                        //            kortvärdeDator[h][i].Add(Kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
+                        //            hämtaSpelkortsBilder(draKort, h, i, posX, posY); //Laddar listan med Picturebox
+                        //            nyKortlek.RemoveAt(draKort);
+                        //            //await Task.Delay(50);
+                        //            posY -= 15;
+                        //        }
+                        //        posY = 140;
+                        //        posX += 55;
+                        //    }
+                        //}
+                    }
 
-
-                    //    if (h == 0)
-                    //    {
-                    //        kortlista = new List<int>();
-                    //        kortvärdeDator[h].Add(kortlista);
-                    //        //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                    //        draKort = rnd.Next(nyKortlek.Count);
-                    //        kortvärdeDator[h][0].Add(Kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
-                    //        kortvärdeTotaltDator.Add(Kortlek.beräknaKortvärde(kortvärdeDator[0][0])); //Hämtar summan av alla kort
-                    //        hämtaSpelkortsBilder(draKort,0, 0, 0, 128); //Laddar listan med Picturebox
-                    //    }
-                    //    else
-                    //    {
-                    //        for (int i = 0; i < 2; i++) //Loopar korthög
-                    //        {
-                    //            kortlista = new List<int>();
-                    //            kortvärdeDator[h].Add(kortlista);
-                    //            for (int j = 0; j < 2; j++) //Delar ut två kort i korthögen
-                    //            {
-                    //                //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                    //                draKort = rnd.Next(nyKortlek.Count);
-                    //                kortlista = new List<int>();
-                    //                kortvärdeDator[h][i].Add(Kortlek.hämtaKortvärde(nyKortlek[draKort])); //Lägger till kortvärdet av det dragna kortet
-                    //                hämtaSpelkortsBilder(draKort, h, i, posX, posY); //Laddar listan med Picturebox
-                    //                nyKortlek.RemoveAt(draKort);
-                    //                //await Task.Delay(50);
-                    //                posY -= 15;
-                    //            }
-                    //            posY = 140;
-                    //            posX += 55;
-                    //        }
-                    //    }
-                    //}
-                    
 
                     //visaFörstaTvåSpelkort();
                     knappDouble.Show();
