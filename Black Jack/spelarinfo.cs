@@ -19,8 +19,7 @@ namespace Black_Jack
         public static int spelarNummer { get; set; }
         static spelarinfo()
         {
-            Random random = new Random();
-            spelarNummer = random.Next(1, antalspelare + 1);
+
             
         }
 

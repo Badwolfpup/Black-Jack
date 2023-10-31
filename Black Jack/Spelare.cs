@@ -11,10 +11,15 @@ namespace Black_Jack
         public List<Spelhög> spelhög { get; set; }
         public Label spelarinfolabel { get; set; }
 
-        public Spelare()
+        public int datorbalans { get; set; }
+
+        private string spelarinfotext;
+
+        public Spelare(int i)
         {
             spelhög = new List<Spelhög>();
             spelarinfolabel = new Label();
+            if (i != spelarinfo.spelarNummer && i != 0) datorbalans = 5000;
         }
 
         public void läggtillSpelarinfo(int i, int datornummer, int posX, int posY)
@@ -25,8 +30,22 @@ namespace Black_Jack
             spelarinfolabel.AutoSize = true;
             spelarinfolabel.BringToFront();
 
-            if (i == spelarinfo.spelarNummer) spelarinfolabel.Text = spelarinfo.spelarnamn + ": $" + spelarinfo.kontobalans;
-            else spelarinfolabel.Text = "Dator" + datornummer + ": $5000";
+            if (i == spelarinfo.spelarNummer)
+            {
+                spelarinfotext = spelarinfo.spelarnamn + ": $";
+                spelarinfolabel.Text = spelarinfotext + spelarinfo.kontobalans;
+            }
+            else
+            {
+                spelarinfotext = "Dator" + datornummer + ": $";
+                spelarinfolabel.Text = spelarinfotext + datorbalans;
+            }
+        }
+
+        public void uppdateraSpelarinfo(int i)
+        {
+            if (i == spelarinfo.spelarNummer) spelarinfolabel.Text = spelarinfotext + spelarinfo.kontobalans.ToString(); 
+            else spelarinfolabel.Text = spelarinfotext + datorbalans.ToString();
         }
 
         public void läggtillSpelhög()
@@ -90,7 +109,7 @@ namespace Black_Jack
                 betinfo.BackColor = Color.LightGray;
                 betinfo.AutoSize = true;
                 betinfo.BringToFront();
-                betinfo.Text = "!";
+                betinfo.Text = "$0";
             }
 
             public void läggtillKortsumma(int posX, int posY)
