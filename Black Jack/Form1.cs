@@ -28,26 +28,34 @@ namespace Black_Jack
         List<int> markervärde = new List<int>(); //Hur många marker spelare har satsat
         List<int> markervärde1 = new List<int>(); // Hur många marker spelare har satsat på andra
 
-        PictureBox dollar5, dollar10, dollar50, dollar100, dollar500, dollar1000; //För bilder på de olika markerna
+        //För bilder på de olika markerna
+        PictureBox dollar5 = new PictureBox(); 
+        PictureBox dollar10 = new PictureBox();
+        PictureBox dollar50 = new PictureBox();
+        PictureBox dollar100 = new PictureBox();
+        PictureBox dollar500 = new PictureBox();
+        PictureBox dollar1000 = new PictureBox(); 
 
+        //Håller kolla på om det överstiger maxbet på $1000
         bool[] kollaKryss = new bool[] { false, false, false, false, false, false }; //True om spelarens inte har tillräckligt med marker för att betta en vissa valör
-        bool[] kollaKryssV = new bool[] { false, false, false, false, false, false }; //Som ovan fast för vänster
-        bool[] kollaKryssH = new bool[] { false, false, false, false, false, false }; //Som ovan fast för höger
+        bool[] kollaKryssV = new bool[] { false, false, false, false, false, false }; //Sparar den icke-aktive bethögen
+        bool[] kollaKryssH = new bool[] { false, false, false, false, false, false }; 
 
-        int antalMarker = 5000; //Hur många marker spelaren har
 
         bool pågåendeRunda = false; //Håller koll på om det är en pågående spelrunda (true) eller om man är i bettingfasen (false).
         bool vilkensatsat = true; //Hålla koll på om vänster eller höger bet, true = vänster
         bool spelaresTur = false;
 
-        System.Windows.Forms.Button knappHit, knappPass, knappDouble, knappSplit; //Knappar som spelaren kan trycka på
+        //System.Windows.Forms.Button knappHit, knappPass, knappDouble, knappSplit; //Knappar som spelaren kan trycka på
+        System.Windows.Forms.Button knappHit = new System.Windows.Forms.Button();
+        System.Windows.Forms.Button knappPass = new System.Windows.Forms.Button();
+        System.Windows.Forms.Button knappDouble = new System.Windows.Forms.Button();
+        System.Windows.Forms.Button knappSplit = new System.Windows.Forms.Button();
 
-        string spelarNamn = ""; //Sparar vad spelaren heter
-
-        System.Windows.Forms.ToolTip hitTooltip; //Tooltip för Hit-knappen
-        System.Windows.Forms.ToolTip passTooltip; //Tooltip för Pass-knappen
-        System.Windows.Forms.ToolTip doubleTooltip; //Tooltip för Double-knappen
-        System.Windows.Forms.ToolTip splitTooltip; //Tooltip för Split-knappen
+        System.Windows.Forms.ToolTip hitTooltip = new System.Windows.Forms.ToolTip(); //Tooltip för Hit-knappen
+        System.Windows.Forms.ToolTip passTooltip = new System.Windows.Forms.ToolTip(); //Tooltip för Pass-knappen
+        System.Windows.Forms.ToolTip doubleTooltip = new System.Windows.Forms.ToolTip(); //Tooltip för Double-knappen
+        System.Windows.Forms.ToolTip splitTooltip = new System.Windows.Forms.ToolTip(); //Tooltip för Split-knappen
 
         SolidBrush rödpensel = new SolidBrush(Color.IndianRed); //Färglägger där spelarens satsar
         SolidBrush grönpensel = new SolidBrush(Color.LightGreen); //Färglägger där spelarens satsar
@@ -87,7 +95,7 @@ namespace Black_Jack
             }
             for (int i = 0; i < spelarlista.Count; i++)
             {
-                if (spelarlista[i].Contains(spelarNamn))
+                if (spelarlista[i].Contains(spelarinfo.spelarnamn))
                 {
                     x = spelarlista[i];
                     int y = x.IndexOf(',');
@@ -117,29 +125,25 @@ namespace Black_Jack
 
         private void tooltips()
         {
-            hitTooltip = new System.Windows.Forms.ToolTip();
             hitTooltip.AutoPopDelay = 5000;
             hitTooltip.InitialDelay = 400;
             hitTooltip.ReshowDelay = 200;
             hitTooltip.SetToolTip(this.knappHit, "Hit!");
 
-            passTooltip = new System.Windows.Forms.ToolTip();
             passTooltip.AutoPopDelay = 5000;
             passTooltip.InitialDelay = 400;
             passTooltip.ReshowDelay = 200;
             passTooltip.SetToolTip(this.knappPass, "Pass!");
 
-            doubleTooltip = new System.Windows.Forms.ToolTip();
             doubleTooltip.AutoPopDelay = 5000;
             doubleTooltip.InitialDelay = 400;
             doubleTooltip.ReshowDelay = 200;
             doubleTooltip.SetToolTip(this.knappDouble, "Double!");
 
-            //splitTooltip = new System.Windows.Forms.ToolTip();
-            //splitTooltip.AutoPopDelay = 5000;
-            //splitTooltip.InitialDelay = 1000;
-            //splitTooltip.ReshowDelay = 200;
-            //splitTooltip.SetToolTip(this.knappSplit, "Split!");
+            splitTooltip.AutoPopDelay = 5000;
+            splitTooltip.InitialDelay = 1000;
+            splitTooltip.ReshowDelay = 200;
+            splitTooltip.SetToolTip(this.knappSplit, "Split!");
         }
 
         private void Form1_Load_1(object sender, EventArgs e)
@@ -165,7 +169,7 @@ namespace Black_Jack
 
             läggtillInitialaRamar();
             skapaMarkerBilder();
-            //tooltips();
+            tooltips();
             datorBet();
 
         }
@@ -175,7 +179,7 @@ namespace Black_Jack
    
         private void läggTillKnapp(int posX, int posY)
         {
-            knappHit = new System.Windows.Forms.Button();
+            //knappHit = new System.Windows.Forms.Button();
             knappHit.Size = new Size(30, 30);
             knappHit.Location = new Point(posX, posY);
             knappHit.FlatStyle = FlatStyle.Flat;
@@ -189,7 +193,7 @@ namespace Black_Jack
             this.Controls.Add(knappHit);
             knappHit.MouseClick += new MouseEventHandler(knappHit_click);
 
-            knappPass = new System.Windows.Forms.Button();
+            //knappPass = new System.Windows.Forms.Button();
             knappPass.Size = new Size(30, 30);
             knappPass.Location = new Point(posX, posY);
             knappPass.FlatStyle = FlatStyle.Flat;
@@ -204,7 +208,7 @@ namespace Black_Jack
             knappPass.MouseClick += new MouseEventHandler(knappPass_click);
             //knappPass.Hide();
 
-            knappDouble = new System.Windows.Forms.Button();
+            //knappDouble = new System.Windows.Forms.Button();
             knappDouble.Size = new Size(30, 30);
             knappDouble.Location = new Point(posX, posY);
             knappDouble.FlatStyle = FlatStyle.Flat;
@@ -219,7 +223,7 @@ namespace Black_Jack
             knappDouble.MouseClick += new MouseEventHandler(knappDouble_click);
             //knappDouble.Hide();
 
-            knappSplit = new System.Windows.Forms.Button();
+            //knappSplit = new System.Windows.Forms.Button();
             knappSplit.Size = new Size(30, 30);
             knappSplit.Location = new Point(posX, posY);
             knappSplit.FlatStyle = FlatStyle.Flat;
@@ -319,9 +323,6 @@ namespace Black_Jack
 
         private void datorBet()
         {
-            int balans;
-            int bet;
-            string x;
             for (int i = 1; i < spelarlista.Count; i++)
             {
                 if (i != spelarinfo.spelarNummer)
@@ -915,7 +916,6 @@ namespace Black_Jack
 
         private void skapaMarkerBilder()
         {
-            dollar5 = new PictureBox();
             dollar5.Location = new Point(this.Width / 2 - 244, this.Height / 2 + 225);
             dollar5.Size = new Size(80, 80);
             dollar5.BackColor = Color.Transparent;
@@ -924,7 +924,6 @@ namespace Black_Jack
             this.Controls.Add(dollar5);
             dollar5.MouseClick += new MouseEventHandler(dollar5_click);
 
-            dollar10 = new PictureBox();
             dollar10.Location = new Point(this.Width / 2 - 174, this.Height / 2 + 235);
             dollar10.Size = new Size(80, 80);
             dollar10.BackColor = Color.Transparent;
@@ -933,7 +932,6 @@ namespace Black_Jack
             this.Controls.Add(dollar10);
             dollar10.MouseClick += new MouseEventHandler(dollar10_click);
 
-            dollar50 = new PictureBox();
             dollar50.Location = new Point(this.Width / 2 - 104, this.Height / 2 + 245);
             dollar50.Size = new Size(80, 80);
             dollar50.BackColor = Color.Transparent;
@@ -942,7 +940,6 @@ namespace Black_Jack
             this.Controls.Add(dollar50);
             dollar50.MouseClick += new MouseEventHandler(dollar50_click);
 
-            dollar100 = new PictureBox();
             dollar100.Location = new Point(this.Width / 2 - 34, this.Height / 2 + 245);
             dollar100.Size = new Size(80, 80);
             dollar100.BackColor = Color.Transparent;
@@ -951,7 +948,6 @@ namespace Black_Jack
             this.Controls.Add(dollar100);
             dollar100.MouseClick += new MouseEventHandler(dollar100_click);
 
-            dollar500 = new PictureBox();
             dollar500.Location = new Point(this.Width / 2 + 44, this.Height / 2 + 235);
             dollar500.Size = new Size(80, 80);
             dollar500.BackColor = Color.Transparent;
@@ -960,7 +956,6 @@ namespace Black_Jack
             this.Controls.Add(dollar500);
             dollar500.MouseClick += new MouseEventHandler(dollar500_click);
 
-            dollar1000 = new PictureBox();
             dollar1000.Location = new Point(this.Width / 2 + 114, this.Height / 2 + 225);
             dollar1000.Size = new Size(80, 80);
             dollar1000.BackColor = Color.Transparent;
@@ -1016,7 +1011,7 @@ namespace Black_Jack
                 {
                     if (vilkensatsat)
                     {
-                        if (antalMarker > 5)
+                        if (spelarinfo.kontobalans > 5)
                         {
                             markervärde.Add(5);
                             markervärde = marker.sortera(markervärde);
@@ -1030,7 +1025,7 @@ namespace Black_Jack
                     }
                     else
                     {
-                        if (antalMarker > 5)
+                        if (spelarinfo.kontobalans > 5)
                         {
                             markervärde1.Add(5);
                             markervärde1 = marker.sortera(markervärde1);
@@ -1094,7 +1089,7 @@ namespace Black_Jack
                 {
                     if (vilkensatsat)
                     {
-                        if (antalMarker >= 10)
+                        if (spelarinfo.kontobalans >= 10)
                         {
                             markervärde.Add(10);
                             markervärde = marker.sortera(markervärde);
@@ -1108,7 +1103,7 @@ namespace Black_Jack
                     }
                     else
                     {
-                        if (antalMarker >= 10)
+                        if (spelarinfo.kontobalans >= 10)
                         {
                             markervärde1.Add(10);
                             markervärde1 = marker.sortera(markervärde1);
@@ -1172,7 +1167,7 @@ namespace Black_Jack
                 {
                     if (vilkensatsat)
                     {
-                        if (antalMarker >= 50)
+                        if (spelarinfo.kontobalans >= 50)
                         {
                             markervärde.Add(50);
                             markervärde = marker.sortera(markervärde);
@@ -1186,7 +1181,7 @@ namespace Black_Jack
                     }
                     else
                     {
-                        if (antalMarker >= 50)
+                        if (spelarinfo.kontobalans >= 50)
                         {
                             markervärde1.Add(50);
                             markervärde1 = marker.sortera(markervärde1);
@@ -1250,7 +1245,7 @@ namespace Black_Jack
                 {
                     if (vilkensatsat)
                     {
-                        if (antalMarker >= 100)
+                        if (spelarinfo.kontobalans >= 100)
                         {
                             markervärde.Add(100);
                             markervärde = marker.sortera(markervärde);
@@ -1264,7 +1259,7 @@ namespace Black_Jack
                     }
                     else
                     {
-                        if (antalMarker >= 100)
+                        if (spelarinfo.kontobalans >= 100)
                         {
                             markervärde1.Add(100);
                             markervärde1 = marker.sortera(markervärde1);
@@ -1328,7 +1323,7 @@ namespace Black_Jack
                 {
                     if (vilkensatsat)
                     {
-                        if (antalMarker >= 500)
+                        if (spelarinfo.kontobalans >= 500)
                         {
                             markervärde.Add(500);
                             markervärde = marker.sortera(markervärde);
@@ -1342,7 +1337,7 @@ namespace Black_Jack
                     }
                     else
                     {
-                        if (antalMarker >= 500)
+                        if (spelarinfo.kontobalans >= 500)
                         {
                             markervärde1.Add(500);
                             markervärde1 = marker.sortera(markervärde1);
@@ -1406,7 +1401,7 @@ namespace Black_Jack
                 {
                     if (vilkensatsat)
                     {
-                        if (antalMarker >= 1000)
+                        if (spelarinfo.kontobalans >= 1000)
                         {
                             markervärde.Add(1000);
                             markervärde = marker.sortera(markervärde);
@@ -1420,7 +1415,7 @@ namespace Black_Jack
                     }
                     else
                     {
-                        if (antalMarker >= 1000)
+                        if (spelarinfo.kontobalans >= 1000)
                         {
                             markervärde1.Add(1000);
                             markervärde1 = marker.sortera(markervärde1);
