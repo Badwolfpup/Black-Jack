@@ -99,6 +99,7 @@ namespace Black_Jack
                 kortbild.BackColor = Color.Transparent;
                 kortbild.BringToFront();
                 kortbild.SizeMode = PictureBoxSizeMode.StretchImage;
+                kortbild.Image = image;
                 spelkort.Add(kortbild);                 
             }
 
