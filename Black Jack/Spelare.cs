@@ -54,6 +54,12 @@ namespace Black_Jack
             spelhög.Add(hög);
         }
 
+        public void insertSpelhög()
+        {
+            Spelhög hög = new Spelhög();
+            spelhög.Insert(0, hög);
+        }
+
         public void läggtillKortochVärde(string kort, int i, int posX, int posY)
         {
             spelhög[i].läggtillImage(kort, posX, posY);
@@ -128,11 +134,6 @@ namespace Black_Jack
             public void läggtillKortvärde(string kort)
             {
                 kortvärde.Add(Kortlek.hämtaKortvärde(kort));
-            }
-
-            public void läggtillKappar()
-            {
-
             }
         }
     }
