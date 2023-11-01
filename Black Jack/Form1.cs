@@ -254,6 +254,8 @@ namespace Black_Jack
                 {
                     spelarlista.Add(spelare = new Spelare(i));
                     spelarlista[i].läggtillSpelhög();
+                    spelarlista[i].spelhög[0].läggtillKortsumma(kortPosX[i] + 15, kortPosY[i] - 20);
+                    this.Controls.Add(spelarlista[i].spelhög[0].kortsumma);
                 }
                 else
                 {
@@ -267,7 +269,7 @@ namespace Black_Jack
                     {
                         spelarlista[i].läggtillSpelhög();
                         spelarlista[i].läggtillBetinfo(j, kortPosX[i] + posXskillnad, kortPosY[i] + 77);
-                        spelarlista[i].läggtillKortSumma(j, kortPosX[i] + 15 + posXskillnad, kortPosY[i] - 20);
+                        spelarlista[i].läggtillKortSumma(j, kortPosX[i] + 15 + posXskillnad, kortPosY[i] - 5);
                         this.Controls.Add(spelarlista[i].spelhög[j].betinfo);
                         this.Controls.Add(spelarlista[i].spelhög[j].kortsumma);
                         PictureBox p = new PictureBox();
@@ -314,12 +316,14 @@ namespace Black_Jack
         {
             if (vilkensatsat)
             {
-                spelarlista[spelarinfo.spelarNummer].spelhög[0].betinfo.Text = "$" + markervärde.Sum().ToString();
+                //spelarlista[spelarinfo.spelarNummer].spelhög[0].betinfo.Text = "$" + markervärde.Sum().ToString();
+                spelarlista[spelarinfo.spelarNummer].spelhög[0].betinfo.Text = "$" + spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma.ToString();
                 spelarlista[spelarinfo.spelarNummer].uppdateraSpelarinfo(spelarinfo.spelarNummer);
             }
             else
             {
-                spelarlista[spelarinfo.spelarNummer].spelhög[1].betinfo.Text = "$" + markervärde1.Sum().ToString();
+                //spelarlista[spelarinfo.spelarNummer].spelhög[1].betinfo.Text = "$" + markervärde1.Sum().ToString();
+                spelarlista[spelarinfo.spelarNummer].spelhög[1].betinfo.Text = "$" + spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma.ToString();
                 spelarlista[spelarinfo.spelarNummer].uppdateraSpelarinfo(spelarinfo.spelarNummer);
             }
         }
@@ -332,7 +336,8 @@ namespace Black_Jack
                 {
                     for (int j = 0; j < spelarlista[i].spelhög.Count; j++) 
                     {
-                        spelarlista[i].spelhög[j].betinfo.Text = "$:" + betAI(spelarlista[i].datorbalans, i).ToString();
+                        spelarlista[i].spelhög[j].betsumma = betAI(spelarlista[i].datorbalans, i);
+                        spelarlista[i].spelhög[j].betinfo.Text = "$:" + spelarlista[i].spelhög[j].betsumma.ToString();
                         spelarlista[i].uppdateraSpelarinfo(i);
                     }
                 }
@@ -460,7 +465,7 @@ namespace Black_Jack
         #region spellogik
         private async Task spelaKort()
         {
-            if (markervärde.Sum() > 0)
+            if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma > 0)
             {
                 label1.Text = "";
                 string genväg;
@@ -479,6 +484,7 @@ namespace Black_Jack
                             draKort = rnd.Next(nyKortlek.Count);
                             nyKortlek.RemoveAt(draKort);
                             spelarlista[i].läggtillKortochVärde(nyKortlek[draKort], i, kortPosX[i], kortPosY[i]);
+                            spelarlista[i].spelhög[0].kortsumma.Text = spelarlista[i].spelhög[0].kortvärde.Sum().ToString();
                         }
                         else
                         {
@@ -491,7 +497,9 @@ namespace Black_Jack
                                 {
                                     draKort = rnd.Next(nyKortlek.Count);
                                     nyKortlek.RemoveAt(draKort);
+                                    spelarlista[i].spelhög[j].kortsumma.Location = new Point(spelarlista[i].spelhög[j].kortsumma.Location.X, spelarlista[i].spelhög[j].kortsumma.Location.Y - 15);
                                     spelarlista[i].läggtillKortochVärde(nyKortlek[draKort], j, kortPosX[i] + posXskillnad, kortPosY[i] - posYskillnad);
+                                    spelarlista[i].spelhög[j].kortsumma.Text = spelarlista[i].spelhög[j].kortvärde.Sum().ToString();
                                     posYskillnad += 15;
                                 }
                                 posXskillnad += 55;
@@ -921,9 +929,10 @@ namespace Black_Jack
             {
                 if (vilkensatsat)
                 {
-                    if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betinfo.Text != "$0")
+                    if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma != 0)
                     {
-                        markervärde = marker.raderaMarker(markervärde, 5);
+                        //markervärde = marker.raderaMarker(markervärde, 5);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma -= 5;
                         spelarinfo.kontobalans += 5;
                         harGjortBet();
                     }
@@ -933,9 +942,10 @@ namespace Black_Jack
                 }
                 else
                 {
-                    if (spelarlista[spelarinfo.spelarNummer].spelhög[1].betinfo.Text != "$0")
+                    if (spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma != 0)
                     {
-                        markervärde1 = marker.raderaMarker(markervärde1, 5);
+                        //markervärde1 = marker.raderaMarker(markervärde1, 5);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma -= 5;
                         spelarinfo.kontobalans += 5;
                         harGjortBet();
                     }
@@ -952,8 +962,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans > 5)
                         {
-                            markervärde.Add(5);
-                            markervärde = marker.sortera(markervärde);
+                            //markervärde.Add(5);
+                            //markervärde = marker.sortera(markervärde);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma += 5;
                             spelarinfo.kontobalans -= 5;
                             harGjortBet();
                         }
@@ -966,8 +977,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans > 5)
                         {
-                            markervärde1.Add(5);
-                            markervärde1 = marker.sortera(markervärde1);
+                            //markervärde1.Add(5);
+                            //markervärde1 = marker.sortera(markervärde1);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma += 5;
                             spelarinfo.kontobalans -= 5;
                             harGjortBet();
                         }
@@ -992,31 +1004,37 @@ namespace Black_Jack
             {
                 if (vilkensatsat)
                 {
-                    if (10 > markervärde.Sum())
+                    if (10 > spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde.Sum();
-                        markervärde.Clear();
+                        //spelarinfo.kontobalans += markervärde.Sum();
+                        //markervärde.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma = 0;
                         harGjortBet();
                     }
                     else
                     {
-                        markervärde = marker.raderaMarker(markervärde, 10);
+                        //markervärde = marker.raderaMarker(markervärde, 10);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma -= 10;
                         spelarinfo.kontobalans += 10;
                         harGjortBet();
                     }
                 }
                 else
                 {
-                    if (10 > markervärde.Sum())
+                    if (10 > spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde1.Sum();
-                        markervärde1.Clear();
+                        //spelarinfo.kontobalans += markervärde1.Sum();
+                        //markervärde1.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde1 = marker.raderaMarker(markervärde1, 10);
+                        //markervärde1 = marker.raderaMarker(markervärde1, 10);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 10;
                         spelarinfo.kontobalans += 10;
                         harGjortBet();
                     }
@@ -1030,8 +1048,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 10)
                         {
-                            markervärde.Add(10);
-                            markervärde = marker.sortera(markervärde);
+                            //markervärde.Add(10);
+                            //markervärde = marker.sortera(markervärde);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma += 10;
                             spelarinfo.kontobalans -= 10;
                             harGjortBet();
                         }
@@ -1044,8 +1063,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 10)
                         {
-                            markervärde1.Add(10);
-                            markervärde1 = marker.sortera(markervärde1);
+                            //markervärde1.Add(10);
+                            //markervärde1 = marker.sortera(markervärde1);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma += 10;
                             spelarinfo.kontobalans -= 10;
                             harGjortBet();
                         }
@@ -1069,32 +1089,38 @@ namespace Black_Jack
             {
                 if (vilkensatsat)
                 {
-                    if (50 > markervärde.Sum())
+                    if (50 > spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde.Sum();
-                        markervärde.Clear();
+                        //spelarinfo.kontobalans += markervärde.Sum();
+                        //markervärde.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde = marker.raderaMarker(markervärde, 50);
+                        //markervärde = marker.raderaMarker(markervärde, 50);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma -= 50;
                         spelarinfo.kontobalans += 50;
                         harGjortBet();
                     }
                 }
                 else
                 {
-                    if (50 > markervärde1.Sum())
+                    if (50 > spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde1.Sum();
-                        markervärde1.Clear();
+                        //spelarinfo.kontobalans += markervärde1.Sum();
+                        //markervärde1.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde1 = marker.raderaMarker(markervärde1, 50);
+                        //markervärde1 = marker.raderaMarker(markervärde1, 50);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 50;
                         spelarinfo.kontobalans += 50;
                         harGjortBet();
                     }
@@ -1108,8 +1134,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 50)
                         {
-                            markervärde.Add(50);
-                            markervärde = marker.sortera(markervärde);
+                            //markervärde.Add(50);
+                            //markervärde = marker.sortera(markervärde);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma += 50;
                             spelarinfo.kontobalans -= 50;
                             harGjortBet();
                         }
@@ -1122,8 +1149,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 50)
                         {
-                            markervärde1.Add(50);
-                            markervärde1 = marker.sortera(markervärde1);
+                            //markervärde1.Add(50);
+                            //markervärde1 = marker.sortera(markervärde1);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma += 50;
                             spelarinfo.kontobalans -= 50;
                             harGjortBet();
                         }
@@ -1147,32 +1175,38 @@ namespace Black_Jack
             {
                 if (vilkensatsat)
                 {
-                    if (100 > markervärde.Sum())
+                    if (100 > spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde.Sum();
-                        markervärde.Clear();
+                        //spelarinfo.kontobalans += markervärde.Sum();
+                        //markervärde.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde = marker.raderaMarker(markervärde, 100);
+                        //markervärde = marker.raderaMarker(markervärde, 100);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma -= 100;
                         spelarinfo.kontobalans += 100;
                         harGjortBet();
                     }
                 }
                 else
                 {
-                    if (100 > markervärde1.Sum())
+                    if (100 > spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde1.Sum();
-                        markervärde1.Clear();
+                        //spelarinfo.kontobalans += markervärde1.Sum();
+                        //markervärde1.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde1 = marker.raderaMarker(markervärde1, 100);
+                        //markervärde1 = marker.raderaMarker(markervärde1, 100);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 100;
                         spelarinfo.kontobalans += 100;
                         harGjortBet();
                     }
@@ -1186,8 +1220,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 100)
                         {
-                            markervärde.Add(100);
-                            markervärde = marker.sortera(markervärde);
+                            //markervärde.Add(100);
+                            //markervärde = marker.sortera(markervärde);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma += 100;
                             spelarinfo.kontobalans -= 100;
                             harGjortBet();
                         }
@@ -1200,8 +1235,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 100)
                         {
-                            markervärde1.Add(100);
-                            markervärde1 = marker.sortera(markervärde1);
+                            //markervärde1.Add(100);
+                            //markervärde1 = marker.sortera(markervärde1);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma += 100;
                             spelarinfo.kontobalans -= 100;
                             harGjortBet();
                         }
@@ -1225,32 +1261,38 @@ namespace Black_Jack
             {
                 if (vilkensatsat)
                 {
-                    if (500 > markervärde.Sum())
+                    if (500 > spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde.Sum();
-                        markervärde.Clear();
+                        //spelarinfo.kontobalans += markervärde.Sum();
+                        //markervärde.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde = marker.raderaMarker(markervärde, 500);
+                        //markervärde = marker.raderaMarker(markervärde, 500);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 500;
                         spelarinfo.kontobalans += 500;
                         harGjortBet();
                     }
                 }
                 else
                 {
-                    if (500 > markervärde1.Sum())
+                    if (500 > spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde1.Sum();
-                        markervärde1.Clear();
+                        //spelarinfo.kontobalans += markervärde1.Sum();
+                        //markervärde1.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 500;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde1 = marker.raderaMarker(markervärde1, 500);
+                        //markervärde1 = marker.raderaMarker(markervärde1, 500);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 500;
                         spelarinfo.kontobalans += 500;
                         harGjortBet();
                     }
@@ -1264,8 +1306,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 500)
                         {
-                            markervärde.Add(500);
-                            markervärde = marker.sortera(markervärde);
+                            //markervärde.Add(500);
+                            //markervärde = marker.sortera(markervärde);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma += 500;
                             spelarinfo.kontobalans -= 500;
                             harGjortBet();
                         }
@@ -1278,8 +1321,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 500)
                         {
-                            markervärde1.Add(500);
-                            markervärde1 = marker.sortera(markervärde1);
+                            //markervärde1.Add(500);
+                            //markervärde1 = marker.sortera(markervärde1);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma += 500;
                             spelarinfo.kontobalans -= 500;
                             harGjortBet();
                         }
@@ -1303,32 +1347,38 @@ namespace Black_Jack
             {
                 if (vilkensatsat)
                 {
-                    if (1000 > markervärde.Sum())
+                    if (1000 > spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde.Sum();
-                        markervärde.Clear();
+                        //spelarinfo.kontobalans += markervärde.Sum();
+                        //markervärde.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde = marker.raderaMarker(markervärde, 1000);
+                        //markervärde = marker.raderaMarker(markervärde, 1000);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma -= 1000;
                         spelarinfo.kontobalans += 1000;
                         harGjortBet();
                     }
                 }
                 else
                 {
-                    if (1000 > markervärde1.Sum())
+                    if (1000 > spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma)
                     {
-                        spelarinfo.kontobalans += markervärde1.Sum();
-                        markervärde1.Clear();
+                        //spelarinfo.kontobalans += markervärde1.Sum();
+                        //markervärde1.Clear();
+                        spelarinfo.kontobalans += spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma;
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma = 0;
                         harGjortBet();
 
                     }
                     else
                     {
-                        markervärde1 = marker.raderaMarker(markervärde1, 1000);
+                        //markervärde1 = marker.raderaMarker(markervärde1, 1000);
+                        spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma -= 1000;
                         spelarinfo.kontobalans += 1000;
                         harGjortBet();
                     }
@@ -1342,8 +1392,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 1000)
                         {
-                            markervärde.Add(1000);
-                            markervärde = marker.sortera(markervärde);
+                            //markervärde.Add(1000);
+                            //markervärde = marker.sortera(markervärde);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma +=1000;
                             spelarinfo.kontobalans -= 1000;
                             harGjortBet();
                         }
@@ -1356,8 +1407,9 @@ namespace Black_Jack
                     {
                         if (spelarinfo.kontobalans >= 1000)
                         {
-                            markervärde1.Add(1000);
-                            markervärde1 = marker.sortera(markervärde1);
+                            //markervärde1.Add(1000);
+                            //markervärde1 = marker.sortera(markervärde1);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma +=1000;
                             spelarinfo.kontobalans -= 1000;
                             harGjortBet();
                         }
@@ -1374,8 +1426,8 @@ namespace Black_Jack
 
         private void knappHit_click(object sender, MouseEventArgs e)
         {
-            if (markervärde.Sum() == 0) spelarlista[spelarinfo.spelarNummer].spelhög.RemoveAt(0);
-            if (markervärde1.Sum() == 0) spelarlista[spelarinfo.spelarNummer].spelhög.RemoveAt(1);
+            if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma == 0) spelarlista[spelarinfo.spelarNummer].spelhög.RemoveAt(0);
+            if (spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma == 0) spelarlista[spelarinfo.spelarNummer].spelhög.RemoveAt(1);
             spelaKort();
         }
 
@@ -1389,10 +1441,16 @@ namespace Black_Jack
 
         private void knappDouble_click(object sender, MouseEventArgs e)
         {
-            knappDouble.Hide();
-            knappPass.Hide();
-            spelaKort();
-            passa();
+            int a = 0;
+            if (!vilkensatsat) a = 1;
+            spelarinfo.kontobalans -= spelarlista[spelarinfo.spelarNummer].spelhög[a].betsumma;
+            spelarlista[spelarinfo.spelarNummer].spelhög[a].betsumma *= 2;
+            spelarlista[spelarinfo.spelarNummer].spelhög[a].betinfo.Text = spelarlista[spelarinfo.spelarNummer].spelhög[a].betsumma.ToString();
+            spelarlista[spelarinfo.spelarNummer].uppdateraSpelarinfo(spelarinfo.spelarNummer);
+            //knappDouble.Hide();
+            //knappPass.Hide();
+            //spelaKort();
+            //passa();
         }
 
         private void knappSplit_click(object sender, MouseEventArgs e)
@@ -1436,8 +1494,8 @@ namespace Black_Jack
                 klickadRam.Tag = y;
                 vilkensatsat = !vilkensatsat;
                 maxBet();
-                this.Controls.Remove(bilderIram[0]);
-                this.Controls.Remove(bilderIram[1]);
+                //this.Controls.Remove(bilderIram[0]);
+                //this.Controls.Remove(bilderIram[1]);
                 DrawFilledRoundedRectangle(bilderIram[0], grönpensel);
                 DrawFilledRoundedRectangle(bilderIram[1], rödpensel);
             }

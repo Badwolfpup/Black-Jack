@@ -25,7 +25,7 @@ namespace Black_Jack
         public void läggtillSpelarinfo(int i, int datornummer, int posX, int posY)
         {
             spelarinfolabel.Location = new Point(posX, posY);
-            spelarinfolabel.Font = new Font("MS Gothic", 12, FontStyle.Bold);
+            spelarinfolabel.Font = new Font("MS Gothic", 10, FontStyle.Bold);
             spelarinfolabel.BackColor = Color.LightGray;
             spelarinfolabel.AutoSize = true;
             spelarinfolabel.BringToFront();
@@ -79,6 +79,8 @@ namespace Black_Jack
             public List<int> kortvärde { get; set; }
             public Label betinfo { get; set; }
             public Label kortsumma { get; set; }
+            public int betsumma { get; set; }
+
 
             public Spelhög()
             {
@@ -106,7 +108,7 @@ namespace Black_Jack
             public void läggtillBetinfo(int posX, int posY)
             {
                 betinfo.Location = new Point(posX, posY);
-                betinfo.Font = new Font("MS Gothic", 12, FontStyle.Bold);
+                betinfo.Font = new Font("MS Gothic", 10, FontStyle.Bold);
                 betinfo.BackColor = Color.LightGray;
                 betinfo.AutoSize = true;
                 betinfo.BringToFront();
@@ -116,11 +118,11 @@ namespace Black_Jack
             public void läggtillKortsumma(int posX, int posY)
             {
                 kortsumma.Location = new Point(posX, posY);
-                kortsumma.Font = new Font("MS Gothic", 12, FontStyle.Bold);
+                kortsumma.Font = new Font("MS Gothic", 10, FontStyle.Bold);
                 kortsumma.BackColor = Color.LightGray;
                 kortsumma.AutoSize = true;
                 kortsumma.BringToFront();
-                kortsumma.Text = "!";
+                kortsumma.Text = "";
             }
 
             public void läggtillKortvärde(string kort)
