@@ -81,7 +81,6 @@ namespace Black_Jack
         public class Spelhög
         {
             public List<PictureBox> spelkort { get; set; }
-            public List<Button> knappar { get; set; }
             public List<int> kortvärde { get; set; }
             public Label betinfo { get; set; }
             public Label kortsumma { get; set; }
@@ -91,7 +90,6 @@ namespace Black_Jack
             public Spelhög()
             {
                 spelkort = new List<PictureBox>();
-                knappar = new List<Button>();
                 kortvärde = new List<int>();
                 betinfo = new Label();
                 kortsumma = new Label();

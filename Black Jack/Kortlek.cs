@@ -8,10 +8,14 @@ namespace Black_Jack
 {
 	public static class Kortlek
 	{
+		public static List<string> nykortlek { get; set; }
 
-		public static List<string> Nykortlek()
-		{
-			List<string> kortlek = new List<string>();
+		static Kortlek()
+        {
+			nykortlek = new List<string>();
+		}
+		public static List<string> skapaNykortlek()
+		{			
 			char[] färger = new char[4] { 'H', 'S', 'R', 'K' };
 			for (int h = 0; h < 4; h++)
 			{
@@ -22,37 +26,37 @@ namespace Black_Jack
 						if (j < 10)
 						{
 							string kort = färger[i].ToString() + j.ToString();
-							kortlek.Add(kort);
+							nykortlek.Add(kort);
 						}
 						else if (j == 10)
 						{
 							string kort = färger[i].ToString() + "T";
-							kortlek.Add(kort);
+							nykortlek.Add(kort);
 						}
 						else if (j == 11)
 						{
 							string kort = färger[i].ToString() + "J";
-							kortlek.Add(kort);
+							nykortlek.Add(kort);
 						}
 						else if (j == 12)
 						{
 							string kort = färger[i].ToString() + "Q";
-							kortlek.Add(kort);
+							nykortlek.Add(kort);
 						}
 						else if (j == 13)
 						{
 							string kort = färger[i].ToString() + "K";
-							kortlek.Add(kort);
+							nykortlek.Add(kort);
 						}
 						else
 						{
 							string kort = färger[i].ToString() + "A";
-							kortlek.Add(kort);
+							nykortlek.Add(kort);
 						}
 					}
 				}
 			}
-			return kortlek;
+			return nykortlek;
 		}
 
 		public static int hämtaKortvärde(string kort)

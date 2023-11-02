@@ -56,7 +56,7 @@ namespace Black_Jack
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void läggtill_Click(object sender, EventArgs e)
         {
             if (textBox1.Text != "")
             {
@@ -79,7 +79,7 @@ namespace Black_Jack
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void starta_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex > -1)
             {
@@ -94,7 +94,7 @@ namespace Black_Jack
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void tabort_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex > -1)
             {
@@ -180,5 +180,7 @@ namespace Black_Jack
                 spelarinfo.antalspelare = 6;
             }
         }
+
+
     }
 }

@@ -62,13 +62,14 @@
             // bytSpelareToolStripMenuItem
             // 
             this.bytSpelareToolStripMenuItem.Name = "bytSpelareToolStripMenuItem";
-            this.bytSpelareToolStripMenuItem.Size = new System.Drawing.Size(225, 34);
+            this.bytSpelareToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.bytSpelareToolStripMenuItem.Text = "Byt spelare";
+            this.bytSpelareToolStripMenuItem.Click += new System.EventHandler(this.bytSpelareToolStripMenuItem_Click);
             // 
             // fyllPåMarkerToolStripMenuItem
             // 
             this.fyllPåMarkerToolStripMenuItem.Name = "fyllPåMarkerToolStripMenuItem";
-            this.fyllPåMarkerToolStripMenuItem.Size = new System.Drawing.Size(225, 34);
+            this.fyllPåMarkerToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.fyllPåMarkerToolStripMenuItem.Text = "Fyll på marker";
             // 
             // hjälpToolStripMenuItem
@@ -98,11 +99,12 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Black Jack by Badwolfpup";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_Close_1);
+            this.Load += new System.EventHandler(this.Form1_Load_1);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.Load += new EventHandler(Form1_Load_1);
 
         }
 

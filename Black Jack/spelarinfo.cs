@@ -51,6 +51,7 @@ namespace Black_Jack
                 {
                     Environment.Exit(0);
                 }
+                MessageBox.Show(e.Message, "info", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 

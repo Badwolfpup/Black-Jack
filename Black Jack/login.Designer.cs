@@ -28,179 +28,194 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            button2 = new Button();
-            listBox1 = new ListBox();
-            textBox1 = new TextBox();
-            button3 = new Button();
-            radioButton1 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton3 = new RadioButton();
-            radioButton4 = new RadioButton();
-            radioButton5 = new RadioButton();
-            radioButton6 = new RadioButton();
-            SuspendLayout();
+            this.läggtill = new System.Windows.Forms.Button();
+            this.starta = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tabort = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.SuspendLayout();
             // 
-            // button1
+            // läggtill
             // 
-            button1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(39, 130);
-            button1.Name = "button1";
-            button1.Size = new Size(181, 36);
-            button1.TabIndex = 0;
-            button1.Text = "Lägg till ny spelare";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            this.läggtill.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.läggtill.Location = new System.Drawing.Point(56, 217);
+            this.läggtill.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.läggtill.Name = "läggtill";
+            this.läggtill.Size = new System.Drawing.Size(259, 60);
+            this.läggtill.TabIndex = 0;
+            this.läggtill.Text = "Lägg till ny spelare";
+            this.läggtill.UseVisualStyleBackColor = true;
+            this.läggtill.Click += new System.EventHandler(this.läggtill_Click);
             // 
-            // button2
+            // starta
             // 
-            button2.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(419, 188);
-            button2.Name = "button2";
-            button2.Size = new Size(114, 36);
-            button2.TabIndex = 1;
-            button2.Text = "Starta";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            this.starta.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.starta.Location = new System.Drawing.Point(599, 313);
+            this.starta.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.starta.Name = "starta";
+            this.starta.Size = new System.Drawing.Size(163, 60);
+            this.starta.TabIndex = 1;
+            this.starta.Text = "Starta";
+            this.starta.UseVisualStyleBackColor = true;
+            this.starta.Click += new System.EventHandler(this.starta_Click);
             // 
             // listBox1
             // 
-            listBox1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 25;
-            listBox1.Location = new Point(237, 27);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(164, 154);
-            listBox1.TabIndex = 2;
+            this.listBox1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 38;
+            this.listBox1.Location = new System.Drawing.Point(339, 45);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(233, 232);
+            this.listBox1.TabIndex = 2;
             // 
             // textBox1
             // 
-            textBox1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox1.Location = new Point(39, 87);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(181, 32);
-            textBox1.TabIndex = 3;
+            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.textBox1.Location = new System.Drawing.Point(56, 145);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(257, 45);
+            this.textBox1.TabIndex = 3;
             // 
-            // button3
+            // tabort
             // 
-            button3.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(237, 188);
-            button3.Name = "button3";
-            button3.Size = new Size(101, 36);
-            button3.TabIndex = 1;
-            button3.Text = "Ta bort";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            this.tabort.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tabort.Location = new System.Drawing.Point(339, 313);
+            this.tabort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabort.Name = "tabort";
+            this.tabort.Size = new System.Drawing.Size(144, 60);
+            this.tabort.TabIndex = 1;
+            this.tabort.Text = "Ta bort";
+            this.tabort.UseVisualStyleBackColor = true;
+            this.tabort.Click += new System.EventHandler(this.tabort_Click);
             // 
             // radioButton1
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton1.Location = new Point(419, 29);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(91, 25);
-            radioButton1.TabIndex = 4;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "1 spelare";
-            radioButton1.UseVisualStyleBackColor = true;
-            radioButton1.CheckedChanged += radioButton1_CheckedChanged;
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.radioButton1.Location = new System.Drawing.Point(599, 48);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(135, 36);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "1 spelare";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radioButton2
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton2.Location = new Point(419, 54);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(91, 25);
-            radioButton2.TabIndex = 4;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "2 spelare";
-            radioButton2.UseVisualStyleBackColor = true;
-            radioButton2.CheckedChanged += radioButton2_CheckedChanged;
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.radioButton2.Location = new System.Drawing.Point(599, 90);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(135, 36);
+            this.radioButton2.TabIndex = 4;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "2 spelare";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+
             // 
             // radioButton3
             // 
-            radioButton3.AutoSize = true;
-            radioButton3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton3.Location = new Point(419, 79);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Size = new Size(91, 25);
-            radioButton3.TabIndex = 4;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "3 spelare";
-            radioButton3.UseVisualStyleBackColor = true;
-            radioButton3.CheckedChanged += radioButton3_CheckedChanged;
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.radioButton3.Location = new System.Drawing.Point(599, 132);
+            this.radioButton3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(135, 36);
+            this.radioButton3.TabIndex = 4;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "3 spelare";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
             // 
             // radioButton4
             // 
-            radioButton4.AutoSize = true;
-            radioButton4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton4.Location = new Point(419, 104);
-            radioButton4.Name = "radioButton4";
-            radioButton4.Size = new Size(91, 25);
-            radioButton4.TabIndex = 4;
-            radioButton4.TabStop = true;
-            radioButton4.Text = "4 spelare";
-            radioButton4.UseVisualStyleBackColor = true;
-            radioButton4.CheckedChanged += radioButton4_CheckedChanged;
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.radioButton4.Location = new System.Drawing.Point(599, 173);
+            this.radioButton4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(135, 36);
+            this.radioButton4.TabIndex = 4;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "4 spelare";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
+
             // 
             // radioButton5
             // 
-            radioButton5.AutoSize = true;
-            radioButton5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton5.Location = new Point(419, 129);
-            radioButton5.Name = "radioButton5";
-            radioButton5.Size = new Size(91, 25);
-            radioButton5.TabIndex = 4;
-            radioButton5.TabStop = true;
-            radioButton5.Text = "5 spelare";
-            radioButton5.UseVisualStyleBackColor = true;
-            radioButton5.CheckedChanged += radioButton5_CheckedChanged;
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.radioButton5.Location = new System.Drawing.Point(599, 215);
+            this.radioButton5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(135, 36);
+            this.radioButton5.TabIndex = 4;
+            this.radioButton5.TabStop = true;
+            this.radioButton5.Text = "5 spelare";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton5_CheckedChanged);
             // 
             // radioButton6
             // 
-            radioButton6.AutoSize = true;
-            radioButton6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            radioButton6.Location = new Point(419, 154);
-            radioButton6.Name = "radioButton6";
-            radioButton6.Size = new Size(91, 25);
-            radioButton6.TabIndex = 4;
-            radioButton6.TabStop = true;
-            radioButton6.Text = "6 spelare";
-            radioButton6.UseVisualStyleBackColor = true;
-            radioButton6.CheckedChanged += radioButton6_CheckedChanged;
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.radioButton6.Location = new System.Drawing.Point(599, 257);
+            this.radioButton6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(135, 36);
+            this.radioButton6.TabIndex = 4;
+            this.radioButton6.TabStop = true;
+            this.radioButton6.Text = "6 spelare";
+            this.radioButton6.UseVisualStyleBackColor = true;
+            this.radioButton6.CheckedChanged += new System.EventHandler(this.radioButton6_CheckedChanged);
             // 
             // login
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(545, 285);
-            Controls.Add(radioButton6);
-            Controls.Add(radioButton5);
-            Controls.Add(radioButton4);
-            Controls.Add(radioButton3);
-            Controls.Add(radioButton2);
-            Controls.Add(radioButton1);
-            Controls.Add(textBox1);
-            Controls.Add(listBox1);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
-            Name = "login";
-            Text = "Form2";
-            FormClosing += login_FormClosing;
-            Load += login_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(779, 475);
+            this.Controls.Add(this.radioButton6);
+            this.Controls.Add(this.radioButton5);
+            this.Controls.Add(this.radioButton4);
+            this.Controls.Add(this.radioButton3);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.radioButton1);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.tabort);
+            this.Controls.Add(this.starta);
+            this.Controls.Add(this.läggtill);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Name = "login";
+            this.Text = "Form2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.login_FormClosing);
+            this.Load += new System.EventHandler(this.login_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
 
-        private Button button1;
-        private Button button2;
+        private Button läggtill;
+        private Button starta;
         private ListBox listBox1;
         private TextBox textBox1;
-        private Button button3;
+        private Button tabort;
         private RadioButton radioButton1;
         private RadioButton radioButton2;
         private RadioButton radioButton3;
