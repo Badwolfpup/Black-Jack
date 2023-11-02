@@ -532,7 +532,224 @@ namespace Black_Jack
 
         }
 
+        #region datorAI
+        private void datorAI(int x)
+        {
+            
+
+            for (int i = x; i < spelarlista.Count; i++)
+            {
+                if (i == spelarinfo.spelarNummer) return;
+                for (int j = 0; j < spelarlista[i].spelhög.Count; j++)
+                {
+                    splitEllerDouble(i, j);
+                    while (HitOrPass(i, j)) ;
+                    
+                }
+            }
+        }
+
+        private void läggtillKort(int i, int j)
+        {
+            Random rnd = new Random();
+            int draKort = rnd.Next(Kortlek.nykortlek.Count);           
+            spelarlista[i].spelhög[j].kortsumma.Location = new Point(spelarlista[i].spelhög[j].kortsumma.Location.X, spelarlista[i].spelhög[j].kortsumma.Location.Y - 15);
+            spelarlista[i].läggtillKortochVärde(Kortlek.nykortlek[draKort], j, spelarlista[i].spelhög[j].spelkort[spelarlista[i].spelhög[j].spelkort.Count-1].Location.X, spelarlista[i].spelhög[j].spelkort[spelarlista[i].spelhög[j].spelkort.Count - 1].Location.Y-15);
+            spelarlista[i].spelhög[j].kortsumma.Text = Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde).ToString();
+            Kortlek.nykortlek.RemoveAt(draKort);
+        }
+
+        private bool HitOrPass(int i, int j)
+        {
+            bool VellerH = false;
+            if (j != 0) VellerH = !VellerH;
+
+            if (!spelarlista[i].spelhög[j].kortvärde.Contains(11))
+            {
+                switch(Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                {
+                    case 8:
+                        läggtillKort(i, j);
+                        return true;
+                    case 9:
+                        läggtillKort(i, j);
+                        return true;
+                    case 10:
+                        läggtillKort(i, j);
+                        return true;
+                    case 11:
+                        läggtillKort(i, j);
+                        return true;
+                    case 12:
+                        if (spelarlista[0].spelhög[0].kortvärde[0] < 4 || spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                        {
+                            läggtillKort(i, j);
+                            return true;
+                        }
+                        else return false;
+                    case 13:
+                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                        {
+                            läggtillKort(i, j);
+                            return true;
+                        }
+                        else return false;
+                    case 14:
+                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                        {
+                            läggtillKort(i, j);
+                            return true;
+                        }
+                        else return false;
+                    case 15:
+                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                        {
+                            läggtillKort(i, j);
+                            return true;
+                        }
+                        else return false;
+                    case 16:
+                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                        {
+                            läggtillKort(i, j);
+                            return true;
+                        }
+                        else return false;
+                    default:
+                        return false;
+                }
+            } else
+            {
+                switch (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                {
+                    case 18:
+                        if (spelarlista[0].spelhög[0].kortvärde[0] > 8)
+                        {
+                            läggtillKort(i, j);
+                            return true;
+                        }
+                        else return false;
+                    case 19:
+                        return false;
+                    case 20:
+                        return false;
+                    default:
+                        läggtillKort(i, j);
+                        return true;
+                }
+            }
+        }
+
+        private void splitEllerDouble(int i, int j)
+        {
+            bool VellerH = false;
+            if (j != 0) VellerH = !VellerH;
+
+            if (!spelarlista[i].spelhög[j].splitEllerDouble)
+            {
+                if (spelarlista[i].spelhög[j].kortvärde[0] == spelarlista[i].spelhög[j].kortvärde[1])
+                {                        
+                    switch (spelarlista[i].spelhög[j].kortvärde[0])
+                    {
+                        case 2:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 8)
+                            {
+                                split(i, VellerH);
+                                spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            }
+                            break;
+                        case 3:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 8)
+                            {
+                                split(i, VellerH);
+                                spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            }
+                            break;
+                        case 6:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 2 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
+                            {
+                                split(i, VellerH);
+                                spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            }
+                            break;
+                        case 7:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] < 8)
+                            {
+                                split(i, VellerH);
+                                spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            }
+                            break;
+                        case 8:
+                            split(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            break;
+                        case 9:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] != 7 || spelarlista[0].spelhög[0].kortvärde[0] != 10 || spelarlista[0].spelhög[0].kortvärde[0] != 11)
+                            {
+                                split(i, VellerH);
+                                spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            }
+                            break;
+                        case 11:
+                            split(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    if (!spelarlista[i].spelhög[j].kortvärde.Contains(11))
+                    {
+                        if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 11)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 10 && (spelarlista[0].spelhög[0].kortvärde[0] != 10 || spelarlista[0].spelhög[0].kortvärde[0] != 11))
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 9 && spelarlista[0].spelhög[0].kortvärde[0] > 2 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        }
+                    } 
+                    else
+                    {
+                        if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 19 && spelarlista[0].spelhög[0].kortvärde[0] == 6)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 18 && spelarlista[0].spelhög[0].kortvärde[0] < 6)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 17 && spelarlista[0].spelhög[0].kortvärde[0] > 2 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 16 && spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 15 && spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 14 && spelarlista[0].spelhög[0].kortvärde[0] > 4 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
+                        {
+                            dubbla(i, VellerH);
+                            spelarlista[i].spelhög[j].splitEllerDouble = true;
+                        }
+                    }
+                }
+            }
+            
+        }
+        #endregion
+
         #region spellogik
+
         private async Task spelaKort()
         {
             if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma > 0)
@@ -549,9 +766,9 @@ namespace Black_Jack
                         {
                             //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
                             draKort = rnd.Next(Kortlek.nykortlek.Count);
-                            Kortlek.nykortlek.RemoveAt(draKort);
                             spelarlista[i].läggtillKortochVärde(Kortlek.nykortlek[draKort], i, kortPosX[i], kortPosY[i]);
                             spelarlista[i].spelhög[0].kortsumma.Text = spelarlista[i].spelhög[0].kortvärde.Sum().ToString();
+                            Kortlek.nykortlek.RemoveAt(draKort);
                         }
                         else
                         {
@@ -562,11 +779,11 @@ namespace Black_Jack
                                 int posYskillnad = 0;
                                 for (int k = 0; k < 2; k++)
                                 {
-                                    draKort = rnd.Next(Kortlek.nykortlek.Count);
-                                    Kortlek.nykortlek.RemoveAt(draKort);
+                                    draKort = rnd.Next(Kortlek.nykortlek.Count);                                  
                                     spelarlista[i].spelhög[j].kortsumma.Location = new Point(spelarlista[i].spelhög[j].kortsumma.Location.X, spelarlista[i].spelhög[j].kortsumma.Location.Y - 15);
                                     spelarlista[i].läggtillKortochVärde(Kortlek.nykortlek[draKort], j, kortPosX[i] + posXskillnad, kortPosY[i] - posYskillnad);
-                                    spelarlista[i].spelhög[j].kortsumma.Text = spelarlista[i].spelhög[j].kortvärde.Sum().ToString();
+                                    spelarlista[i].spelhög[j].kortsumma.Text = Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde).ToString();
+                                    Kortlek.nykortlek.RemoveAt(draKort);
                                     posYskillnad += 15;
                                 }
                                 posXskillnad += 55;

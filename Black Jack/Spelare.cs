@@ -10,16 +10,18 @@ namespace Black_Jack
     {
         public List<Spelhög> spelhög { get; set; }
         public Label spelarinfolabel { get; set; }
-
         public int datorbalans { get; set; }
 
         private string spelarinfotext;
+        public int skicklighet { get; set; } //Sannolikheten att datorn tar rätt beslut
 
         public Spelare(int i)
         {
             spelhög = new List<Spelhög>();
             spelarinfolabel = new Label();
             if (i != spelarinfo.spelarNummer && i != 0) datorbalans = 5000;
+            Random r = new Random();
+            skicklighet = r.Next(70, 96);
         }
 
         public void läggtillSpelarinfo(int i, int datornummer, int posX, int posY)
@@ -85,6 +87,7 @@ namespace Black_Jack
             public Label betinfo { get; set; }
             public Label kortsumma { get; set; }
             public int betsumma { get; set; }
+            public bool splitEllerDouble  { get; set; } = false;
 
 
             public Spelhög()
