@@ -12,7 +12,7 @@ namespace Black_Jack
         public Label spelarinfolabel { get; set; }
         public int datorbalans { get; set; }
 
-        private string spelarinfotext;
+        public string spelarinfotext;
         public int skicklighet { get; set; } //Sannolikheten att datorn tar rätt beslut
 
         public Spelare(int i)
@@ -27,7 +27,7 @@ namespace Black_Jack
         public void läggtillSpelarinfo(int i, int datornummer, int posX, int posY)
         {
             spelarinfolabel.Location = new Point(posX, posY);
-            spelarinfolabel.Font = new Font("MS Gothic", 10, FontStyle.Bold);
+            spelarinfolabel.Font = new Font("MS Gothic", 10, FontStyle.Regular);
             spelarinfolabel.BackColor = Color.LightGray;
             spelarinfolabel.AutoSize = true;
             spelarinfolabel.BringToFront();
@@ -89,6 +89,8 @@ namespace Black_Jack
             public int betsumma { get; set; }
             public bool splitEllerDouble  { get; set; } = false;
 
+            public bool kollatVinst { get; set; }
+
 
             public Spelhög()
             {
@@ -96,6 +98,8 @@ namespace Black_Jack
                 kortvärde = new List<int>();
                 betinfo = new Label();
                 kortsumma = new Label();
+                splitEllerDouble = false;
+                kollatVinst = false;
             }
 
             public void läggtillImage(string kort, int posX, int posY)
@@ -115,7 +119,7 @@ namespace Black_Jack
             public void läggtillBetinfo(int posX, int posY)
             {
                 betinfo.Location = new Point(posX, posY);
-                betinfo.Font = new Font("MS Gothic", 10, FontStyle.Bold);
+                betinfo.Font = new Font("MS Gothic", 10, FontStyle.Regular);
                 betinfo.BackColor = Color.LightGray;
                 betinfo.AutoSize = true;
                 betinfo.BringToFront();
@@ -125,7 +129,7 @@ namespace Black_Jack
             public void läggtillKortsumma(int posX, int posY)
             {
                 kortsumma.Location = new Point(posX, posY);
-                kortsumma.Font = new Font("MS Gothic", 10, FontStyle.Bold);
+                kortsumma.Font = new Font("MS Gothic", 10, FontStyle.Regular);
                 kortsumma.BackColor = Color.LightGray;
                 kortsumma.AutoSize = true;
                 kortsumma.BringToFront();
