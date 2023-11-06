@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,7 +90,7 @@ namespace Black_Jack
             public int betsumma { get; set; }
             public bool splitEllerDouble  { get; set; } = false;
 
-            public bool kollatVinst { get; set; }
+            public bool kollatVinst { get; set; } = false;
 
 
             public Spelhög()
@@ -122,6 +123,7 @@ namespace Black_Jack
                 betinfo.Font = new Font("MS Gothic", 10, FontStyle.Regular);
                 betinfo.BackColor = Color.LightGray;
                 betinfo.AutoSize = true;
+                betinfo.BringToFront() ;
                 betinfo.BringToFront();
                 betinfo.Text = "$0";
             }
