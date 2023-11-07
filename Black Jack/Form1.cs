@@ -865,16 +865,14 @@ namespace Black_Jack
                     }
                 }
             }
-            knappDouble.Show();
-            knappPass.Show();
-            for (int i = 0; i < spelarlista[spelarinfo.spelarNummer].spelhög.Count; i++)
-            {
-                if (spelarlista[spelarinfo.spelarNummer].spelhög[i].kortvärde[0] == spelarlista[spelarinfo.spelarNummer].spelhög[i].kortvärde[1]) knappSplit.Show();
-            }
+            //for (int i = 0; i < spelarlista[spelarinfo.spelarNummer].spelhög.Count; i++)
+            //{
+            //    if (spelarlista[spelarinfo.spelarNummer].spelhög[i].kortvärde[0] == spelarlista[spelarinfo.spelarNummer].spelhög[i].kortvärde[1]) knappSplit.Show();
+            //}
             vilkensatsat = true;
             visaSpelkort();
-            knappDouble.Show();
-            knappPass.Show();
+            //knappDouble.Show();
+            //knappPass.Show();
             pågåendeRunda = true;
 
         }
@@ -1020,7 +1018,7 @@ namespace Black_Jack
                                 spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                 spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkGreen;
                                 spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
-                                spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma;
+                                spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma * 2;
                                 spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
                             }
                             else
@@ -1028,14 +1026,29 @@ namespace Black_Jack
                                 spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                 spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkGreen;
                                 spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
-                                spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma;
+                                spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma * 2;
                                 spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
                             }
                         } else
                         {
                             if (i == spelarinfo.spelarNummer)
                             {
-                                if (bankenskortvärde >= Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde)) 
+                                if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 21 && spelarlista[i].spelhög[j].kortvärde.Count == 2) 
+                                {
+                                    if (bankenskortvärde !=21)
+                                    {
+                                        spelarinfo.kontobalans += (int)(spelarlista[i].spelhög[j].betsumma * 2.5);
+                                        spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                    } else
+                                    {
+                                        spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma;
+                                        spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                    }
+                                    spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
+                                    spelarlista[i].spelhög[j].betinfo.BackColor = Color.BlueViolet;
+                                    spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+                                }
+                                else if (bankenskortvärde >= Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde)) 
                                 {
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkRed;
@@ -1045,13 +1058,31 @@ namespace Black_Jack
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkGreen;
                                     spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+                                    spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma * 2;
+                                    spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
                                 }
-                                spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma;
-                                spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+
                             }
                             else
                             {
-                                if (bankenskortvärde >= Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                                if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 21 && spelarlista[i].spelhög[j].kortvärde.Count == 2)
+                                {
+                                    if (bankenskortvärde != 21)
+                                    {
+                                        spelarlista[i].datorbalans += (int)(spelarlista[i].spelhög[j].betsumma * 2.5);
+                                        spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
+                                    }
+                                    else
+                                    {
+                                        spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma;
+                                        spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
+                                    }
+                                    spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
+                                    spelarlista[i].spelhög[j].betinfo.BackColor = Color.BlueViolet;
+                                    spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+                                }
+
+                                else if (bankenskortvärde >= Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
                                 {
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkRed;
@@ -1062,9 +1093,10 @@ namespace Black_Jack
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkGreen;
                                     spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+                                    spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma * 2;
+                                    spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
                                 }
-                                spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma;
-                                spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
+
                             }
                         }
                     }
@@ -1268,8 +1300,20 @@ namespace Black_Jack
                         spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
                         await Task.Delay(75);
                     }
+
                 }
+
             }
+
+            if (spelarlista[spelarinfo.spelarNummer].spelhög[0].kortvärde[0] == spelarlista[spelarinfo.spelarNummer].spelhög[0].kortvärde[1]) knappSplit.Show();
+            try
+            {
+                if (spelarlista[spelarinfo.spelarNummer].spelhög[1].kortvärde[0] == spelarlista[spelarinfo.spelarNummer].spelhög[1].kortvärde[1]) knappSplit.Show();
+            }
+            catch { }
+            knappHit.Show();
+            knappDouble.Show();
+            knappPass.Show();
 
             await Task.Delay(100);
             datorAI(1);
@@ -1818,6 +1862,7 @@ namespace Black_Jack
 
                     if (!harDelat2)
                     {
+                        knappHit.Hide();
                         spelaKort();                     
                         harDelat2 = !harDelat2;
                     }
