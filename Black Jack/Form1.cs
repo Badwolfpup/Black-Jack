@@ -11,6 +11,7 @@ using System.Linq;
 using System.Diagnostics.Eventing.Reader;
 using System.ComponentModel;
 using static Black_Jack.Spelare;
+using NAudio.Wave;
 
 namespace Black_Jack
 {
@@ -131,6 +132,12 @@ namespace Black_Jack
         {
             nyOmgång(); //Nollställer spelomgången
             loggain.ShowDialog(); 
+        }
+
+        private void fyllPåMarkerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            spelarinfo.kontobalans = 5000;
+            spelarlista[spelarinfo.spelarNummer].uppdateraSpelarinfo(spelarinfo.spelarNummer);
         }
 
         private void tooltips() //Egenskaper för tooltips för knapparna
@@ -550,36 +557,39 @@ namespace Black_Jack
                 int a = spelarlista[i].spelhög.Count;
                 for (int j = 0; j < a; j++)
                 {
-                    splitEllerDouble(i, j);
+                    splitEllerDouble(i, j);                   
                     a = spelarlista[i].spelhög.Count;
                     try
                     {
                         spelarlista[i].spelhög[j].kortsumma.BackColor = Color.Yellow;
                     } catch { }
-
+                    await Task.Delay(300);
                     //if (spelarlista[i].spelhög.Count > 1) spelarlista[i].spelhög[j-1].kortsumma.BackColor = SystemColors.Control;
                     if (spelarlista[i].spelhög[j].splitEllerDouble)
                     {
-                        spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
                         try
                         {
                             spelarlista[i].spelhög[j].kortsumma.BackColor = Color.Yellow;
-                        } catch { }
-                        await Task.Delay(100);
-                        läggtillKort(i, j);
-                        kollaVinnare(i, j);
+                        } catch { }                        
+                        spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                        läggtillKort(i, j);                                              
+                        await Task.Delay(500);
+                        kollaVinnare(i, j);                       
                     }
                     else
                     {
                         while (HitOrPass(i, j)) 
-                        {
-                            spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                        {                           
                             try
                             {
                                 spelarlista[i].spelhög[j].kortsumma.BackColor = Color.Yellow;
                             } catch { }
-                            await Task.Delay(100);
+                            await Task.Delay(300);
+                            spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                            läggtillKort(i, j);
+                            await Task.Delay(500);
                         }
+                        await Task.Delay(500);
                         kollaVinnare(i, j);
                     }
                     //if (j == spelarlista[i].spelhög.Count-1) spelarlista[i].spelhög[j].kortsumma.BackColor = SystemColors.Control;
@@ -591,11 +601,28 @@ namespace Black_Jack
         private async Task bankAi()
         {
             bool bank17orBust = false;
+            int antalSpelhög = 0;
+            int antalVinst = 0;
+            
+            for (int i = 1; i < spelarlista.Count; i++)
+            {
+                for (int j = 0; j < spelarlista[i].spelhög.Count; j++)
+                {
+                    antalSpelhög++;
+                    if (spelarlista[i].spelhög[j].kollatVinst)antalVinst++;
+                }
+            }
+            if (antalSpelhög == antalVinst)
+            {
+                pågåendeRunda = !pågåendeRunda;
+                return;
+            }
+
             while (!bank17orBust)
             {
                 läggtillKort();
                 spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                await Task.Delay(100);
+                await Task.Delay(500);
                 if (Kortlek.beräknaKortvärde(spelarlista[0].spelhög[0].kortvärde) > 21)
                 {
                     kollaVinnare(Kortlek.beräknaKortvärde(spelarlista[0].spelhög[0].kortvärde));
@@ -620,7 +647,6 @@ namespace Black_Jack
         {
             Random rnd = new Random();
             int draKort = rnd.Next(Kortlek.nykortlek.Count);
-            //spelarlista[0].spelhög[0].kortsumma.Location = new Point(spelarlista[i].spelhög[j].kortsumma.Location.X, spelarlista[i].spelhög[j].kortsumma.Location.Y - 15);
             spelarlista[0].läggtillKortochVärde(Kortlek.nykortlek[draKort], 0, spelarlista[0].spelhög[0].spelkort[spelarlista[0].spelhög[0].spelkort.Count - 1].Location.X +15, spelarlista[0].spelhög[0].spelkort[0].Location.Y);
             spelarlista[0].spelhög[0].kortsumma.Text = Kortlek.beräknaKortvärde(spelarlista[0].spelhög[0].kortvärde).ToString();
             Kortlek.nykortlek.RemoveAt(draKort);
@@ -631,7 +657,6 @@ namespace Black_Jack
         {
             Random rnd = new Random();
             int draKort = rnd.Next(Kortlek.nykortlek.Count);           
-            //spelarlista[i].spelhög[j].kortsumma.Location = new Point(spelarlista[i].spelhög[j].kortsumma.Location.X, spelarlista[i].spelhög[j].kortsumma.Location.Y - 15);
             spelarlista[i].läggtillKortochVärde(Kortlek.nykortlek[draKort], j, spelarlista[i].spelhög[j].spelkort[spelarlista[i].spelhög[j].spelkort.Count-1].Location.X, spelarlista[i].spelhög[j].spelkort[spelarlista[i].spelhög[j].spelkort.Count - 1].Location.Y-15);
             spelarlista[i].spelhög[j].kortsumma.Text = Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde).ToString();
             Kortlek.nykortlek.RemoveAt(draKort);
@@ -640,94 +665,132 @@ namespace Black_Jack
 
         private bool HitOrPass(int i, int j)
         {
-            if (!spelarlista[i].spelhög[j].kortvärde.Contains(11))
+            if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) < 22) 
             {
-                switch(Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                if (!spelarlista[i].spelhög[j].kortvärde.Contains(11))
                 {
-                    case 4:
-                        läggtillKort(i, j);
-                        return true;
-                    case 5:
-                        läggtillKort(i, j);
-                        return true;
-                    case 6:
-                        läggtillKort(i, j);
-                        return true;
-                    case 7:
-                        läggtillKort(i, j);
-                        return true;
-                    case 8:
-                        läggtillKort(i, j);
-                        return true;
-                    case 9:
-                        läggtillKort(i, j);
-                        return true;
-                    case 10:
-                        läggtillKort(i, j);
-                        return true;
-                    case 11:
-                        läggtillKort(i, j);
-                        return true;
-                    case 12:
-                        if (spelarlista[0].spelhög[0].kortvärde[0] < 4 || spelarlista[0].spelhög[0].kortvärde[0] > 6)
-                        {
-                            läggtillKort(i, j);
+                    switch (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                    {
+                        case 4:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
                             return true;
-                        }
-                        else return false;
-                    case 13:
-                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
-                        {
-                            läggtillKort(i, j);
+                        case 5:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
                             return true;
-                        }
-                        else return false;
-                    case 14:
-                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
-                        {
-                            läggtillKort(i, j);
+                        case 6:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
                             return true;
-                        }
-                        else return false;
-                    case 15:
-                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
-                        {
-                            läggtillKort(i, j);
+                        case 7:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
                             return true;
-                        }
-                        else return false;
-                    case 16:
-                        if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
-                        {
-                            läggtillKort(i, j);
+                        case 8:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
                             return true;
-                        }
-                        else return false;
-                    default: return false;
-                }
-            } else
-            {
-                switch (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                        case 9:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                            return true;
+                        case 10:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                            return true;
+                        case 11:
+                            spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                            return true;
+                        case 12:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] < 4 || spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                        case 13:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                        case 14:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                        case 15:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                        case 16:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 6)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                        default:
+                            spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                            return false;
+                    }
+                } else
                 {
-                    case 18:
-                        if (spelarlista[0].spelhög[0].kortvärde[0] > 8)
-                        {
-                            läggtillKort(i, j);
-                            return true;
-                        }
-                        else return false;
-                    case 19: return false;
-                    case 20: return false;
-                    case 21: return false;
-                    default:
-                        if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) < 22)
-                        {
-                            läggtillKort(i, j);
-                            return true;
-                        }
-                        else return false;
+                    switch (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
+                    {
+                        case 18:
+                            if (spelarlista[0].spelhög[0].kortvärde[0] > 8)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                        case 19:
+                            spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                            return false;
+                        case 20:
+                            spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                            return false;
+                        case 21:
+                            spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                            return false;
+                        default:
+                            if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) < 22)
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                                return true;
+                            }
+                            else
+                            {
+                                spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                                return false;
+                            }
+                    }
                 }
-            }
+            } else return false;
         }
 
         private void splitEllerDouble(int i, int j)
@@ -744,37 +807,44 @@ namespace Black_Jack
                         case 2:
                             if (spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 8)
                             {
+                                spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                                 split(i, VellerH);
                             }
                             break;
                         case 3:
                             if (spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 8)
                             {
+                                spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                                 split(i, VellerH);
                             }
                             break;
                         case 6:
                             if (spelarlista[0].spelhög[0].kortvärde[0] > 2 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
                             {
+                                spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                                 split(i, VellerH);
                             }
                             break;
                         case 7:
                             if (spelarlista[0].spelhög[0].kortvärde[0] < 8)
                             {
+                                spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                                 split(i, VellerH);
                             }
                             break;
                         case 8:
+                            spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                             split(i, VellerH);
                             break;
                         case 9:
                             if (spelarlista[0].spelhög[0].kortvärde[0] != 7 || spelarlista[0].spelhög[0].kortvärde[0] != 10 || spelarlista[0].spelhög[0].kortvärde[0] != 11)
                             {
+                                spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                                 split(i, VellerH);
                             }
                             break;
                         case 11:
+                            spelaLjud(@"C:\\Black Jack\Audio\split.wav");
                             split(i, VellerH);
                             break;
                     }
@@ -785,12 +855,15 @@ namespace Black_Jack
                     {
                         if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 11)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 10 && (spelarlista[0].spelhög[0].kortvärde[0] != 10 || spelarlista[0].spelhög[0].kortvärde[0] != 11))
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 9 && spelarlista[0].spelhög[0].kortvärde[0] > 2 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         }
                     } 
@@ -798,21 +871,27 @@ namespace Black_Jack
                     {
                         if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 19 && spelarlista[0].spelhög[0].kortvärde[0] == 6)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 18 && spelarlista[0].spelhög[0].kortvärde[0] < 6)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 17 && spelarlista[0].spelhög[0].kortvärde[0] > 2 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 16 && spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 15 && spelarlista[0].spelhög[0].kortvärde[0] > 3 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         } else if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 14 && spelarlista[0].spelhög[0].kortvärde[0] > 4 && spelarlista[0].spelhög[0].kortvärde[0] < 7)
                         {
+                            spelaLjud(@"C:\\Black Jack\Audio\double.wav");
                             dubbla(i, VellerH);
                         }
                     }
@@ -824,9 +903,9 @@ namespace Black_Jack
 
         #region spellogik
 
-        private async Task spelaKort()
+        private void spelaKort()
         {
-            foreach (PictureBox p in ramar)
+            foreach (PictureBox p in ramar) //Tar bort ramarna man ser under bettingfasen
             {
                 Controls.Remove(p);
                 p.Dispose();
@@ -834,20 +913,18 @@ namespace Black_Jack
             Random rnd = new Random();
             int draKort;
             spelaLjud(@"C:\\Black Jack\Audio\lekblandas.wav");
-            await Task.Delay(500);
-            Kortlek.skapaNykortlek();
-            for (int i = 0; i < (spelarinfo.antalspelare + 1); i++)
+            Kortlek.skapaNykortlek(); //Blandar en ny kortlek
+            for (int i = 0; i < (spelarinfo.antalspelare + 1); i++) //Drar bankens kort och de två försat för spelarna
             {
-                if (i == 0)
+                if (i == 0) //Bankens kort
                 {
                     draKort = rnd.Next(Kortlek.nykortlek.Count);
                     spelarlista[i].läggtillKortochVärde(Kortlek.nykortlek[draKort], i, kortPosX[i], kortPosY[i]);
                     spelarlista[i].spelhög[0].kortsumma.Text = spelarlista[i].spelhög[0].kortvärde.Sum().ToString();
                     Kortlek.nykortlek.RemoveAt(draKort);
                 }
-                else
+                else //Spelarna kort
                 {
-                    //spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
                     int posXskillnad = 0;
                     for (int j = 0; j < spelarlista[i].spelhög.Count; j++)
                     {
@@ -855,7 +932,6 @@ namespace Black_Jack
                         for (int k = 0; k < 2; k++)
                         {
                             draKort = rnd.Next(Kortlek.nykortlek.Count);                                  
-                            //spelarlista[i].spelhög[j].kortsumma.Location = new Point(spelarlista[i].spelhög[j].kortsumma.Location.X, spelarlista[i].spelhög[j].kortsumma.Location.Y - 15);
                             spelarlista[i].läggtillKortochVärde(Kortlek.nykortlek[draKort], j, kortPosX[i] + posXskillnad, kortPosY[i] - posYskillnad);
                             Kortlek.nykortlek.RemoveAt(draKort);
                             posYskillnad += 15;
@@ -865,16 +941,9 @@ namespace Black_Jack
                     }
                 }
             }
-            //for (int i = 0; i < spelarlista[spelarinfo.spelarNummer].spelhög.Count; i++)
-            //{
-            //    if (spelarlista[spelarinfo.spelarNummer].spelhög[i].kortvärde[0] == spelarlista[spelarinfo.spelarNummer].spelhög[i].kortvärde[1]) knappSplit.Show();
-            //}
             vilkensatsat = true;
-            visaSpelkort();
-            //knappDouble.Show();
-            //knappPass.Show();
             pågåendeRunda = true;
-
+            visaSpelkort();
         }
 
         private bool split(int i, bool VellerH)
@@ -1002,7 +1071,7 @@ namespace Black_Jack
             }
         }
 
-        private void kollaVinnare(int bankenskortvärde) //Kollar allas kort efter att banken har dragit klart
+        private async Task kollaVinnare(int bankenskortvärde) //Kollar allas kort efter att banken har dragit klart
         {
             for (int i = 1; i < spelarlista.Count; i++)
             {
@@ -1015,11 +1084,27 @@ namespace Black_Jack
 
                             if (i == spelarinfo.spelarNummer)
                             {
-                                spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
-                                spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkGreen;
-                                spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
-                                spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma * 2;
-                                spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                if (Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde) == 21 && spelarlista[i].spelhög[j].kortvärde.Count == 2)
+                                {
+                                    double blackjack = spelarlista[i].spelhög[j].betsumma * 2.5;                                  
+                                    spelarinfo.kontobalans += (int)blackjack;
+                                    spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                    spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
+                                    spelarlista[i].spelhög[j].betinfo.BackColor = Color.BlueViolet;
+                                    spelarlista[i].spelhög[j].betinfo.Text = "+$" + blackjack.ToString();
+                                    spelaLjud(@"C:\\Black Jack\Audio\vinst.wav");
+                                    await Task.Delay(500);
+                                }
+                                else
+                                {
+                                    spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
+                                    spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkGreen;
+                                    spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+                                    spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma * 2;
+                                    spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                    spelaLjud(@"C:\\Black Jack\Audio\vinst.wav");
+                                    await Task.Delay(500);
+                                }
                             }
                             else
                             {
@@ -1029,6 +1114,7 @@ namespace Black_Jack
                                 spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma * 2;
                                 spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
                             }
+                            
                         } else
                         {
                             if (i == spelarinfo.spelarNummer)
@@ -1037,12 +1123,19 @@ namespace Black_Jack
                                 {
                                     if (bankenskortvärde !=21)
                                     {
-                                        spelarinfo.kontobalans += (int)(spelarlista[i].spelhög[j].betsumma * 2.5);
+                                        double blackjack = spelarlista[i].spelhög[j].betsumma * 2.5;
+                                        spelarinfo.kontobalans += (int)blackjack;
+                                        spelarlista[i].spelhög[j].betinfo.Text = "+$" + blackjack.ToString();
                                         spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                        spelaLjud(@"C:\\Black Jack\Audio\vinst.wav");
+                                        await Task.Delay(500);
                                     } else
                                     {
                                         spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma;
                                         spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                        spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+                                        spelaLjud(@"C:\\Black Jack\Audio\förlust.wav");
+                                        await Task.Delay(500);
                                     }
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.BlueViolet;
@@ -1053,6 +1146,8 @@ namespace Black_Jack
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.DarkRed;
                                     spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "-");
+                                    spelaLjud(@"C:\\Black Jack\Audio\förlust.wav");
+                                    await Task.Delay(500);
                                 } else
                                 {
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
@@ -1060,6 +1155,8 @@ namespace Black_Jack
                                     spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
                                     spelarinfo.kontobalans += spelarlista[i].spelhög[j].betsumma * 2;
                                     spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarinfo.kontobalans;
+                                    spelaLjud(@"C:\\Black Jack\Audio\vinst.wav");
+                                    await Task.Delay(500);
                                 }
 
                             }
@@ -1069,17 +1166,20 @@ namespace Black_Jack
                                 {
                                     if (bankenskortvärde != 21)
                                     {
-                                        spelarlista[i].datorbalans += (int)(spelarlista[i].spelhög[j].betsumma * 2.5);
+                                        double blackjack = spelarlista[i].spelhög[j].betsumma * 2.5;
+                                        spelarlista[i].datorbalans += (int)blackjack;
+                                        spelarlista[i].spelhög[j].betinfo.Text = "+$" + blackjack.ToString();
                                         spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
                                     }
                                     else
                                     {
                                         spelarlista[i].datorbalans += spelarlista[i].spelhög[j].betsumma;
                                         spelarlista[i].spelarinfolabel.Text = spelarlista[i].spelarinfotext + spelarlista[i].datorbalans;
+                                        spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
+
                                     }
                                     spelarlista[i].spelhög[j].betinfo.ForeColor = Color.White;
                                     spelarlista[i].spelhög[j].betinfo.BackColor = Color.BlueViolet;
-                                    spelarlista[i].spelhög[j].betinfo.Text.Insert(0, "+");
                                 }
 
                                 else if (bankenskortvärde >= Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde))
@@ -1117,7 +1217,7 @@ namespace Black_Jack
                 {
                     spelarinfo.kontobalans -= spelarlista[i].spelhög[j].betsumma;
                     spelarlista[i].spelarinfolabel.Text = "$" + spelarinfo.kontobalans;
-                    harDelat2 = false;
+                    //harDelat2 = false;
                     vilkensatsat = true;
                     return true;
                 }
@@ -1229,12 +1329,6 @@ namespace Black_Jack
         }
         private void nyOmgång()
         {
-            //foreach (PictureBox p in ramar)
-            //{
-            //    Controls.Remove(p);
-            //    p.Dispose();
-            //}
-
             try
             {
                 foreach (System.Windows.Forms.Button b in this.Controls)
@@ -1267,9 +1361,7 @@ namespace Black_Jack
             vilkensatsat = true;
             harDelat2 = false;
             vilkenSpelhög = 0;
-            //pågåendeRunda = false;
             läggtillInitialaRamar();
-            //läggTillMarkerBilder();
             tooltips();
             datorBet();
         }
@@ -1298,7 +1390,7 @@ namespace Black_Jack
                         if (k == 0) spelarlista[i].spelhög[j].kortsumma.Text = spelarlista[i].spelhög[j].kortvärde[0].ToString();
                         else spelarlista[i].spelhög[j].kortsumma.Text = Kortlek.beräknaKortvärde(spelarlista[i].spelhög[j].kortvärde).ToString();
                         spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
-                        await Task.Delay(75);
+                        await Task.Delay(100);
                     }
 
                 }
@@ -1848,37 +1940,54 @@ namespace Black_Jack
 
         private void knappHit_click(object? sender, MouseEventArgs e)
         {
+            _ = knappHit_clickAsync(sender, e);
+ 
+        }
 
-            if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma > 0)
+        private async Task knappHit_clickAsync(object? sender, MouseEventArgs e)
+        {
+            if (spelarlista[spelarinfo.spelarNummer].spelhög[0].betsumma >= 50)
             {
                 if (pågåendeRunda)
                 {
                     try
                     {
-                        if (spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma == 0) spelarlista[spelarinfo.spelarNummer].spelhög.RemoveAt(1);
-                    } catch { }
+                        if (spelarlista[spelarinfo.spelarNummer].spelhög[1].betsumma == 0)
+                        {
+                            spelarlista[spelarinfo.spelarNummer].spelhög.RemoveAt(1);
+                            this.Controls.Remove(spelarlista[spelarinfo.spelarNummer].spelhög[1].betinfo);
+                            spelarlista[spelarinfo.spelarNummer].spelhög[1].betinfo.Dispose();
+                        }
+                    }
+                    catch { }
 
 
 
                     if (!harDelat2)
                     {
                         knappHit.Hide();
-                        spelaKort();                     
+                        spelaKort();
                         harDelat2 = !harDelat2;
                     }
                     else
                     {
+                        spelaLjud(@"C:\\Black Jack\Audio\hit.wav");
+                        await Task.Delay(500);
                         läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög);
                         if (kollaVinnare(spelarinfo.spelarNummer, vilkenSpelhög))
                         {
+                            await Task.Delay(200);
                             vilkenSpelhög++;
                             try
                             {
                                 spelarlista[spelarinfo.spelarNummer].spelhög[vilkenSpelhög].kortsumma.BackColor = Color.Yellow;
-                            } catch { }
+                            }
+                            catch { }
+                            spelaLjud(@"C:\\Black Jack\Audio\förlust.wav");
+                            await Task.Delay(500);
                         }
                         if (vilkenSpelhög >= spelarlista[spelarinfo.spelarNummer].spelhög.Count)
-                            if (spelarinfo.spelarNummer + 1 > spelarinfo.antalspelare) 
+                            if (spelarinfo.spelarNummer + 1 > spelarinfo.antalspelare)
                             {
                                 gömKnappar();
                                 bankAi();
@@ -1895,22 +2004,29 @@ namespace Black_Jack
             }
             else
             {
-                MessageBox.Show("Du måste satsa något", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Du måste minst satsa 50 på den vänstra", "Info", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-         }
-
+        }
         private void knappPass_click(object? sender, MouseEventArgs e)
+        {
+            _ = knappPass_clickAsync(sender, e);
+        }
+
+        private async Task knappPass_clickAsync(object? sender, MouseEventArgs e)
         {
             if (pågåendeRunda)
             {
                 if (vilkenSpelhög < spelarlista[spelarinfo.spelarNummer].spelhög.Count)
                 {
+                    spelaLjud(@"C:\\Black Jack\Audio\pass.wav");
+                    await Task.Delay(300);
                     vilkenSpelhög++;
                     vilkensatsat = !vilkensatsat;
                     try
                     {
                         spelarlista[spelarinfo.spelarNummer].spelhög[vilkenSpelhög].kortsumma.BackColor = Color.Yellow;
-                    } catch { }
+                    }
+                    catch { }
                 }
                 if (vilkenSpelhög >= spelarlista[spelarinfo.spelarNummer].spelhög.Count)
                 {
@@ -1927,13 +2043,22 @@ namespace Black_Jack
                 }
             }
         }
-
+        
         private void knappDouble_click(object? sender, MouseEventArgs e)
+        {
+            _ = knappDouble_clickAsync(sender, e);
+        }
+
+        private async Task knappDouble_clickAsync(object? sender, MouseEventArgs e)
         {
             if (dubbla(spelarinfo.spelarNummer, vilkensatsat))
             {
+                spelaLjud(@"C:\\Black Jack\Audio\double.wav");
+                await Task.Delay(300);
                 läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög);
                 kollaVinnare(spelarinfo.spelarNummer, vilkenSpelhög);
+                spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                await Task.Delay(500);
                 vilkenSpelhög++;
                 vilkensatsat = false;
                 try
@@ -1958,32 +2083,56 @@ namespace Black_Jack
         }
 
         private void knappSplit_click(object? sender, MouseEventArgs e)
-        {            
+        {
+            _ = knappSplit_clickAsync(sender, e);
+        }
+
+        private async Task knappSplit_clickAsync(object? sender, MouseEventArgs e)
+        {
             if (split(spelarinfo.spelarNummer, vilkensatsat))
             {
                 if (vilkensatsat)
                 {
-                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög);
-                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög + 1);
-                    vilkensatsat = false;
+                    spelaLjud(@"C:\\Black Jack\Audio\split.wav");
+                    await Task.Delay(300);
                     try
                     {
                         spelarlista[spelarinfo.spelarNummer].spelhög[vilkenSpelhög].kortsumma.BackColor = Color.Yellow;
+                    } catch { }
+                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög);
+                    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                    await Task.Delay(500);
+                    try
+                    {
                         spelarlista[spelarinfo.spelarNummer].spelhög[vilkenSpelhög + 1].kortsumma.BackColor = Color.Yellow;
                     }
                     catch { }
+                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög + 1);
+                    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                    await Task.Delay(500);
+                    vilkensatsat = false;
                     vilkenSpelhög += 2;
-                } else
+                }
+                else
                 {
-                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög);
-                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög + 1);
-                    vilkensatsat = false;
+                    spelaLjud(@"C:\\Black Jack\Audio\split.wav");
+                    await Task.Delay(300);
                     try
                     {
                         spelarlista[spelarinfo.spelarNummer].spelhög[vilkenSpelhög].kortsumma.BackColor = Color.Yellow;
+                    }
+                    catch { }
+                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög);
+                    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                    await Task.Delay(500);
+                    try
+                    {
                         spelarlista[spelarinfo.spelarNummer].spelhög[vilkenSpelhög + 1].kortsumma.BackColor = Color.Yellow;
                     }
                     catch { }
+                    läggtillKort(spelarinfo.spelarNummer, vilkenSpelhög + 1);
+                    spelaLjud(@"C:\\Black Jack\Audio\kortspelas.wav");
+                    await Task.Delay(500);
                     vilkenSpelhög += 2;
                 }
 
@@ -2002,7 +2151,6 @@ namespace Black_Jack
                 }
             }
         }
-
         private void ram_click(object sender, EventArgs e)
         {
             int x = 0;

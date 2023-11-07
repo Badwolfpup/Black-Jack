@@ -71,6 +71,7 @@
             this.fyllPåMarkerToolStripMenuItem.Name = "fyllPåMarkerToolStripMenuItem";
             this.fyllPåMarkerToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.fyllPåMarkerToolStripMenuItem.Text = "Fyll på marker";
+            this.fyllPåMarkerToolStripMenuItem.Click += new System.EventHandler(this.fyllPåMarkerToolStripMenuItem_Click);
             // 
             // hjälpToolStripMenuItem
             // 

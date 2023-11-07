@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Black_Jack
 {
-    internal class Marker
+    internal class Marker //Klass som använder för att hantera de enskilda markerna då de fortfarande visades med bilder på markern
     {
         List<int> värdelista;
         int räknare;
@@ -25,7 +25,7 @@ namespace Black_Jack
 
         }
 
-        public List<int> sorteraMarker(List<int> markerVärde) 
+        public List<int> sorteraMarker(List<int> markerVärde) //Sorterade in en satsad marker på rätt plats
         {
             värdelista = markerVärde;
             räknare = 0;
@@ -42,7 +42,7 @@ namespace Black_Jack
             return värdelista;
         }
 
-        public List<int> raderaMarker(List<int> markerVärde, int tabortvärde)
+        public List<int> raderaMarker(List<int> markerVärde, int tabortvärde) //Raderade valören samt omvandlade en högre valör till lägre valörer, om det behövdes
         {
             värdelista = markerVärde;
             for (int i = värdelista.Count-1; i > -1; i--)
@@ -214,7 +214,7 @@ namespace Black_Jack
         }
 
 
-        private bool bytValör()
+        private bool bytValör() //Bytte till lämpligt marker
         {
             int summa = 0;
             int antalRäknadeMarker = 0;
