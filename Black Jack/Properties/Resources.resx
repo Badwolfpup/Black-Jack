@@ -117,4 +117,233 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="bakgrund" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\bakgrund.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="blackjackbord" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\blackjackbord.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="double" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\double.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="femdollar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\femdollar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="femdollarkryss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\femdollarkryss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="femhundradollar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\femhundradollar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="femhundradollarkryss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\femhundradollarkryss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="femtiodollar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\femtiodollar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="femtiodollarkryss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\femtiodollarkryss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="förlust" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\förlust.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="H2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="H9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\H9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\hit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HJ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HJ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HQ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HQ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\HT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hundradollar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\hundradollar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hundradollarkryss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\hundradollarkryss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="insurance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\insurance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="K9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\K9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="KA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\KA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="KJ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\KJ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="KK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\KK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kortspelas" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\kortspelas.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="KQ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\KQ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="KT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\KT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lekblandas" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\lekblandas.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="pass" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\pass.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="R9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\R9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RJ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RJ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RQ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RQ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="S9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\S9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SA.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="satsamarker" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\satsamarker.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SJ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SJ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="split" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\split.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SQ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\SQ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ST" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ST.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tiodollar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tiodollar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tiodollarkryss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tiodollarkryss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tusendollar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tusendollar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tusendollarkryss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tusendollarkryss.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="vinst" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\vinst.wav;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -19,7 +19,7 @@ namespace Black_Jack
 
 
         }
-        string filgenväg = @"C:\\Black Jack\spelarinfo.txt";
+        string filgenväg = AppDomain.CurrentDomain.BaseDirectory + "spelarinfo.txt";
         bool stängtsjälv = true;
 
         private void login_Load(object sender, EventArgs e)

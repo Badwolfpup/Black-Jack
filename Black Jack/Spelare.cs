@@ -105,8 +105,7 @@ namespace Black_Jack
 
             public void läggtillImage(string kort, int posX, int posY) //Lägger till bilden på kortet till pictureboxen, samt properties
             {
-                string genväg = @"C:\\Black Jack\bilder\Spelkort\" + kort + ".png";
-                Image image = Image.FromFile(genväg);
+                Image image = (Image)Properties.Resources.ResourceManager.GetObject(kort);
                 PictureBox kortbild = new PictureBox();
                 kortbild.Size = new Size(50, 72);
                 kortbild.Location = new Point(posX, posY);
@@ -114,7 +113,7 @@ namespace Black_Jack
                 kortbild.BringToFront();
                 kortbild.SizeMode = PictureBoxSizeMode.StretchImage;
                 kortbild.Image = image;
-                spelkort.Add(kortbild);                 
+                spelkort.Add(kortbild);   //test               
             }
 
             public void läggtillBetinfo(int posX, int posY) //Ger properties till labeln som visar hur mycket som bettats
